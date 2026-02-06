@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group LexiCore, Reflective Report, " />
+
+<meta property="og:title" content="Collecting Data: Social Media and Media Attention (by Group &#34;LexiCore&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/collecting-data-social-media-and-media-attention-by-group-lexicore.html" />
+<meta property="og:description" content="By Group &#34;LexiCore&#34; To Begin With Our research topic focuses on the impact of media and social media Attention on the excess returns of stocks of US technology companies. This involves two crucial data sources: social media text and traditional media news text. This article will briefly describe the work …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-10T19:30:00+08:00" />
+<meta name="twitter:title" content="Collecting Data: Social Media and Media Attention (by Group &#34;LexiCore&#34;) ">
+<meta name="twitter:description" content="By Group &#34;LexiCore&#34; To Begin With Our research topic focuses on the impact of media and social media Attention on the excess returns of stocks of US technology companies. This involves two crucial data sources: social media text and traditional media news text. This article will briefly describe the work …">
+
+        <title>Collecting Data: Social Media and Media Attention (by Group &#34;LexiCore&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/collecting-data-social-media-and-media-attention-by-group-lexicore.html">
+                Collecting Data: Social Media and Media Attention (by Group "LexiCore")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>By Group "LexiCore"</p>
+<h1>To Begin With</h1>
+<p>Our research topic focuses on the impact of media and social media Attention
+on the excess returns of stocks of US technology companies. This involves two 
+crucial data sources: social media text and traditional media news text. This
+article will briefly describe the work we have done in this area, the problems
+encountered during the process, and the methods we have attempted to solve 
+them.</p>
+<p>At the same time, in the article, we have presented the code used by some of 
+the group members in their work. When you attempt to reproduce it, you should 
+be aware that this is not the complete version. This is because we encountered 
+some issues during the process of scrapping Reddit and X. If you also encounter 
+similar problems and can identify some solutions or methods, please feel free 
+to contact us. Thank you very much!</p>
+<h1>Building a Structured News Dataset: A Technical Walkthrough</h1>
+<p>We systematically gathered news articles from two major sources—The Guardian and The New York Times—using their respective APIs. Here's a technical summary of our implementation, challenges faced, and how we structured the final dataset.</p>
+<h2>Data Collection Architecture</h2>
+<p>We targeted a comprehensive date range from January 1, 2020, to December 31, 2025, covering pre-pandemic, pandemic, and post-pandemic periods including the ChatGPT launch era.</p>
+<p>For <strong>The Guardian</strong>, we utilized the Open Platform API with daily iteration:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Date range generation</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+<span class="n">dates</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">current_date</span> <span class="o">=</span> <span class="n">start_date</span>
+<span class="k">while</span> <span class="n">current_date</span> <span class="o">&lt;=</span> <span class="n">end_date</span><span class="p">:</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">current_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="p">))</span>
+    <span class="n">current_date</span> <span class="o">+=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Section filtering and API calls</span>
+<span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;better-business&#39;</span><span class="p">,</span> <span class="s1">&#39;business&#39;</span><span class="p">,</span> <span class="s1">&#39;business-to-business&#39;</span><span class="p">,</span> <span class="s1">&#39;money&#39;</span><span class="p">,</span> <span class="s1">&#39;science&#39;</span><span class="p">,</span> <span class="s1">&#39;technology&#39;</span><span class="p">,</span> <span class="s1">&#39;us-news&#39;</span><span class="p">]</span>
+<span class="n">news_contents</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">news_title</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">days</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">:</span>
+    <span class="n">daily_content</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">daily_title</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://content.guardianapis.com/search?from-date=</span><span class="si">{</span><span class="n">days</span><span class="si">}</span><span class="s2">&amp;to-date=</span><span class="si">{</span><span class="n">days</span><span class="si">}</span><span class="s2">&amp;production-office=us&amp;show-fields=all&amp;page-size=100&amp;lang=en&amp;api-key=API_KEY&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">article</span><span class="p">[</span><span class="s1">&#39;sectionId&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sections</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">body</span> <span class="o">=</span> <span class="n">article</span><span class="p">[</span><span class="s1">&#39;fields&#39;</span><span class="p">][</span><span class="s1">&#39;bodyText&#39;</span><span class="p">]</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">article</span><span class="p">[</span><span class="s1">&#39;webTitle&#39;</span><span class="p">]</span>
+        <span class="n">daily_content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+        <span class="n">daily_title</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="n">news_contents</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">days</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_content</span>
+    <span class="n">news_title</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">days</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_title</span>
+</code></pre></div>
+
+<p>For <strong>The New York Times</strong>, we employed the Archive API with monthly batch processing:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Monthly data collection</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Business Day&#39;</span><span class="p">,</span> <span class="s1">&#39;Science&#39;</span><span class="p">,</span> <span class="s1">&#39;Technology&#39;</span><span class="p">,</span> <span class="s1">&#39;U.S.&#39;</span><span class="p">,</span> <span class="s1">&#39;Your Money&#39;</span><span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://api.nytimes.com/svc/archive/v1/202</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">.json?api-key=API_KEY&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">article</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">articles</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">section_name</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;section_name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">section_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sections</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">pub_date_str</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pub_date&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">pub_date_str</span><span class="p">:</span>
+                    <span class="n">date_key</span> <span class="o">=</span> <span class="n">pub_date_str</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">article_info</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;abstract&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;abstract&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                    <span class="s1">&#39;headline&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;headline&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                    <span class="s1">&#39;section_name&#39;</span><span class="p">:</span> <span class="n">section_name</span><span class="p">,</span>
+                    <span class="s1">&#39;word_count&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;word_count&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">}</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">date_key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">article_info</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error processing article </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+</code></pre></div>
+
+<h2>Technical Challenges &amp; Solutions</h2>
+<p><strong>API Rate Limiting</strong> presented significant hurdles. The Guardian's daily quota required segmenting our six-year timeline and implementing key rotation mid-process:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Example of key rotation strategy</span>
+<span class="n">api_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;key1&#39;</span><span class="p">,</span> <span class="s1">&#39;key2&#39;</span><span class="p">,</span> <span class="s1">&#39;key3&#39;</span><span class="p">]</span>
+<span class="n">current_key_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">get_api_key</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">current_key_index</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">api_keys</span><span class="p">[</span><span class="n">current_key_index</span><span class="p">]</span>
+    <span class="n">current_key_index</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_key_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">api_keys</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">key</span>
+</code></pre></div>
+
+<p>NYT's per-second limits necessitated implementing strategic pauses and processing data in smaller monthly batches:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># Adding delays between requests</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Wait 1 second between requests</span>
+</code></pre></div>
+
+<p><strong>Data Storage Evolution</strong> revealed architectural insights. Our initial approach separated titles and content into distinct JSON files, which proved cumbersome for analysis. We subsequently developed a merge script:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Merging separate data files</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;news_Guardian_title.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">titles_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;news_Guardian_contents.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">content_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="n">merged_data</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">titles_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">merged_data</span><span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">titles</span> <span class="o">=</span> <span class="n">titles_data</span><span class="p">[</span><span class="n">date</span><span class="p">]</span>
+    <span class="n">contents</span> <span class="o">=</span> <span class="n">content_data</span><span class="p">[</span><span class="n">date</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">titles</span><span class="p">)):</span>
+        <span class="n">article</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">titles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">contents</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+        <span class="n">merged_data</span><span class="p">[</span><span class="n">date</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
+
+<span class="c1"># Save merged data</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;news_Guardian_merged.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">merged_data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Data Consistency</strong> required careful normalization. We standardized date formats across sources, handled missing fields systematically, and implemented validation checks to ensure data integrity throughout the six-year collection period.</p>
+<h2>Implementation &amp; Workflow</h2>
+<p>Our Python implementation employed <code>requests</code> for API calls, <code>datetime</code> for date sequencing, and <code>json</code> for data persistence. The workflow modularized date generation, API communication, data parsing, and file operations:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Core workflow structure</span>
+<span class="k">def</span> <span class="nf">generate_dates</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">):</span>
+    <span class="c1"># Generate list of dates</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">fetch_guardian_articles</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">api_key</span><span class="p">):</span>
+    <span class="c1"># Fetch Guardian articles for a specific date</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">fetch_nyt_articles</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">api_key</span><span class="p">):</span>
+    <span class="c1"># Fetch NYT articles for a specific month</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">save_to_json</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="c1"># Save data to JSON file</span>
+    <span class="k">pass</span>
+
+<span class="c1"># Main execution flow</span>
+<span class="n">dates</span> <span class="o">=</span> <span class="n">generate_dates</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">:</span>
+    <span class="n">articles</span> <span class="o">=</span> <span class="n">fetch_guardian_articles</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">api_key</span><span class="p">)</span>
+    <span class="n">save_to_json</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;guardian_</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>We added comprehensive logging and progress indicators to monitor collection status across extended runtimes:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># Track progress</span>
+<span class="n">processed_dates</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">total_dates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing date </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">processed_dates</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total_dates</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="c1"># Process data</span>
+    <span class="n">processed_dates</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div>
+
+<p>The final datasets are structured to support reproducible research, with The Guardian data organized as date-keyed article lists and NYT data including metadata on source, total dates, article counts, and generation timestamps. This foundation enables downstream text preprocessing, sentiment analysis, and quantitative modeling of media-market relationships.</p>
+<p>This technical groundwork provides a clean, query-ready news corpus spanning 2,190 days, supporting empirical analysis of how business and technology media coverage intersects with financial market dynamics.</p>
+<h1>Scraping Social Media: An Unsuccessful Attempt</h1>
+<p>We attempted to use the API methods introduced in the lecture note to scrape the social media posts from Reddit and X and categorize them to find the relevant information we needed. However, we encountered problems such as authorization issues, quotas, and query duration limitations.</p>
+<h2>Try Scraping Reddit</h2>
+<p>We try to copy the following URL directly to the address bar of our browser and open it to test token:</p>
+<p>https://api.pushshift.io/reddit/search/submission?size=1</p>
+<p>OUTPUT: {"detail":"Not authenticated"}</p>
+<p>Here, we encountered authorization issues. Then we turn to applying for Pushshift API.</p>
+<p>OUTPUT: {"detail":"User is not an authorized moderator."}</p>
+<p>Still, we do not have sufficient authority to carry out the above operations. Through the official contact method, we attempted to contact the Reddit administrators via email to inquire about obtaining API authorization, but were refused.</p>
+<h3>Pushshift API Access Changes</h3>
+<p>By reviewing public sources, we found that around 2023, Pushshift tightened their control policies regarding the API.</p>
+<p><strong>Before (≤ 2022)</strong></p>
+<ul>
+<li>The Pushshift API was fully public</li>
+<li>No authentication token was required</li>
+<li>Widely used in academic research without access restrictions</li>
+</ul>
+<p><strong>Now (post-2023)</strong></p>
+<ul>
+<li>Pushshift has been taken back under Reddit’s authorization</li>
+<li>API access is restricted</li>
+<li>Most endpoints require authentication via a token</li>
+<li>Tokens are not automatically granted and are typically tied to authorized Reddit moderator accounts.</li>
+</ul>
+<p>As a result, unauthenticated requests now return access errors (e.g., “Not authenticated”), which prevents direct data collection without approved credentials.</p>
+<h2>Scraping Twitter/X: Why You Can't Fetch Old Tweets</h2>
+<p>While trying to scarpe Twitter, we encountered a frustrating limitation with Twitter's API that many developers face: the inability to fetch tweets beyond 7 days using the standard search endpoint.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">tweepy</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">bearer_token</span><span class="o">=</span><span class="s2">&quot;token_b&quot;</span><span class="p">)</span>
+
+<span class="c1"># This works for tweets from the last 7 days</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">search_recent_tweets</span><span class="p">(</span>
+    <span class="n">query</span><span class="o">=</span><span class="s2">&quot;NVIDIA lang:en -is:retweet&quot;</span><span class="p">,</span>
+    <span class="n">start_time</span><span class="o">=</span><span class="s2">&quot;2026-01-07T00:00:00Z&quot;</span><span class="p">,</span>  <span class="c1"># about 3 days ago</span>
+    <span class="n">end_time</span><span class="o">=</span><span class="s2">&quot;2026-01-07T23:59:59Z&quot;</span><span class="p">,</span>
+    <span class="n">max_results</span><span class="o">=</span><span class="mi">100</span>
+<span class="p">)</span>
+
+<span class="c1"># This FAILS with 400 Bad Request</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">search_recent_tweets</span><span class="p">(</span>
+    <span class="n">query</span><span class="o">=</span><span class="s2">&quot;NVIDIA lang:en -is:retweet&quot;</span><span class="p">,</span>
+    <span class="n">start_time</span><span class="o">=</span><span class="s2">&quot;2026-01-01T00:00:00Z&quot;</span><span class="p">,</span>  <span class="c1"># More than 7 days ago</span>
+    <span class="n">end_time</span><span class="o">=</span><span class="s2">&quot;2026-01-01T23:59:59Z&quot;</span><span class="p">,</span>
+    <span class="n">max_results</span><span class="o">=</span><span class="mi">100</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<h3>Key constraints of Twitter API</h3>
+<p>After digging through Twitter's documentation, We confirmed the issue: Twitter's search_recent_tweets endpoint only provides access to tweets from the last 7 days. This is a hard limitation of their Essential access tier (the free tier).</p>
+<p><strong>Recent Search (/2/tweets/search/recent):</strong></p>
+<ul>
+<li>
+<p>Maximum 7-day lookback window</p>
+</li>
+<li>
+<p>Rate limits: 180 requests/15-minute window (per user)</p>
+</li>
+<li>
+<p>512 character limit for queries</p>
+</li>
+</ul>
+<p><strong>Full-Archive Search (/2/tweets/search/all):</strong></p>
+<ul>
+<li>
+<p>Access to entire Twitter archive</p>
+</li>
+<li>
+<p>Only available with Academic Research or Enterprise access</p>
+</li>
+<li>
+<p>Requires special approval and payment</p>
+</li>
+</ul>
+<p>Twitter API's 7-day limitation for recent search is a significant constraint for historical analysis projects. While workarounds exist, they require careful planning and continuous data collection rather than one-time historical pulls.</p>
+<p>For researchers needing full historical access, applying for Twitter's Academic Research access through a university affiliation remains the only official solution.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-10T19:30:00+08:00">Sat 10 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-lexicore-ref">Group LexiCore
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

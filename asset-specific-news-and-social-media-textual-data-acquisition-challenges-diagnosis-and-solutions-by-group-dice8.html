@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group Dice8, Reflective Report, " />
+
+<meta property="og:title" content="Asset Specific News and Social Media Textual Data Acquisition: Challenges, Diagnosis, and Solutions (by Group &#34;Dice8&#34;） "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/asset-specific-news-and-social-media-textual-data-acquisition-challenges-diagnosis-and-solutions-by-group-dice8.html" />
+<meta property="og:description" content="Note: Since the code is too lengthy, please refer to our GitHub repository (Google_news2024_getandclean_v1) for the relevant implementation. 1.Data source We aim to develop a sentiment analysis model for financial markets. The initial objective is to acquire monthly news data and monthly social media data for 14 major financial …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-10T19:15:00+08:00" />
+<meta name="twitter:title" content="Asset Specific News and Social Media Textual Data Acquisition: Challenges, Diagnosis, and Solutions (by Group &#34;Dice8&#34;） ">
+<meta name="twitter:description" content="Note: Since the code is too lengthy, please refer to our GitHub repository (Google_news2024_getandclean_v1) for the relevant implementation. 1.Data source We aim to develop a sentiment analysis model for financial markets. The initial objective is to acquire monthly news data and monthly social media data for 14 major financial …">
+
+        <title>Asset Specific News and Social Media Textual Data Acquisition: Challenges, Diagnosis, and Solutions (by Group &#34;Dice8&#34;）  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/asset-specific-news-and-social-media-textual-data-acquisition-challenges-diagnosis-and-solutions-by-group-dice8.html">
+                Asset Specific News and Social Media Textual Data Acquisition: Challenges, Diagnosis, and Solutions (by Group "Dice8"）
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p><em>Note: Since the code is too lengthy, please refer to our <a href="https://github.com/SniperWV458/FinNLP7036/tree/Google_news2024_getandclean_v1/Google_news2024_getandclean_v1">GitHub repository</a>
+(Google_news2024_getandclean_v1) for the relevant implementation.</em></p>
+<h1>1.Data source</h1>
+<p>We aim to develop a sentiment analysis model for financial markets. The initial objective is to acquire <strong>monthly news data</strong> and <strong>monthly social media data</strong> for <strong>14 major financial assets</strong> within
+ the timeframe from <strong>January 2003 to December 2024.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Ticker</th>
+<th>Asset</th>
+<th>Asset Class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GSPC</td>
+<td>S&amp;P 500 Index</td>
+<td>Equities</td>
+</tr>
+<tr>
+<td>IXIC</td>
+<td>NASDAQ Composite</td>
+<td>Equities</td>
+</tr>
+<tr>
+<td>DJI</td>
+<td>Dow Jones Industrial Average</td>
+<td>Equities</td>
+</tr>
+<tr>
+<td>FCHI</td>
+<td>CAC 40(France)</td>
+<td>Equities</td>
+</tr>
+<tr>
+<td>FTSE</td>
+<td>FTSE 100(UK)</td>
+<td>Equities</td>
+</tr>
+<tr>
+<td>STOXX50E</td>
+<td>EuroStoxx 50</td>
+<td>Equities</td>
+</tr>
+<tr>
+<td>HSI</td>
+<td>Hang Seng Index(Hong Kong)</td>
+<td>Equities</td>
+</tr>
+<tr>
+<td>000001.SS</td>
+<td>Shanghai Composite(China)</td>
+<td>Equities</td>
+</tr>
+<tr>
+<td>BSESN</td>
+<td>BSE Sensex(India)</td>
+<td>Equities</td>
+</tr>
+<tr>
+<td>NSEI</td>
+<td>Nifty 50(India)</td>
+<td>Equities</td>
+</tr>
+<tr>
+<td>KS11</td>
+<td>KOSPI(South Korea)</td>
+<td>Equities</td>
+</tr>
+<tr>
+<td>GC=F</td>
+<td>Gold</td>
+<td>Commodities</td>
+</tr>
+<tr>
+<td>SI=F</td>
+<td>Silver</td>
+<td>Commodities</td>
+</tr>
+<tr>
+<td>CL=F</td>
+<td>WTI Crude Oil Futures</td>
+<td>Commodities</td>
+</tr>
+</tbody>
+</table>
+<h1>2.News Data Collection</h1>
+<h2>2.1 Source 1: API.ai</h2>
+<p>First, we want to share the difficulties encountered, solutions explored, and final outcomes in obtaining news data.</p>
+<p>After studying the Data Sources in the Lecture Notes, we first considered obtaining data from <a href="https://newsapi.ai/">NewsAPI.ai</a>. Its advantages over other methods are as follows:</p>
+<ul>
+<li>
+<p>Simple REST API interface</p>
+</li>
+<li>
+<p>Returns JSON format data directly, including title, body, source, and timestamp</p>
+</li>
+<li>
+<p>Relatively fast download speed</p>
+</li>
+</ul>
+<p>So, we registered an account on the API website and obtained the API key.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="s2">&quot;Our_API_Key&quot;</span>
+<span class="n">API_URL</span> <span class="o">=</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">eventregistry</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">article</span><span class="o">/</span><span class="n">getArticles</span>
+</code></pre></div>
+
+<h3>2.1.1 API Connection Testing and Primary Data Acquisition Attempt</h3>
+<p>We first conducted a test to see if we could connect to the API and successfully retrieve data for the S&amp;P 500 for the last month of 2025.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">test_api</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;It is a test&quot;</span><span class="p">)</span>
+    <span class="n">test_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;apiKey&quot;</span><span class="p">:</span> <span class="n">API_KEY</span><span class="p">,</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;getArticles&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="s2">&quot;S&amp;P 500&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dateStart&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-12-01&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dateEnd&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;news&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lang&quot;</span><span class="p">:</span> <span class="s2">&quot;eng&quot;</span>
+        <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">API_URL</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">test_params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Connect to API successfully&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;articles&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">articles</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;articles&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;get </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span><span class="si">}</span><span class="s2">  articles&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">articles</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Title example:</span><span class="si">{</span><span class="n">articles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;N/A&#39;</span><span class="p">)[:</span><span class="mi">80</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">200</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span>
+</code></pre></div>
+
+<p>Running the <code>test_api</code> function, the test passed smoothly, successfully retrieving 100 news articles related to the S&amp;P 500 for December 2025.</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_test_api.png"></p>
+<p>We then continued to attempt to retrieve news data related to the S&amp;P 500 for our required time window.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">news_api</span><span class="p">(</span><span class="n">keyword</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;It is a test&quot;</span><span class="p">)</span>
+
+    <span class="n">test_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;apiKey&quot;</span><span class="p">:</span> <span class="n">API_KEY</span><span class="p">,</span>
+    <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;getArticles&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="s2">&quot;S&amp;P 500&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dateStart&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-12-01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dateEnd&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;news&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lang&quot;</span><span class="p">:</span> <span class="s2">&quot;eng&quot;</span>
+    <span class="p">}</span>
+</code></pre></div>
+
+<p>But to our surprise, we retrieved 0 articles related to the S&amp;P 500 for the window period from January 2003 to December 2024.</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_news_main.png"></p>
+<h3>2.1.2 Problem Diagnosis Process</h3>
+<p>To solve this problem, we constructed <strong>multiple keywords</strong> for the asset to search for news. However, all five keywords failed to retrieve any results.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">simple_queries</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;S&amp;P 500&quot;</span><span class="p">,</span> <span class="s2">&quot;SPX&quot;</span><span class="p">,</span> <span class="s2">&quot;S&amp;P500&quot;</span><span class="p">,</span> <span class="s2">&quot;Standard &amp; Poor&#39;s&quot;</span><span class="p">,</span> <span class="s2">&quot;stock market&quot;</span><span class="p">,</span> <span class="s2">&quot;Wall Street&quot;</span><span class="p">]</span>
+<span class="n">results_simple</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">simple_queries</span><span class="p">:</span>
+    <span class="n">success</span><span class="p">,</span> <span class="n">articles</span> <span class="o">=</span> <span class="n">news_Main</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="n">results_simple</span><span class="p">[</span><span class="n">query</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span> <span class="k">if</span> <span class="n">articles</span> <span class="k">else</span> <span class="mi">0</span>
+</code></pre></div>
+
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_get_SP.png"></p>
+<p>Ultimately, we suspected that due to the data retrieval limitations of the API's free tier, we could not obtain data for a long time window. Therefore, we attempted to design a comprehensive diagnostic program to identify the root cause.</p>
+<p><code>fetch_news_for_range(days)</code> is the time-window diagnostic function we designed specifically to test the historical data support level of NewsAPI.ai. 
+This function accepts a days parameter, automatically calculates the corresponding date range, and then queries for news related to "EuroStoxx 50" (the reason for not querying S&amp;P 500 related news here is that the number of S&amp;P 500 related articles is too large, exceeding the return limit from the very first time window; the return limit will be mentioned later).</p>
+<p>By testing different days values (7 days, 30 days, 90 days, 1 year, 5 years), we could clearly understand the actual capability boundary of the free version of the API.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_news_for_range</span><span class="p">(</span><span class="n">days</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+    <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">start_date</span> <span class="o">=</span> <span class="n">end_date</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">days</span><span class="p">)</span>
+
+    <span class="n">date_from</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">date_to</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;apiKey&quot;</span><span class="p">:</span> <span class="n">API_KEY</span><span class="p">,</span>
+    <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;getArticles&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="s2">&quot;EuroStoxx 50&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dateStart&quot;</span><span class="p">:</span> <span class="n">date_from</span><span class="p">,</span>
+    <span class="s2">&quot;dateEnd&quot;</span><span class="p">:</span> <span class="n">date_to</span><span class="p">,</span>
+    <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;news&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lang&quot;</span><span class="p">:</span> <span class="s2">&quot;eng&quot;</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">API_URL</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;articles&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">[]}}</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;articles&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">[]}}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">diagnose_api_limitations</span><span class="p">():</span>
+    <span class="n">test_ranges</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;Last 7 days&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Last 30 days&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Last 90 days&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Last 1 year&quot;</span><span class="p">,</span> <span class="mi">365</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Last 5 years&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">365</span><span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing API time limitations&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">days</span> <span class="ow">in</span> <span class="n">test_ranges</span><span class="p">:</span>
+        <span class="c1"># Test each time range</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Testing: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">days</span><span class="si">}</span><span class="s2"> days)&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">fetch_news_for_range</span><span class="p">(</span><span class="n">days</span><span class="p">)</span>
+        <span class="n">article_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">article_count</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Found: </span><span class="si">{</span><span class="n">article_count</span><span class="si">}</span><span class="s2"> articles&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+
+<p>From the diagnostic results, we did not truly test the time range limit of the API. The data increased to 100 as the query window
+ expanded and then stopped rising. On the surface, it seemed constrained by the time window, but after testing with other keywords and combining it with the previous test_api 
+result which also returned 100 articles, we finally confirmed: <strong>The actual limitation is not the time range, but the API's single-page return limit -- a maximum of 100 records per page.</strong> The time window test was essentially masked by this quantity limit, failing to truly reflect the API's complete support capability for historical data.</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_diagnose.png"></p>
+<p>To distinguish between the return limit and time constraints, we redesigned
+ our testing strategy, shifting from continuous time window testing to segmented time interval
+ analysis. We divided the timeline into six non-overlapping intervals, each queried independently, avoiding the distortion of results by the single-query quantity limit.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="k">def</span> <span class="nf">fetch_news_for_range</span><span class="p">(</span><span class="n">start_days_ago</span><span class="p">,</span> <span class="n">end_days_ago</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+    <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">end_days_ago</span><span class="p">)</span>
+    <span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">start_days_ago</span><span class="p">)</span>
+    <span class="n">date_from</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">date_to</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;apiKey&quot;</span><span class="p">:</span> <span class="n">API_KEY</span><span class="p">,</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;getArticles&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="s2">&quot;EuroStoxx 50&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dateStart&quot;</span><span class="p">:</span> <span class="n">date_from</span><span class="p">,</span>
+        <span class="s2">&quot;dateEnd&quot;</span><span class="p">:</span> <span class="n">date_to</span><span class="p">,</span>
+        <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;news&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lang&quot;</span><span class="p">:</span> <span class="s2">&quot;eng&quot;</span>
+
+    <span class="p">}</span>
+
+    <span class="err">…</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">diagnose_api_limitations_segmented</span><span class="p">():</span>
+    <span class="n">test_ranges</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;0-7 days&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;7-30 days&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">23</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;30-90 days&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;90-180 days&quot;</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;180-365 days&quot;</span><span class="p">,</span> <span class="mi">365</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">185</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;365-730 days&quot;</span><span class="p">,</span> <span class="mi">730</span><span class="p">,</span> <span class="mi">365</span><span class="p">,</span> <span class="mi">365</span><span class="p">),</span>
+        <span class="p">]</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Segmented API Time Range Test&quot;</span><span class="p">)</span>
+
+    <span class="n">total_articles</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">start_days</span><span class="p">,</span> <span class="n">end_days</span><span class="p">,</span> <span class="n">span_days</span> <span class="ow">in</span> <span class="n">test_ranges</span><span class="p">:</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">fetch_news_for_range</span><span class="p">(</span><span class="n">start_days</span><span class="p">,</span> <span class="n">end_days</span><span class="p">)</span>
+        <span class="n">article_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+
+        <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;articles&quot;</span><span class="p">:</span> <span class="n">article_count</span><span class="p">,</span>
+            <span class="s2">&quot;start_days&quot;</span><span class="p">:</span> <span class="n">start_days</span><span class="p">,</span>
+            <span class="s2">&quot;end_days&quot;</span><span class="p">:</span> <span class="n">end_days</span><span class="p">,</span>
+            <span class="s2">&quot;span_days&quot;</span><span class="p">:</span> <span class="n">span_days</span><span class="p">,</span>
+            <span class="s2">&quot;date_range&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">start_days</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">end_days</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">}</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Summary:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Article Distribution:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">percentage</span> <span class="o">=</span> <span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;articles&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">total_articles</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="k">if</span> <span class="n">total_articles</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">15</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;articles&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2"> articles | </span><span class="si">{</span><span class="n">percentage</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+
+<p>The results show that the EuroStoxx 50 related news returned by the API exhibits a <strong>significant temporal decay trend</strong>: all articles are concentrated within the most recent 90 days, while the data retrieval result for periods before 90 days is zero. This indicates that this API has <strong>strict limitations on the time coverage</strong> of historical news; the actual usable data window likely does not exceed three months.</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_diag_api.png"></p>
+<p>This demonstrates that the API approach is not viable, prompting us to turn to web scraping from Google News for data acquisition.</p>
+<h3>2.1.3 Conclusions and Insights</h3>
+<p>During this process of examining the data retrieval limits of the API, we had a vague sense that the path to obtaining complete data through this interface was not smooth. In fact, some team members had already begun turning to Google News scraping as an alternative solution. However, we still persisted in systematically verifying the reasons for the retrieval failure with code—this persistence itself is an important lesson we learned in the process: <strong>Sometimes the value of a problem lies not in being solved, but in being clearly identified and understood.</strong> The significance of technical exploration lies not only in finding a feasible path but also in understanding why a certain path is not feasible.</p>
+<h1>2.News Data Collection</h1>
+<h2>2.1 Source 1: API.ai</h2>
+<p>First, we want to share the difficulties encountered, solutions explored, and final outcomes in obtaining news data.</p>
+<p>After studying the Data Sources in the Lecture Notes, we first considered obtaining data from <a href="https://newsapi.ai/">NewsAPI.ai</a>. Its advantages over other methods are as follows:</p>
+<ul>
+<li>
+<p>Simple REST API interface</p>
+</li>
+<li>
+<p>Returns JSON format data directly, including title, body, source, and timestamp</p>
+</li>
+<li>
+<p>Relatively fast download speed</p>
+</li>
+</ul>
+<p>So, we registered an account on the API website and obtained the API key.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="s2">&quot;Our_API_Key&quot;</span>
+<span class="n">API_URL</span> <span class="o">=</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">eventregistry</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">article</span><span class="o">/</span><span class="n">getArticles</span>
+</code></pre></div>
+
+<h3>2.1.1 API Connection Testing and Primary Data Acquisition Attempt</h3>
+<p>We first conducted a test to see if we could connect to the API and successfully retrieve data for the S&amp;P 500 for the last month of 2025.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">test_api</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;It is a test&quot;</span><span class="p">)</span>
+    <span class="n">test_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;apiKey&quot;</span><span class="p">:</span> <span class="n">API_KEY</span><span class="p">,</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;getArticles&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="s2">&quot;S&amp;P 500&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dateStart&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-12-01&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dateEnd&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;news&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lang&quot;</span><span class="p">:</span> <span class="s2">&quot;eng&quot;</span>
+        <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">API_URL</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">test_params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Connect to API successfully&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;articles&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">articles</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;articles&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;get </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span><span class="si">}</span><span class="s2">  articles&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">articles</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Title example:</span><span class="si">{</span><span class="n">articles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;N/A&#39;</span><span class="p">)[:</span><span class="mi">80</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">200</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span>
+</code></pre></div>
+
+<p>Running the <code>test_api</code> function, the test passed smoothly, successfully retrieving 100 news articles related to the S&amp;P 500 for December 2025.</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_test_api.png"></p>
+<p>We then continued to attempt to retrieve news data related to the S&amp;P 500 for our required time window.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">news_api</span><span class="p">(</span><span class="n">keyword</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;It is a test&quot;</span><span class="p">)</span>
+
+    <span class="n">test_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;apiKey&quot;</span><span class="p">:</span> <span class="n">API_KEY</span><span class="p">,</span>
+    <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;getArticles&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="s2">&quot;S&amp;P 500&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dateStart&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-12-01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dateEnd&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;news&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lang&quot;</span><span class="p">:</span> <span class="s2">&quot;eng&quot;</span>
+    <span class="p">}</span>
+</code></pre></div>
+
+<p>But to our surprise, we retrieved 0 articles related to the S&amp;P 500 for the window period from January 2003 to December 2024.</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_news_main.png"></p>
+<h3>2.1.2 Problem Diagnosis Process</h3>
+<p>To solve this problem, we constructed <strong>multiple keywords</strong> for the asset to search for news. However, all five keywords failed to retrieve any results.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">simple_queries</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;S&amp;P 500&quot;</span><span class="p">,</span> <span class="s2">&quot;SPX&quot;</span><span class="p">,</span> <span class="s2">&quot;S&amp;P500&quot;</span><span class="p">,</span> <span class="s2">&quot;Standard &amp; Poor&#39;s&quot;</span><span class="p">,</span> <span class="s2">&quot;stock market&quot;</span><span class="p">,</span> <span class="s2">&quot;Wall Street&quot;</span><span class="p">]</span>
+<span class="n">results_simple</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">simple_queries</span><span class="p">:</span>
+    <span class="n">success</span><span class="p">,</span> <span class="n">articles</span> <span class="o">=</span> <span class="n">news_Main</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="n">results_simple</span><span class="p">[</span><span class="n">query</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span> <span class="k">if</span> <span class="n">articles</span> <span class="k">else</span> <span class="mi">0</span>
+</code></pre></div>
+
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_get_SP.png"></p>
+<p>Ultimately, we suspected that due to the data retrieval limitations of the API's free tier, we could not obtain data for a long time window. Therefore, we attempted to design a comprehensive diagnostic program to identify the root cause.</p>
+<p><code>fetch_news_for_range(days)</code> is the time-window diagnostic function we designed specifically to test the historical data support level of NewsAPI.ai. 
+This function accepts a days parameter, automatically calculates the corresponding date range, and then queries for news related to "EuroStoxx 50" (the reason for not querying S&amp;P 500 related news here is that the number of S&amp;P 500 related articles is too large, exceeding the return limit from the very first time window; the return limit will be mentioned later).</p>
+<p>By testing different days values (7 days, 30 days, 90 days, 1 year, 5 years), we could clearly understand the actual capability boundary of the free version of the API.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_news_for_range</span><span class="p">(</span><span class="n">days</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+    <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">start_date</span> <span class="o">=</span> <span class="n">end_date</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">days</span><span class="p">)</span>
+
+    <span class="n">date_from</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">date_to</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;apiKey&quot;</span><span class="p">:</span> <span class="n">API_KEY</span><span class="p">,</span>
+    <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;getArticles&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="s2">&quot;EuroStoxx 50&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dateStart&quot;</span><span class="p">:</span> <span class="n">date_from</span><span class="p">,</span>
+    <span class="s2">&quot;dateEnd&quot;</span><span class="p">:</span> <span class="n">date_to</span><span class="p">,</span>
+    <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;news&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lang&quot;</span><span class="p">:</span> <span class="s2">&quot;eng&quot;</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">API_URL</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;articles&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">[]}}</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;articles&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">[]}}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">diagnose_api_limitations</span><span class="p">():</span>
+    <span class="n">test_ranges</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;Last 7 days&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Last 30 days&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Last 90 days&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Last 1 year&quot;</span><span class="p">,</span> <span class="mi">365</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;Last 5 years&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">365</span><span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing API time limitations&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">days</span> <span class="ow">in</span> <span class="n">test_ranges</span><span class="p">:</span>
+        <span class="c1"># Test each time range</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Testing: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">days</span><span class="si">}</span><span class="s2"> days)&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">fetch_news_for_range</span><span class="p">(</span><span class="n">days</span><span class="p">)</span>
+        <span class="n">article_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">article_count</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Found: </span><span class="si">{</span><span class="n">article_count</span><span class="si">}</span><span class="s2"> articles&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+
+<p>From the diagnostic results, we did not truly test the time range limit of the API. The data increased to 100 as the query window
+ expanded and then stopped rising. On the surface, it seemed constrained by the time window, but after testing with other keywords and combining it with the previous test_api 
+result which also returned 100 articles, we finally confirmed: <strong>The actual limitation is not the time range, but the API's single-page return limit -- a maximum of 100 records per page.</strong> The time window test was essentially masked by this quantity limit, failing to truly reflect the API's complete support capability for historical data.</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_diagnose.png"></p>
+<p>To distinguish between the return limit and time constraints, we redesigned
+ our testing strategy, shifting from continuous time window testing to segmented time interval
+ analysis. We divided the timeline into six non-overlapping intervals, each queried independently, avoiding the distortion of results by the single-query quantity limit.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="k">def</span> <span class="nf">fetch_news_for_range</span><span class="p">(</span><span class="n">start_days_ago</span><span class="p">,</span> <span class="n">end_days_ago</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+    <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">end_days_ago</span><span class="p">)</span>
+    <span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">start_days_ago</span><span class="p">)</span>
+    <span class="n">date_from</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">date_to</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;apiKey&quot;</span><span class="p">:</span> <span class="n">API_KEY</span><span class="p">,</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;getArticles&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="s2">&quot;EuroStoxx 50&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dateStart&quot;</span><span class="p">:</span> <span class="n">date_from</span><span class="p">,</span>
+        <span class="s2">&quot;dateEnd&quot;</span><span class="p">:</span> <span class="n">date_to</span><span class="p">,</span>
+        <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;news&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lang&quot;</span><span class="p">:</span> <span class="s2">&quot;eng&quot;</span>
+
+    <span class="p">}</span>
+
+    <span class="err">…</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">diagnose_api_limitations_segmented</span><span class="p">():</span>
+    <span class="n">test_ranges</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;0-7 days&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;7-30 days&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">23</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;30-90 days&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;90-180 days&quot;</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;180-365 days&quot;</span><span class="p">,</span> <span class="mi">365</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">185</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;365-730 days&quot;</span><span class="p">,</span> <span class="mi">730</span><span class="p">,</span> <span class="mi">365</span><span class="p">,</span> <span class="mi">365</span><span class="p">),</span>
+        <span class="p">]</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Segmented API Time Range Test&quot;</span><span class="p">)</span>
+
+    <span class="n">total_articles</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">start_days</span><span class="p">,</span> <span class="n">end_days</span><span class="p">,</span> <span class="n">span_days</span> <span class="ow">in</span> <span class="n">test_ranges</span><span class="p">:</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">fetch_news_for_range</span><span class="p">(</span><span class="n">start_days</span><span class="p">,</span> <span class="n">end_days</span><span class="p">)</span>
+        <span class="n">article_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+
+        <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;articles&quot;</span><span class="p">:</span> <span class="n">article_count</span><span class="p">,</span>
+            <span class="s2">&quot;start_days&quot;</span><span class="p">:</span> <span class="n">start_days</span><span class="p">,</span>
+            <span class="s2">&quot;end_days&quot;</span><span class="p">:</span> <span class="n">end_days</span><span class="p">,</span>
+            <span class="s2">&quot;span_days&quot;</span><span class="p">:</span> <span class="n">span_days</span><span class="p">,</span>
+            <span class="s2">&quot;date_range&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">start_days</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">end_days</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">}</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Summary:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Article Distribution:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">percentage</span> <span class="o">=</span> <span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;articles&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">total_articles</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="k">if</span> <span class="n">total_articles</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">15</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;articles&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2"> articles | </span><span class="si">{</span><span class="n">percentage</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+
+<p>The results show that the EuroStoxx 50 related news returned by the API exhibits a <strong>significant temporal decay trend</strong>: all articles are concentrated within the most recent 90 days, while the data retrieval result for periods before 90 days is zero. This indicates that this API has <strong>strict limitations on the time coverage</strong> of historical news; the actual usable data window likely does not exceed three months.</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_diag_api.png"></p>
+<p>This demonstrates that the API approach is not viable, prompting us to turn to web scraping from Google News for data acquisition.</p>
+<h3>2.1.3 Conclusions and Insights</h3>
+<p>During this process of examining the data retrieval limits of the API, we had a vague sense that the path to obtaining complete data through this interface was not smooth. In fact, some team members had already begun turning to Google News scraping as an alternative solution. However, we still persisted in systematically verifying the reasons for the retrieval failure with code—this persistence itself is an important lesson we learned in the process: <strong>Sometimes the value of a problem lies not in being solved, but in being clearly identified and understood.</strong> The significance of technical exploration lies not only in finding a feasible path but also in understanding why a certain path is not feasible.</p>
+<h2>2.2 Source 2: Google News</h2>
+<p>Building a web scraper to collect financial data from Google News presented a unique set of challenges, transforming a seemingly straightforward task into a complex exercise in stealth and system design. The goal was clear: programmatically gather news articles related to specific financial indices like the S&amp;P 500 to analyze market sentiment. The reality, however, involved a constant battle against sophisticated anti-bot mechanisms. Text below post chronicles the key technical hurdles encountered and the iterative process of developing solutions.</p>
+<h3>2.2.1 Strategies for dealing with Google's anti-scraping mechanisms</h3>
+<h4>a. Disable automation features</h4>
+<p>The fundamental principle of evading detection is to make the automated script indistinguishable from a human user. Google's systems are exceptionally adept at spotting the tell-tale signs of automation. My initial, naive attempt—using a standard Selenium-controlled browser—was immediately flagged. The journey to refinement began with masking these automated fingerprints.</p>
+<p>The first and most crucial step was to configure the Chrome browser to hide its automated nature. This involved a multi-pronged approach within the browser options.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.chrome.options</span> <span class="kn">import</span> <span class="n">Options</span>
+
+<span class="n">chrome_options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+
+<span class="c1"># 1. Disable automation control features</span>
+<span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--disable-blink-features=AutomationControlled&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2. Remove specific switches that indicate automation</span>
+<span class="n">chrome_options</span><span class="o">.</span><span class="n">add_experimental_option</span><span class="p">(</span><span class="s2">&quot;excludeSwitches&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;enable-automation&quot;</span><span class="p">,</span> <span class="s2">&quot;enable-logging&quot;</span><span class="p">])</span>
+
+<span class="c1"># 3. Disable the use of automation extensions</span>
+<span class="n">chrome_options</span><span class="o">.</span><span class="n">add_experimental_option</span><span class="p">(</span><span class="s1">&#39;useAutomationExtension&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">chrome_options</span><span class="p">)</span>
+</code></pre></div>
+
+<p>This code snippet effectively tells the browser not to advertise its true nature. Hiding these internal features is the equivalent of removing a "self-driving" placard from a car; from the outside, it looks like any other vehicle on the road.</p>
+<h4>b. User Agent (UA) Pool Rotation</h4>
+<p>Disabling automation flags is a good start, but it's not enough. The next layer of defense involves mimicking human behavior patterns. Two key tactics were employed: dynamic user agent rotation and strategic request timing.</p>
+<p>A User Agent (UA) string identifies the browser and operating system to the web server. Using a single, static UA is a red flag for a bot. The solution was to implement a pool of common UAs and rotate them randomly for each session or task.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">user_agents</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15&quot;</span>
+<span class="p">]</span>
+
+<span class="n">selected_ua</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">user_agents</span><span class="p">)</span>
+<span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--user-agent=</span><span class="si">{</span><span class="n">selected_ua</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h4>c. Random delay</h4>
+<p>Furthermore, a bot typically makes requests at machine-gun speed. Humans, on the other hand, browse with unpredictable pauses. Introducing random delays between requests was critical.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">DELAY_BETWEEN_REQUESTS</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>  <span class="c1"># seconds</span>
+
+<span class="k">def</span> <span class="nf">paced_request</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="c1"># ... code to navigate to a URL ...</span>
+    <span class="n">delay</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="n">DELAY_BETWEEN_REQUESTS</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+</code></pre></div>
+
+<p>This simple yet effective method of adding a random wait time between 2 and 5 seconds significantly reduced the risk of triggering rate limits.</p>
+<h4>d.Adjust the browser window</h4>
+<p>Adjust the browser window size to a commonly used human dimension.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--window-size=1920,1080&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>2.2.2 Other issues</h3>
+<p>Even with a well-disguised browser, technical problems specific to the target website can halt progress. Two significant issues were related to search query formatting and result pagination.</p>
+<h4>a.Issues encountered with search keywords</h4>
+<p>When searching for "S&amp;P 500", the ampersand (&amp;) character is interpreted by the URL as a parameter separator. My initial script would only send "S" as the search term, completely breaking the functionality. The solution was to properly encode the search term before inserting it into the URL.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">quote_plus</span>
+<span class="n">search_term</span> <span class="o">=</span> <span class="s2">&quot;S&amp;P500 OR SPX OR SP500&quot;</span>
+<span class="n">search_term_encoded</span> <span class="o">=</span> <span class="n">quote_plus</span><span class="p">(</span><span class="n">search_term</span><span class="p">)</span>
+<span class="c1"># Result: &#39;S%26P500+OR+SPX+OR+SP500&#39;</span>
+</code></pre></div>
+
+<p>This encodes the special characters, ensuring the server receives the exact query intended.</p>
+<h4>b.Start and end dates of the time filter</h4>
+<p>A more complex problem was scraping more than the initial 10 results displayed by Google News. Simply scrolling down the page was insufficient; it only loaded dynamic content within the first page. To access the true "next page" of results, the script needed to interact with the "More results" button. This required a robust method to find and click the button, accounting for potential variations in its label or design.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
+<span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="kn">import</span> <span class="n">NoSuchElementException</span>
+
+<span class="n">more_button_selectors</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;input[value*=&#39;More&#39;]&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;a[aria-label*=&#39;More&#39;]&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;a:contains(&#39;More results&#39;)&quot;</span><span class="p">,</span> <span class="c1"># Requires a different lookup method</span>
+    <span class="s2">&quot;button:contains(&#39;More&#39;)&quot;</span>
+<span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">click_more_results</span><span class="p">(</span><span class="n">driver</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">selector</span> <span class="ow">in</span> <span class="n">more_button_selectors</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Example using CSS_SELECTOR for simplicity</span>
+            <span class="n">more_button</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">,</span> <span class="n">selector</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">more_button</span><span class="o">.</span><span class="n">is_displayed</span><span class="p">():</span>
+                <span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;arguments[0].scrollIntoView(true);&quot;</span><span class="p">,</span> <span class="n">more_button</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;arguments[0].click();&quot;</span><span class="p">,</span> <span class="n">more_button</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="n">NoSuchElementException</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+    <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
+
+<p>This function attempts to locate the button using multiple possible selectors, making the pagination process more reliable.</p>
+<h3>2.2.3 Problem nsolvable for now: CAPTCHA and IP Blocks</h3>
+<p>Despite all these efforts, the most formidable obstacle remains: Google's reCAPTCHA and subsequent IP address bans. When the system determines that traffic is suspicious, it presents a CAPTCHA challenge. Automatically solving these is ethically questionable and technically very difficult. Often, the only immediate "solution" is to wait for the IP address to be released from what scraper developers colloquially call "Google jail." This highlights the inherent limitations of such projects and underscores the importance of respectful scraping practices, such as adhering to robots.txtand minimizing server load.</p>
+<h3>2.2.4 Data Output</h3>
+<p>Finally, we structure the data into a table, which includes “asset_name”, “title”,  description”, “content”, “author”, “content_length”, “word_count”, “year”, “month” ,etc.. Then, we export the data to Excel. A sample output is shown below:</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_result_news.png"></p>
+<p>Also, here is our text data statistics table:</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_01_table_sta.png"></p>
+<h1>3.Social media data source</h1>
+<p>Based on our needs for building a financial market sentiment analysis model, social media data,
+ in addition to mainstream news, is a crucial supplementary source. We attempted to extract relevant
+ discussions from Reddit(especially financial subreddits like r/wallstreetbets and r/stocks) to extract retail investor sentiment.</p>
+<p>The core crawling strategy and output summary are as follows:</p>
+<h2>3.1 Crawling Logic</h2>
+<p>We traversed multiple target subreddits and used a combination of sorting methods such as "Popular," "Newest," and "Best of the Year,"
+ while also using keywords such as "S&amp;P 500" for searching, attempting to maximize data coverage.</p>
+<h2>3.2 Main Output Results</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">Data</span> <span class="n">Statistics</span><span class="p">:</span>
+<span class="n">Total</span> <span class="n">Posts</span><span class="p">:</span> <span class="mi">2374</span>
+<span class="n">Earliest</span> <span class="n">Post</span><span class="p">:</span> <span class="mi">2025</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">13</span> <span class="mi">05</span><span class="p">:</span><span class="mi">53</span><span class="p">:</span><span class="mi">56</span>
+<span class="n">Latest</span> <span class="n">Post</span><span class="p">:</span> <span class="mi">2026</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">10</span> <span class="mi">19</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">15</span>
+<span class="n">Daily</span> <span class="n">Posting</span> <span class="n">Statistics</span><span class="p">:</span>
+
+<span class="n">date</span>
+<span class="mi">2026</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">97</span>
+<span class="mi">2026</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">02</span> <span class="mi">100</span>
+<span class="mi">2026</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">03</span> <span class="mi">84</span>
+<span class="mi">2026</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">04</span> <span class="mi">52</span>
+<span class="mi">2026</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">05</span> <span class="mi">63</span>
+<span class="mi">2026</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">06</span> <span class="mi">114</span>
+<span class="mi">2026</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">07</span> <span class="mi">149</span>
+<span class="mi">2026</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">08</span> <span class="mi">131</span>
+<span class="mi">2026</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">09</span> <span class="mi">144</span>
+<span class="mi">2026</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">10</span> <span class="mi">391</span>
+<span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
+</code></pre></div>
+
+<p>Although the crawler successfully ran and retrieved thousands of data points, the results revealed a fundamental contradiction.
+While the code is robust, having crawled 2000+ posts, the data's time span is only about one year, 
+and the posts are highly concentrated around the crawl dates. This is unusable for research requiring backtesting with years of historical data (e.g., 2003-2024).</p>
+<p>It is found out to be a limitation of the platform design. The Reddit API and page access mechanism default and prioritize returning the latest content creating an invisible barrier to deep access to historical data.
+This attempt clearly shows that Reddit cannot directly provide long-term, uniform historical sentiment data. It also modified terms of use of data API to explicitly prohibit usage of Reddit data for commercialized and noncommercialized machine learning training.</p>
+<p><strong>Other alternative channels also had shortcomings:</strong> Twitter's (X) API policy had shifted towards commercialization, making historical data acquisition costly; 
+YouTube's comment data, due to its dynamic page loading mechanism and API quota limitations, was difficult to crawl stably and in large quantities; and 
+labeled datasets like Sentiment140 lacked accurate timestamps, making alignment with market data difficult.</p>
+<p>To address these issues, we experimented with several open-source toolkits on GitHub specifically for data collection and explored other platforms. 
+We found that <code>StockTwits</code>, which focuses on stock discussions, while requiring an API key application, had relatively clear and user-friendly interface rules, 
+potentially providing a viable alternative data source for our research.</p>
+<h1>4.Summary and Insights</h1>
+<h2>4.1 Summary</h2>
+<p>This project aims to build a high-quality financial asset text dataset covering news and social media data for the period 2003–2024. The main achievements are as follows:</p>
+<h3>4.1.1 News Data</h3>
+<p>Attempts to obtain data via NewsAPI.ai revealed that its free tier has historical data time window limitations (≈90 days) and single-query return limits (100 entries), making it unsuitable for long-term needs. Subsequently, we turned to Google News web scraping. By simulating browser behavior, introducing random delays, using dynamic User-Agents, encoding queries, and implementing intelligent pagination, we successfully scraped and structured news data.</p>
+<h3>4.1.2 Social Media Data</h3>
+<p>Attempts to scrape financial discussions from Reddit yielded 2,000+ entries, but the data was heavily concentrated around recent dates, making it unsuitable for long-term analysis. We also found that platforms like Twitter and YouTube posed challenges for historical data collection due to API restrictions. Finally, StockTwits was identified as a potential alternative data source.</p>
+<h2>4.2 Insights</h2>
+<h3>4.2.1 Identifying the Problem Is a Valuable Outcome</h3>
+<p>While testing the API, we systematically diagnosed and confirmed its time and quantity limitations, validating the idea that “sometimes the value of a problem lies not in being solved, but in being clearly understood.” Technical exploration involves not only finding feasible paths but also understanding why certain paths are not viable.</p>
+<h3>4.2.2 Stay Flexible and Maintain Backup Sources</h3>
+<p>Single data sources often have unexpected limitations. Shifting from APIs to scraping, and from Reddit to StockTwits, demonstrates the importance of adaptability and multi-source preparation. In complex data projects, alternative plans should be prepared in advance.</p>
+<h3>4.2.3 Data Quality Assessment Should Start Early</h3>
+<p>The “recent concentration” of Reddit data illustrates that even large volumes of data may be unusable if poorly distributed over time. Preliminary statistical analysis should be conducted during the data collection phase to avoid wasting resources later.
+In conclusion, this data collection process not only enhanced technical skills but also highlighted the importance of problem diagnosis, strategic adaptation, compliance awareness, and early quality assessment in data-driven projects.</p>
+<p><strong>Group Dice8</strong><br>
+January 10, 2026</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-10T19:15:00+08:00">Sat 10 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-dice8-ref">Group Dice8
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

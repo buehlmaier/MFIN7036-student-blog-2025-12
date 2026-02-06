@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group Deepsick, Reflective Report, " />
+
+<meta property="og:title" content="Predicting Federal Funds Rate Movements from FOMC Statement(by Group &#34;Deepsick&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/predicting-federal-funds-rate-movements-from-fomc-statementby-group-deepsick.html" />
+<meta property="og:description" content="By Group &#34;Deepsick&#34; Introduction Monetary policy communication plays an important role in shaping market expectations, with the Federal Funds Rate being one of the most closely watched policy indicators. Although the Federal Open Market Committee (FOMC) communicates its decisions through official statements and meeting minutes, these texts are qualitative in …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-10T15:40:00+08:00" />
+<meta name="twitter:title" content="Predicting Federal Funds Rate Movements from FOMC Statement(by Group &#34;Deepsick&#34;) ">
+<meta name="twitter:description" content="By Group &#34;Deepsick&#34; Introduction Monetary policy communication plays an important role in shaping market expectations, with the Federal Funds Rate being one of the most closely watched policy indicators. Although the Federal Open Market Committee (FOMC) communicates its decisions through official statements and meeting minutes, these texts are qualitative in …">
+
+        <title>Predicting Federal Funds Rate Movements from FOMC Statement(by Group &#34;Deepsick&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/predicting-federal-funds-rate-movements-from-fomc-statementby-group-deepsick.html">
+                Predicting Federal Funds Rate Movements from FOMC Statement(by Group "Deepsick")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>By Group "Deepsick"</p>
+<h2><strong>Introduction</strong></h2>
+<p>Monetary policy communication plays an important role in shaping market expectations, with the Federal Funds Rate being one of the most closely watched policy indicators. Although the Federal Open Market Committee (FOMC) communicates its decisions through official statements and meeting minutes, these texts are qualitative in nature and difficult to interpret systematically.</p>
+<p>Recent advances in natural language processing (NLP) make it possible to transform such unstructured text into quantitative features. This project explores whether the language used in FOMC communication contains predictive signals about future movements in the Federal Funds Rate.</p>
+<p>This project explores whether NLP techniques can be used to extract quantitative signals from FOMC communication and assess whether policy language contains information about future movements in the Federal Funds Rate. The textual analysis is linked to observed interest rate outcomes using data from Federal Reserve Economic Data (FRED).</p>
+<p>By framing monetary policy prediction as a text-based classification problem, this project provides a practical demonstration of how relatively simple NLP techniques can be applied to real-world policy documents.</p>
+<hr>
+<h2><strong>Data Source</strong></h2>
+<h5>1. FOMC text data:</h5>
+<p>The textual data consist of FOMC statements and meeting minutes collected from official Federal Reserve websites. The we use <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm">FOMC Calendars</a> to obtain documents from recent years (2020–2025), while the <a href="https://www.federalreserve.gov/monetarypolicy/fomc_historical_year.htm">FOMC Historical Year</a> to collect documents from earlier years (2000–2019).</p>
+<p>In total, the dataset includes:</p>
+<ul>
+<li>220 FOMC statements</li>
+<li>207 FOMC meeting minutes</li>
+<li>Coverage period: 2000–2025</li>
+</ul>
+<h5>2. Monetary Policy Data:</h5>
+<p>The effective federal funds rate (DFF) data are obtained from <a href="https://fred.stlouisfed.org/series/DFF">FRED</a>.
+In total, the dataset includes:</p>
+<ul>
+<li>9,497 daily observations.</li>
+<li>Coverage period: 2000–2025</li>
+</ul>
+<p>In the following section, we introduce the data preprocessing procedures and corresponding strategies.</p>
+<hr>
+<h2><strong>Step 1: Data Collection</strong></h2>
+<p>For the text data, firstly we import the libraries. Since the Federal Reserve’s website is static, which does not require the user interaction or JavaScript rendering, we conduct the Requests library to do the web scraping.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+</code></pre></div>
+
+<p>We download and store the statement and minutes’ html from the current url and history url.
+Our HTTP requests are sent using the requests library with a standard browser user-agent header to avoid access restrictions. Later, the HTML content is parsed using BeautifulSoup.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0&quot;</span><span class="p">}</span>
+<span class="c1"># get current html links</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">current_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+<span class="c1"># get historical html links</span>
+<span class="n">hist_response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">historical_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="n">hist_soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">hist_response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Due to inconsistencies in webpage design across different periods, the structure of FOMC pages differs between current and historical URLs. </p>
+<p><img alt="Picture showing 2025FOMCMeetings" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Deepsick_01_2025FOMCMeetings.jpeg"> <img alt="Picture showing 2005Memos" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Deepsick_01_2005Memos.jpeg"></p>
+<p>For recent years, FOMC statements have been published as press releases with standardized HTML structures, allowing statement links to be identified directly through consistent URL patterns. In contrast, historical pages embed statements within year-specific archives alongside various related materials. Statement links are therefore identified using keyword matching (e.g., “statement”) and filtered by the presence of an eight-digit date pattern (YYYYMMDD) in the URL. PDF files and supplementary documents are excluded to avoid irrelevant or duplicate content. Accordingly, separate extraction rules are applied to current and historical pages to ensure consistent and accurate data collection over time.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 2020-2025 Statement Link</span>
+       <span class="k">if</span> <span class="p">(</span>
+           <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;HTML&quot;</span>
+           <span class="ow">and</span> <span class="n">href</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/newsevents/pressreleases/monetary&quot;</span><span class="p">)</span>
+           <span class="ow">and</span> <span class="n">href</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.htm&quot;</span><span class="p">)</span>
+       <span class="p">):</span>
+<span class="c1"># 2000-2019 Statement Link</span>
+           <span class="k">if</span> <span class="p">(</span>
+               <span class="mi">2000</span> <span class="o">&lt;=</span> <span class="n">year</span> <span class="o">&lt;=</span> <span class="mi">2019</span>
+               <span class="ow">and</span> <span class="s2">&quot;statement&quot;</span> <span class="ow">in</span> <span class="n">label</span>
+               <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d</span><span class="si">{8}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">href</span><span class="p">)</span>
+               <span class="ow">and</span> <span class="ow">not</span> <span class="n">href</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pdf&quot;</span><span class="p">)</span>
+           <span class="p">):</span>
+</code></pre></div>
+
+<p>Combine the html from 2000-2025 together.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 3. combine the links of statements and minutes (2000-2025)</span>
+   <span class="n">sta_links</span> <span class="o">=</span> <span class="n">statement_links</span> <span class="o">+</span> <span class="n">historical_statement_links</span>
+   <span class="n">min_links</span> <span class="o">=</span> <span class="n">minutes_links</span> <span class="o">+</span> <span class="n">historical_minutes_links</span>
+</code></pre></div>
+
+<p>Next, we use the beautiful soup to extract the date and text from the HTML. 
+We found that each HTML link contains the meeting date, which was extracted directly from the URL. This approach is more efficient than parsing the date from the HTML content, as the webpage structure is inconsistent across years and makes the date difficult to locate programmatically. </p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 4. extract date and text from html</span>
+<span class="k">def</span> <span class="nf">extract_date_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">   </span><span class="sd">&quot;&quot;&quot;Extract YYYYMMDD from URL only; return empty string on failure.&quot;&quot;&quot;</span>
+   <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d</span><span class="si">{8}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+   <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
+       <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+   <span class="n">dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The text content is extracted using the function extract_text_from_soup. Specifically, the function first targets the main content area identified by the col-sm-8 "div", and falls back to "table" elements when necessary. All relevant "p" tags are collected and concatenated to form the complete document text.</p>
+<p>Besides, a text-cleaning step is then applied to normalize whitespace. Specifically, carriage returns (\r), line breaks (\n), and tab characters (\t) are replaced with spaces, and multiple consecutive spaces are collapsed into a single space. This ensures a clean and consistent text format for subsequent analysis.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 5. data cleaning</span>
+<span class="k">def</span> <span class="nf">data_cleaning</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">   </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">   Normalize whitespace (remove \\r, \\n, \\t) and collapse multiple spaces.</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+   <span class="c1"># Replace common control characters with spaces</span>
+   <span class="n">cleaned</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+   <span class="c1"># Collapse repeated spaces</span>
+   <span class="n">cleaned</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">cleaned</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">cleaned</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</code></pre></div>
+
+<p>At the end of the data collection process of the text data, we save the date and text into a CSV file. The following shows the resulting statement dataset.</p>
+<p><img alt="Picture showing results" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Deepsick_01_results.jpeg"></p>
+<p>For the DFF data, observations are matched to FOMC statements by date. A policy direction label is constructed as follows:</p>
+<ul>
+<li><code>+1</code>: rate increase  </li>
+<li><code>0</code>: no change  </li>
+<li><code>−1</code>: rate decrease  </li>
+</ul>
+<p>Since rate changes occur after statement releases, the label at time <em>t</em> is defined using the rate movement between <em>t</em> and <em>t+1</em>. The following shows the clean and transformed DFF dataset:</p>
+<p><img alt="Picture showing rate" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Deepsick_01_rate.jpeg"></p>
+<hr>
+<h2><strong>Step 2: Data Preprocessing</strong></h2>
+<p>In this section, we construct a standard Natural Language Processing (NLP) preprocessing pipeline to transform raw textual data into a clean, structured format suitable for downstream analysis or modeling. The pipeline is: lowercase the text -&gt; tokenization -&gt; delete punctuations/numbers -&gt; remove stopwords -&gt; lemmatization -&gt; save to csv.
+Before the preprocessing, we import the NLTK library, which provides essential tools for tokenization, stopword removal, and lemmatization.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">nltk</span>
+<span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">WordNetLemmatizer</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+</code></pre></div>
+
+<p>We begin by converting all text to lowercase to ensure case consistency. Next, the text is tokenized into individual words using NLTK’s tokenizer. After tokenization, non-alphabetic tokens such as punctuation marks and numbers are removed to reduce noise. We then apply stopword removal to eliminate commonly used words (e.g., <em>“the”</em>, <em>“and”</em>, <em>“is”</em>) that typically carry limited semantic value. Following this, lemmatization is performed to normalize words to their base or dictionary form, which helps reduce vocabulary size while preserving meaning.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">cleaned_statement1</span> <span class="o">=</span> <span class="n">cleaned_statement</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="c1"># 1. lowercase all text</span>
+<span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="c1"># 2. tokenize text</span>
+<span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nltk</span><span class="o">.</span><span class="n">word_tokenize</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="c1"># 3. is alpha (delete punctuation, numbers, etc.)</span>
+<span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">isalpha</span><span class="p">()])</span>
+<span class="c1"># 4. stopwords removal</span>
+<span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">EN_STOPWORDS</span><span class="p">])</span>
+<span class="c1"># 6. lemmatization</span>
+<span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">LEMMATIZER</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">x</span><span class="p">])</span>
+<span class="c1"># 7. save as csv</span>
+<span class="n">cleaned_statement1</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;cleaned_statement1.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Finally, the cleaned and processed text is saved to a CSV file. This preprocessing workflow ensures that the textual data is consistent, noise-reduced, and semantically meaningful.</p>
+<hr>
+<h2><strong>Step 3: Text Vectorization</strong></h2>
+<p>TF-IDF features are constructed using both unigrams and bigrams. The lemmatized tokens are converted back into text format and vectorized using <code>TfidfVectorizer</code> with <code>ngram_range = (1, 2)</code>.</p>
+<p>To reduce noise and dimensionality:</p>
+<ul>
+<li>Terms appearing in fewer than 10 documents are removed (<code>min_df = 10</code>)</li>
+<li>Terms appearing in more than 85% of documents are removed (<code>max_df = 0.85</code>)</li>
+<li>Standard English stopwords are excluded</li>
+</ul>
+<p>This filtering strategy ensures that the resulting TF-IDF features focus on informative and policy-relevant language rather than generic or repetitive terms.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span>
+       <span class="n">token_pattern</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;(?u)\b\w+\b&quot;</span><span class="p">,</span>
+       <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>  <span class="c1"># unigram and bigram</span>
+       <span class="n">min_df</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="c1"># at least 10 times</span>
+       <span class="n">max_df</span><span class="o">=</span><span class="mf">0.85</span><span class="p">,</span>  <span class="c1"># filter out too frequent words</span>
+       <span class="n">stop_words</span><span class="o">=</span><span class="s1">&#39;english&#39;</span>
+   <span class="p">)</span>
+</code></pre></div>
+
+<hr>
+<h2><strong>Dataset Visualization</strong></h2>
+<p>The TF-IDF features are combined with the DFF-based policy labels into a single dataset containing:</p>
+<ul>
+<li>220 observations</li>
+<li>1,431 features (unigrams and bigrams)</li>
+</ul>
+<p><img alt="Picture showing dataset" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Deepsick_01_dataset.jpeg"></p>
+<hr>
+<h2><strong>Limitations</strong></h2>
+<p>The original plan was to compare models trained on FOMC statements and meeting minutes. However, the meeting minutes are substantially longer, which made data preprocessing and feature construction much more complex than expected. To keep the project manageable, the analysis focuses only on FOMC statements, potentially omitting richer policy discussions.</p>
+<p>In addition, the TF-IDF representation with bigrams may not be optimal. Several high-weight phrases (e.g. “assessment account”, “assessment likely”, “committee today”) appear to have limited economic relevance and may introduce noise.</p>
+<hr>
+<h2><strong>Future Plans</strong></h2>
+<p>The next step is to introduce a clear train–test split to evaluate out-of-sample predictive performance. Baseline models such as logistic regression and random forest classifiers will be trained and compared. Finally, additional data visualization will be used to improve interpretability and better communicate the relationship between policy language and interest rate decisions.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-10T15:40:00+08:00">Sat 10 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-deepsick-ref">Group Deepsick
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

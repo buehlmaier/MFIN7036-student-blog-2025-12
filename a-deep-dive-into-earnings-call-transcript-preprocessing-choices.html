@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group NLPlus+++, Reflective Report, " />
+
+<meta property="og:title" content="A Deep Dive Into Earnings Call Transcript Preprocessing Choices "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/a-deep-dive-into-earnings-call-transcript-preprocessing-choices.html" />
+<meta property="og:description" content="Key points when performing pre-processing for earnings call transcripts In our first blog post, we dive into the nuances of conducting pre-processing on textual data from earnings call transcripts, and the different methods to do so, inspired by the perspective that: NLP is 80% preprocessing When dealing with earnings call …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-10T13:00:00+08:00" />
+<meta name="twitter:title" content="A Deep Dive Into Earnings Call Transcript Preprocessing Choices ">
+<meta name="twitter:description" content="Key points when performing pre-processing for earnings call transcripts In our first blog post, we dive into the nuances of conducting pre-processing on textual data from earnings call transcripts, and the different methods to do so, inspired by the perspective that: NLP is 80% preprocessing When dealing with earnings call …">
+
+        <title>A Deep Dive Into Earnings Call Transcript Preprocessing Choices  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/a-deep-dive-into-earnings-call-transcript-preprocessing-choices.html">
+                A Deep Dive Into Earnings Call Transcript Preprocessing Choices
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h2>Key points when performing pre-processing for earnings call transcripts</h2>
+<p>In our first blog post, we dive into the nuances of conducting pre-processing on textual data from earnings call transcripts, and the different methods to do so, inspired by the perspective that:</p>
+<blockquote>
+<p>NLP is 80% preprocessing</p>
+</blockquote>
+<p>When dealing with earnings call transcripts as a data source, it is dangerous to simply treat them as a whole document in its entirety, or to treat them exactly the same as other textual data sources such as equity research reports or company filings. In practice, earnings call transcripts have common layouts and properties that make them a unique source of textual information. They can be regarded as <strong>semi-structured</strong> data, containing recurring formatting conventions across many different companies, with many 'boilerplate' passages that usually do not contain much meaningful predictive information (if applied to a predictive model in a quant trading strategy). A quick look on Stack Overflow shows that in the context of programming, boilerplate code is defined as follows:</p>
+<blockquote>
+<p>Boilerplate code is any seemingly repetitive
+code that shows up again and again</p>
+</blockquote>
+<p>Similarly, in earnings call transcripts there is a substantial amount of 'boilerplate' text including greetings, 'thank you's and opening remarks such as 'I am excited to speak to you all today'. Eliminating these passages usually leads to the textual data having less noise, and thus a cleaner resulting trading signal when applied to a machine learning prediction model.</p>
+<p>A typical transcript contains two sections with materially different information content:</p>
+<ul>
+<li><strong>Presentation</strong>: prepared remarks from management (more scripted and often aligned to the firm’s intended narrative, meaning that there may be exaggerations).</li>
+<li><strong>Q&amp;A</strong>: interactive dialogue between analysts and executives (more reactive and granular, sometimes revealing performance uncertainty or operational details that upper management may have wanted to hide or exclude in the Presentation section).</li>
+</ul>
+<p>These separations and contextual differences are not merely cosmetic. When Presentation and Q&amp;A are pooled into a single document, downstream signals (e.g. sentiment, forward-looking statements, topics, summaries) may be diluted or distorted. In our workflow, a main theme is that <strong>preprocessing choices may dominate model choice</strong>: they determine which exact textual source is available to the model, how it is segmented, and what information is emphasized by tokenization and truncation constraints.</p>
+<hr>
+<h2>Setup: assumptions and a minimal transcript example</h2>
+<p>To keep the examples self-contained and reproducible, we assume upstream steps already removed HTML tags and obvious regex junk. The example transcript (generated by an LLM) below captures common transcript elements: operator lines, boilerplate text, and then Presentation and Q&amp;A content.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">example_transcript</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">Operator: Good day and welcome to the Q4 2025 earnings call.</span>
+<span class="s1">Safe Harbor Statement: This call contains forward-looking statements subject to risks and uncertainties.</span>
+
+<span class="s1">Presentation</span>
+<span class="s1">CEO: We delivered strong revenue growth this quarter and expect margins to improve next year.</span>
+<span class="s1">CFO: We will continue investing in our platform and we anticipate higher operating leverage.</span>
+
+<span class="s1">Q&amp;A</span>
+<span class="s1">Analyst: Can you comment on pricing pressure in Europe?</span>
+<span class="s1">CEO: We expect pricing to stabilize, but we are monitoring demand closely.</span>
+<span class="s1">Analyst: What are your capex plans for FY2026?</span>
+<span class="s1">CFO: We plan to reduce capex as a percentage of revenue over time.</span>
+<span class="s1">&#39;&#39;&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">example_transcript</span><span class="p">[:</span><span class="mi">300</span><span class="p">],</span> <span class="s2">&quot;...&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<hr>
+<h2>Insight 1: ECTSum-inspired cleaning and lightweight baselines</h2>
+<p>Our starting point for “content-preserving cleaning” was inspired by the open-source code accompanying <strong>ECTSum: A New Benchmark Dataset for Bullet Point Summarization of Long Earnings Call Transcripts</strong> (Mukherjee et al., 2022). The key idea is to remove high-frequency, low-information boilerplate (operator scripts, “turn to slide…” guidance) and to <em>mask structured artifacts</em> (phone numbers, timestamps, fiscal shorthand) that can create spurious correlations.</p>
+<h3>1.1 ECTSum-style phrase filtering + masking (closer to our implementation)</h3>
+<p>In our codebase, we maintained a fairly long <code>EXCLUDE</code> phrase list. The snippet below shows the same logic, but with a shorter list so it remains readable in a blog format.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pandarallel</span> <span class="kn">import</span> <span class="n">pandarallel</span>
+
+<span class="n">pandarallel</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">IN_PARQ</span>  <span class="o">=</span> <span class="s2">&quot;preprocessing_data/confcall_sentences_sm.parquet&quot;</span>
+<span class="n">OUT_PARQ</span> <span class="o">=</span> <span class="s2">&quot;preprocessing_data/confcall_sentences_sm_clean.parquet&quot;</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">IN_PARQ</span><span class="p">)</span>
+
+<span class="n">EXCLUDE</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;forward-looking&quot;</span><span class="p">,</span> <span class="s2">&quot;subject to risks&quot;</span><span class="p">,</span> <span class="s2">&quot;safe harbor&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;operator:&quot;</span><span class="p">,</span> <span class="s2">&quot;please refer to&quot;</span><span class="p">,</span> <span class="s2">&quot;turn to slide&quot;</span><span class="p">,</span> <span class="s2">&quot;press release&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sec&#39;s website&quot;</span><span class="p">,</span> <span class="s2">&quot;replay will be available&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># Patterns for masking</span>
+<span class="n">PHONE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\b\d</span><span class="si">{3}</span><span class="s2">[-.\s]?\d</span><span class="si">{3}</span><span class="s2">[-.\s]?\d</span><span class="si">{4}</span><span class="s2">\b&quot;</span><span class="p">)</span>
+<span class="n">TIME</span>  <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\b\d{1,2}:\d</span><span class="si">{2}</span><span class="s2">\s?(AM|PM)?\b&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+<span class="n">YEAR_S</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bfy\s?\d{2,4}\b&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>              <span class="c1"># FY2026, FY 26, etc.</span>
+<span class="n">TXTNUM</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\b(q[1-4]|10-?k|10-?q|8-?k)\b&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>   <span class="c1"># Q2, 10-K, etc.</span>
+
+<span class="k">def</span> <span class="nf">mask_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">PHONE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;[PHONENUM]&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">TIME</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;[TIME]&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">YEAR_S</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;[YEAR]&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">TXTNUM</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;[TXT-NUM]&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="c1"># Remove EC-specific boilerplate phrases</span>
+<span class="n">mask_excl</span> <span class="o">=</span> <span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentence_text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">parallel_apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="nb">any</span><span class="p">(</span><span class="n">phrase</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="n">EXCLUDE</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">mask_excl</span><span class="p">]</span>
+
+<span class="c1"># Apply masking</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentence_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentence_text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">parallel_apply</span><span class="p">(</span><span class="n">mask_text</span><span class="p">)</span>
+
+<span class="c1"># Drop very short lines</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentence_text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentence_text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[PHONENUM\]&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">OUT_PARQ</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saved →&quot;</span><span class="p">,</span> <span class="n">OUT_PARQ</span><span class="p">,</span> <span class="s2">&quot;shape:&quot;</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div>
+
+<p>This style of cleaning is transparent and easy to audit: we can read the rules and understand exactly what is removed. The trade-off is that phrase lists and masking patterns can be brittle across transcript vendors, so we generally add sanity checks and monitor failure cases rather than assuming a single list works universally.</p>
+<h3>1.2 “Minimal” baselines used for ablations</h3>
+<p>In our codebase for testing, we found it useful to keep at least two lightweight baselines for ablations:</p>
+<p>1) <strong>Phrase-only filtering</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pandarallel</span> <span class="kn">import</span> <span class="n">pandarallel</span>
+
+<span class="n">pandarallel</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;preprocessing_data/confcall_sentences_sm.parquet&quot;</span><span class="p">)</span>
+
+<span class="n">mask_excl</span> <span class="o">=</span> <span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentence_text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">parallel_apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="nb">any</span><span class="p">(</span><span class="n">phrase</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="n">EXCLUDE</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">mask_excl</span><span class="p">]</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;preprocessing_data/confcall_sentences_sm_nostop.parquet&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+<p>2) <strong>spaCy stopword removal</strong> (a stopword-stripping baseline used to test whether function words materially change downstream results):</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">spacy</span>
+
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">blank</span><span class="p">(</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+<span class="n">STOP_WORDS</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">Defaults</span><span class="o">.</span><span class="n">stop_words</span>
+
+<span class="k">def</span> <span class="nf">remove_spacy_stopwords</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">make_doc</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">is_alpha</span> <span class="ow">and</span> <span class="n">tok</span><span class="o">.</span><span class="n">lower_</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">STOP_WORDS</span><span class="p">)</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentence_no_stop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentence_text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">remove_spacy_stopwords</span><span class="p">)</span>
+</code></pre></div>
+
+<hr>
+<h2>Insight 2: Segmenting into Presentation vs Q&amp;A</h2>
+<p>Many transcript datasets already provide <code>presentation_text</code> and <code>qa_text</code>. When they do, we treat this as the "ground truth" section split and build our sentence-level datasets separately for each section. When the raw transcript is a single string, a conservative rule-based split around section headers is often sufficient as a first pass.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">CallSections</span><span class="p">:</span>
+    <span class="n">presentation</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">qa</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="k">def</span> <span class="nf">split_presentation_qa</span><span class="p">(</span><span class="n">raw_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CallSections</span><span class="p">:</span>
+    <span class="n">pres_pat</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\bPresentation\b&quot;</span>
+    <span class="n">qa_pat</span>   <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\b(Q\s*&amp;\s*A|Q\s*and\s*A|Questions?\s*and\s*Answers?)\b&quot;</span>
+
+    <span class="n">pres_m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pres_pat</span><span class="p">,</span> <span class="n">raw_text</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">qa_m</span>   <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">qa_pat</span><span class="p">,</span> <span class="n">raw_text</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pres_m</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">qa_m</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">CallSections</span><span class="p">(</span><span class="n">presentation</span><span class="o">=</span><span class="n">raw_text</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">qa</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pres_m</span> <span class="ow">and</span> <span class="n">qa_m</span> <span class="ow">and</span> <span class="n">pres_m</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">qa_m</span><span class="o">.</span><span class="n">start</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">CallSections</span><span class="p">(</span>
+            <span class="n">presentation</span><span class="o">=</span><span class="n">raw_text</span><span class="p">[</span><span class="n">pres_m</span><span class="o">.</span><span class="n">end</span><span class="p">():</span><span class="n">qa_m</span><span class="o">.</span><span class="n">start</span><span class="p">()]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+            <span class="n">qa</span><span class="o">=</span><span class="n">raw_text</span><span class="p">[</span><span class="n">qa_m</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Conservative fallback (e.g., missing Presentation marker)</span>
+    <span class="k">return</span> <span class="n">CallSections</span><span class="p">(</span>
+        <span class="n">presentation</span><span class="o">=</span><span class="n">raw_text</span><span class="p">[:</span><span class="n">qa_m</span><span class="o">.</span><span class="n">start</span><span class="p">()]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">qa_m</span> <span class="k">else</span> <span class="n">raw_text</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+        <span class="n">qa</span><span class="o">=</span><span class="n">raw_text</span><span class="p">[</span><span class="n">qa_m</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">qa_m</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+</code></pre></div>
+
+<p>Section segmentation is interesting because f the goal is to measure “market-relevant surprise,” we often expect the Q&amp;A to contain more incremental information. It is longer as well, compared to the Presentation. At the same time, management guidance is frequently concentrated in prepared remarks, so removing the Presentation section entirely can also discard predictive language. In practice, we treat “Presentation-only,” “Q&amp;A-only,” and “All” as separate preprocessing variants to be compared downstream.</p>
+<hr>
+<h2>Insight 3: Forward-looking statement labeling with FinBERT-FLS</h2>
+<p>Forward-looking statements (FLS) provide a natural channel for extracting expectations, guidance, and conditional language. Our pipeline labels at the <strong>sentence level</strong> using <code>yiyanghkust/finbert-fls</code>, with GPU micro-batching and chunked parquet I/O (to avoid losing progress on long runs).</p>
+<p>Below is a condensed version of our approach using <code>AutoTokenizer</code> / <code>AutoModelForSequenceClassification</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">gc</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pyarrow</span> <span class="k">as</span> <span class="nn">pa</span>
+<span class="kn">import</span> <span class="nn">pyarrow.parquet</span> <span class="k">as</span> <span class="nn">pq</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForSequenceClassification</span>
+
+<span class="n">DEVICE</span>     <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;yiyanghkust/finbert-fls&quot;</span>
+<span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">MAX_LEN</span>    <span class="o">=</span> <span class="mi">128</span>
+<span class="n">CHUNK_ROWS</span> <span class="o">=</span> <span class="mi">50_000</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_NAME</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">DEVICE</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">predict_fls</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">BATCH_SIZE</span><span class="p">):</span>
+        <span class="n">texts</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentence_text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span> <span class="o">+</span> <span class="n">BATCH_SIZE</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">enc</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="n">MAX_LEN</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">DEVICE</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">(),</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">amp</span><span class="o">.</span><span class="n">autocast</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="p">(</span><span class="n">DEVICE</span> <span class="o">==</span> <span class="s2">&quot;cuda&quot;</span><span class="p">)):</span>
+            <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">enc</span><span class="p">)</span><span class="o">.</span><span class="n">logits</span>
+        <span class="n">preds</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">logits</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="k">del</span> <span class="n">enc</span><span class="p">,</span> <span class="n">logits</span>
+        <span class="k">if</span> <span class="n">DEVICE</span> <span class="o">==</span> <span class="s2">&quot;cuda&quot;</span><span class="p">:</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">preds</span>
+
+<span class="k">def</span> <span class="nf">write_chunk</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">writer</span><span class="p">:</span> <span class="n">pq</span><span class="o">.</span><span class="n">ParquetWriter</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pq</span><span class="o">.</span><span class="n">ParquetWriter</span><span class="p">:</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">Table</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">preserve_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">writer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="n">ParquetWriter</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="n">table</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">write_table</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">writer</span>
+
+<span class="n">IN_PARQ</span>  <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;preprocessing_data/confcall_sentences_sm.parquet&quot;</span><span class="p">)</span>
+<span class="n">OUT_ALL</span>  <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;preprocessing_data/fls_all.parquet&quot;</span><span class="p">)</span>
+<span class="n">OUT_SPEC</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;preprocessing_data/fls_spec.parquet&quot;</span><span class="p">)</span>
+<span class="n">OUT_NSP</span>  <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;preprocessing_data/fls_nspec.parquet&quot;</span><span class="p">)</span>
+<span class="n">OUT_NON</span>  <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;preprocessing_data/fls_non.parquet&quot;</span><span class="p">)</span>
+
+<span class="n">writers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nspec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">non</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">pfile</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="n">ParquetFile</span><span class="p">(</span><span class="n">IN_PARQ</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">pfile</span><span class="o">.</span><span class="n">iter_batches</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="n">CHUNK_ROWS</span><span class="p">):</span>
+    <span class="n">chunk</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+    <span class="n">chunk</span><span class="p">[</span><span class="s2">&quot;fls_label_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">predict_fls</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+    <span class="n">writers</span><span class="p">[</span><span class="s2">&quot;all&quot;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">write_chunk</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">writers</span><span class="p">[</span><span class="s2">&quot;all&quot;</span><span class="p">],</span> <span class="n">OUT_ALL</span><span class="p">)</span>
+    <span class="n">writers</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">write_chunk</span><span class="p">(</span><span class="n">chunk</span><span class="p">[</span><span class="n">chunk</span><span class="p">[</span><span class="s2">&quot;fls_label_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">],</span> <span class="n">writers</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">],</span> <span class="n">OUT_SPEC</span><span class="p">)</span>
+    <span class="n">writers</span><span class="p">[</span><span class="s2">&quot;nspec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">write_chunk</span><span class="p">(</span><span class="n">chunk</span><span class="p">[</span><span class="n">chunk</span><span class="p">[</span><span class="s2">&quot;fls_label_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span> <span class="n">writers</span><span class="p">[</span><span class="s2">&quot;nspec&quot;</span><span class="p">],</span> <span class="n">OUT_NSP</span><span class="p">)</span>
+    <span class="n">writers</span><span class="p">[</span><span class="s2">&quot;non&quot;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">write_chunk</span><span class="p">(</span><span class="n">chunk</span><span class="p">[</span><span class="n">chunk</span><span class="p">[</span><span class="s2">&quot;fls_label_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">],</span> <span class="n">writers</span><span class="p">[</span><span class="s2">&quot;non&quot;</span><span class="p">],</span> <span class="n">OUT_NON</span><span class="p">)</span>
+
+    <span class="k">del</span> <span class="n">chunk</span>
+    <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">writers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">w</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+
+<p>This produces multiple datasets that can be used as separate perspectives of the same call: all sentences, specific-FLS sentences, non-specific-FLS sentences, and non-FLS sentences. These views are convenient for downstream ablations: we can test whether predictive content concentrates in a narrower subset of language.</p>
+<hr>
+<h2>Insight 4: Sentence segmentation → embeddings → aggregation back to call level</h2>
+<p>A frequent practical constraint is that earnings calls are long, while many encoder models have limited context windows. Our approach therefore computes <strong>sentence embeddings</strong> and aggregates them back to a <strong>call-level</strong> representation.</p>
+<p>For readability here, we refer to specific call identifiers it as <code>unique_id</code>.</p>
+<h3>4.1 Sentence segmentation with spaCy (Presentation / Q&amp;A)</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">spacy</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;en_core_web_sm&quot;</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ner&quot;</span><span class="p">,</span> <span class="s2">&quot;tagger&quot;</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">is_valid_sentence</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">20</span> <span class="ow">and</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ch</span><span class="o">.</span><span class="n">isalpha</span><span class="p">()</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">s</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">10</span>
+
+<span class="k">def</span> <span class="nf">split_sentences</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">unique_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">section</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">sents</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">sent</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">is_valid_sentence</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;unique_id&quot;</span><span class="p">:</span> <span class="n">unique_id</span><span class="p">,</span>
+                <span class="s2">&quot;section&quot;</span><span class="p">:</span> <span class="n">section</span><span class="p">,</span>        <span class="c1"># &quot;presentation&quot; or &quot;qa&quot;</span>
+                <span class="s2">&quot;sentence_id&quot;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+                <span class="s2">&quot;sentence_text&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span>
+            <span class="p">})</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="c1"># df_calls must include: unique_id, presentation_text, qa_text</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">df_calls</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">df_calls</span><span class="p">)):</span>
+    <span class="n">rows</span> <span class="o">+=</span> <span class="n">split_sentences</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;presentation_text&quot;</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;unique_id&quot;</span><span class="p">],</span> <span class="s2">&quot;presentation&quot;</span><span class="p">)</span>
+    <span class="n">rows</span> <span class="o">+=</span> <span class="n">split_sentences</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;qa_text&quot;</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;unique_id&quot;</span><span class="p">],</span> <span class="s2">&quot;qa&quot;</span><span class="p">)</span>
+
+<span class="n">df_sent</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+<span class="n">df_sent</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;preprocessing_data/confcall_sentences_sm.parquet&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>4.2 Sentence-BERT embeddings with batch processing and call-level aggregation</h3>
+<p>This is a compact version of our bucket-based aggregation logic (sum embeddings per <code>(unique_id, section)</code>, then divide by count).</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">gc</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">pyarrow.parquet</span> <span class="k">as</span> <span class="nn">pq</span>
+<span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="n">DEVICE</span>     <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span>
+<span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">256</span>
+
+<span class="n">st_model</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">)</span>
+<span class="n">emb_dim</span>  <span class="o">=</span> <span class="n">st_model</span><span class="o">.</span><span class="n">get_sentence_embedding_dimension</span><span class="p">()</span>
+
+<span class="n">bucket</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># (unique_id, section) -&gt; [sum_vec, count]</span>
+<span class="n">pq_file</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="n">ParquetFile</span><span class="p">(</span><span class="s2">&quot;preprocessing_data/confcall_sentences_sm.parquet&quot;</span><span class="p">)</span>
+<span class="n">rows_total</span> <span class="o">=</span> <span class="n">pq_file</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">num_rows</span>
+
+<span class="k">def</span> <span class="nf">add_to_bucket</span><span class="p">(</span><span class="n">unique_ids</span><span class="p">,</span> <span class="n">sections</span><span class="p">,</span> <span class="n">embeds</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">unique_ids</span><span class="p">,</span> <span class="n">sections</span><span class="p">,</span> <span class="n">embeds</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bucket</span><span class="p">:</span>
+            <span class="n">bucket</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">emb_dim</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">bucket</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">v</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">bucket</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">rows_total</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;encode&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;rows&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bar</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">pq_file</span><span class="o">.</span><span class="n">iter_batches</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">50_000</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+        <span class="n">embeds</span> <span class="o">=</span> <span class="n">st_model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentence_text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span>
+            <span class="n">convert_to_numpy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">show_progress_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">add_to_bucket</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;unique_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;section&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">embeds</span><span class="p">)</span>
+        <span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+        <span class="k">del</span> <span class="n">df</span><span class="p">,</span> <span class="n">embeds</span>
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+<span class="c1"># Aggregate back to call level</span>
+<span class="n">out_rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">sec</span><span class="p">),</span> <span class="p">(</span><span class="n">vsum</span><span class="p">,</span> <span class="n">cnt</span><span class="p">)</span> <span class="ow">in</span> <span class="n">bucket</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">out_rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">&quot;unique_id&quot;</span><span class="p">:</span> <span class="n">u</span><span class="p">,</span>
+        <span class="s2">&quot;section&quot;</span><span class="p">:</span> <span class="n">sec</span><span class="p">,</span>
+        <span class="s2">&quot;embedding&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">vsum</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="p">})</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out_rows</span><span class="p">)</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;preprocessing_data/call_embeddings.parquet&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Aggregation somewhat defines what it means to 'represent' a call. Mean aggregation is a reasonable baseline, and more complex pooling (section-weighting, topic-weighting) can be introduced as additional variants in future analysis.</p>
+<hr>
+<h2>Insight 5: Topic classification with RoBERTa + LoRA, then passage construction and passage embeddings</h2>
+<p>We experimented with topical structure in two stages:</p>
+<p>1) <strong>Sentence-level topic classification</strong> using a RoBERTa classifier fine-tuned with <strong>LoRA</strong>, and
+2) <strong>Passage construction</strong> by merging consecutive sentences with the same topic, then embedding passages using multiple models.</p>
+<h3>5.1 Fine-tuning with LoRA</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForSequenceClassification</span><span class="p">,</span> <span class="n">TrainingArguments</span><span class="p">,</span> <span class="n">Trainer</span>
+<span class="kn">from</span> <span class="nn">peft</span> <span class="kn">import</span> <span class="n">LoraConfig</span><span class="p">,</span> <span class="n">get_peft_model</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">BASE_MODEL</span> <span class="o">=</span> <span class="s2">&quot;roberta-base&quot;</span>
+<span class="n">NUM_LABELS</span> <span class="o">=</span> <span class="mi">8</span>  <span class="c1"># set to your topic label count</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">BASE_MODEL</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">BASE_MODEL</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="n">NUM_LABELS</span><span class="p">)</span>
+
+<span class="n">lora_cfg</span> <span class="o">=</span> <span class="n">LoraConfig</span><span class="p">(</span>
+    <span class="n">r</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">lora_alpha</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">lora_dropout</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">],</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;SEQ_CLS&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">get_peft_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">lora_cfg</span><span class="p">)</span>
+
+<span class="n">args</span> <span class="o">=</span> <span class="n">TrainingArguments</span><span class="p">(</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;checkpoints/roberta_topic_lora&quot;</span><span class="p">,</span>
+    <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">2e-5</span><span class="p">,</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">fp16</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">(),</span>
+<span class="p">)</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">eval_dataset</span><span class="o">=</span><span class="n">eval_dataset</span><span class="p">)</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</code></pre></div>
+
+<h3>5.2 Inference + merging consecutive topics into passages</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">AutoModelForSequenceClassification</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<span class="kn">from</span> <span class="nn">peft</span> <span class="kn">import</span> <span class="n">PeftModel</span>
+
+<span class="n">SENTENCE_FILE</span> <span class="o">=</span> <span class="s2">&quot;preprocessing_data/confcall_sentences_sm.parquet&quot;</span>
+<span class="n">OUT_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;topic_passages&quot;</span><span class="p">)</span>
+<span class="n">OUT_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">base</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">BASE_MODEL</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="n">NUM_LABELS</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">PeftModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">&quot;checkpoints/roberta_topic_lora&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="n">topic_pipe</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;text-classification&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">df_sent</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">SENTENCE_FILE</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;unique_id&quot;</span><span class="p">,</span> <span class="s2">&quot;sentence_id&quot;</span><span class="p">])</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">topic_pipe</span><span class="p">(</span><span class="n">df_sent</span><span class="p">[</span><span class="s2">&quot;sentence_text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="n">df_sent</span><span class="p">[</span><span class="s2">&quot;topic&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">preds</span><span class="p">]</span>
+
+<span class="n">passage_rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">unique_id</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">df_sent</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;unique_id&quot;</span><span class="p">):</span>
+    <span class="n">cur_topic</span><span class="p">,</span> <span class="n">cur_texts</span><span class="p">,</span> <span class="n">passage_id</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">sent</span><span class="p">,</span> <span class="n">topic</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;sentence_text&quot;</span><span class="p">],</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;topic&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">cur_topic</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cur_topic</span><span class="p">,</span> <span class="n">cur_texts</span> <span class="o">=</span> <span class="n">topic</span><span class="p">,</span> <span class="p">[</span><span class="n">sent</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">topic</span> <span class="o">==</span> <span class="n">cur_topic</span><span class="p">:</span>
+            <span class="n">cur_texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">passage_rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;unique_id&quot;</span><span class="p">:</span> <span class="n">unique_id</span><span class="p">,</span>
+                <span class="s2">&quot;passage_id&quot;</span><span class="p">:</span> <span class="n">passage_id</span><span class="p">,</span>
+                <span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">cur_topic</span><span class="p">,</span>
+                <span class="s2">&quot;passage&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_texts</span><span class="p">),</span>
+            <span class="p">})</span>
+            <span class="n">passage_id</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">cur_topic</span><span class="p">,</span> <span class="n">cur_texts</span> <span class="o">=</span> <span class="n">topic</span><span class="p">,</span> <span class="p">[</span><span class="n">sent</span><span class="p">]</span>
+
+    <span class="n">passage_rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">&quot;unique_id&quot;</span><span class="p">:</span> <span class="n">unique_id</span><span class="p">,</span>
+        <span class="s2">&quot;passage_id&quot;</span><span class="p">:</span> <span class="n">passage_id</span><span class="p">,</span>
+        <span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">cur_topic</span><span class="p">,</span>
+        <span class="s2">&quot;passage&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_texts</span><span class="p">),</span>
+    <span class="p">})</span>
+
+<span class="n">pass_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">passage_rows</span><span class="p">)</span>
+<span class="n">pass_df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">OUT_DIR</span> <span class="o">/</span> <span class="s2">&quot;roberta_passages.parquet&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Optionally: write per-topic files (mirrors our code)</span>
+<span class="k">for</span> <span class="n">lab</span><span class="p">,</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">pass_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;topic&quot;</span><span class="p">):</span>
+    <span class="n">sub</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">OUT_DIR</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;roberta_passages_</span><span class="si">{</span><span class="n">lab</span><span class="si">}</span><span class="s2">.parquet&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>5.3 Embedding topic passages with multiple models</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
+
+<span class="n">pass_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;topic_passages/roberta_passages.parquet&quot;</span><span class="p">)</span>
+<span class="n">texts</span> <span class="o">=</span> <span class="n">pass_df</span><span class="p">[</span><span class="s2">&quot;passage&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">st</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">)</span>
+<span class="n">embs_mean</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">convert_to_numpy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">pass_df</span><span class="p">[[</span><span class="s2">&quot;unique_id&quot;</span><span class="p">,</span> <span class="s2">&quot;passage_id&quot;</span><span class="p">,</span> <span class="s2">&quot;topic&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">embs_mean</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="n">out</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">embs_mean</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+<span class="n">out</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;topic_passages/passages_mpnet_mean.parquet&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+<p>For long contexts, a long-context encoder (e.g., Longformer) can be used with windowing. </p>
+<p>Passage construction produces more coherent units than isolated sentences and helps align downstream analysis with interpretation (e.g., “pricing” passages vs “guidance” passages). It also provides a natural way to test whether topic-conditioned signals contain incremental predictive content.</p>
+<hr>
+<h2>Insight 6: DeepSeek API for Q&amp;A pair extraction and structured summaries</h2>
+<p>We used DeepSeek API calls for two tasks that are difficult to solve reliably with purely rule-based code:</p>
+<p>1) splitting raw Q&amp;A into explicit <strong>question/answer pairs</strong>, and
+2) generating <strong>topic summaries</strong> and <strong>section summaries</strong> in structured JSON.</p>
+<p>The implementation below follows our scripts closely: JSON-mode responses when possible, and defensive parsing (strip code fences, clean invalid newlines, etc.).</p>
+<h3>6.1 Q&amp;A pair extraction (DeepSeek chat → JSON parsing → parquet)</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">re</span><span class="o">,</span> <span class="nn">json</span><span class="o">,</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DEEPSEEK_API_KEY&quot;</span><span class="p">],</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.deepseek.com&quot;</span>
+<span class="p">)</span>
+
+<span class="n">BAD_QUOTE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(?&lt;!</span><span class="se">\\</span><span class="s1">)&quot;&#39;</span><span class="p">)</span>
+<span class="n">BAD_NL_RE</span>    <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(?&lt;!</span><span class="se">\\</span><span class="s1">)\n&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">safe_json_loads</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="n">BAD_NL_RE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span>
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="n">BAD_QUOTE_RE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="n">cleaned</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+<span class="k">def</span> <span class="nf">deepseek_chat</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expect_json</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="s2">&quot;deepseek-chat&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+        <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+        <span class="s2">&quot;max_tokens&quot;</span><span class="p">:</span> <span class="n">max_tokens</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">expect_json</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;response_format&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">}</span>
+    <span class="n">rsp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rsp</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="n">EXTRACT_PROMPT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Extract Q&amp;A pairs from the transcript below.</span>
+<span class="s2">Return JSON with key &quot;transcript&quot; as a list of objects:</span>
+<span class="s2">[{ &quot;question&quot;: &quot;...&quot;, &quot;answer&quot;: &quot;...&quot;, &quot;speaker_q&quot;: &quot;...&quot;, &quot;speaker_a&quot;: &quot;...&quot; }, ...].</span>
+<span class="s2">Transcript:</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="nf">extract_pairs</span><span class="p">(</span><span class="n">raw_qa</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">deepseek_chat</span><span class="p">(</span><span class="n">EXTRACT_PROMPT</span> <span class="o">+</span> <span class="n">raw_qa</span><span class="p">,</span> <span class="n">expect_json</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^```(?:json)?\s*|\s*```$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">safe_json_loads</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;transcript&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;transcript&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">data</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
+
+<span class="n">df_calls</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;data/confcall_transcript.parquet&quot;</span><span class="p">)</span>
+<span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">df_calls</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">df_calls</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;DeepSeek Q/A&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">extract_pairs</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;qa_text&quot;</span><span class="p">]):</span>
+        <span class="n">p</span><span class="p">[</span><span class="s2">&quot;unique_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;unique_id&quot;</span><span class="p">]</span>
+        <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">records</span><span class="p">)</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;QASplit_data/qa_pairs.parquet&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>6.2 Topic summaries and section summaries</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">SUMMARY_PROMPT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Summarize the transcript below.</span>
+<span class="s2">Return JSON with keys:</span>
+<span class="s2">- &quot;presentation_summary&quot;: string</span>
+<span class="s2">- &quot;qa_summary&quot;: string</span>
+<span class="s2">- &quot;topics&quot;: [{ &quot;topic&quot;: &quot;...&quot;, &quot;summary&quot;: &quot;...&quot; }, ...]</span>
+<span class="s2">Transcript:</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="nf">summarize_sections</span><span class="p">(</span><span class="n">pres_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">qa_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">deepseek_chat</span><span class="p">(</span>
+        <span class="n">SUMMARY_PROMPT</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">[PRESENTATION]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">pres_text</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">[Q&amp;A]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">qa_text</span><span class="p">,</span>
+        <span class="n">expect_json</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2048</span>
+    <span class="p">)</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^```(?:json)?\s*|\s*```$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">safe_json_loads</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
+</code></pre></div>
+
+<p>API-based components are useful, but they introduce dependencies on prompt stability, response formatting, and external service availability. For our workflows, deterministic fallbacks and systematic logging (prompt version, model name, error counts) help keep results interpretable and reproducible.</p>
+<hr>
+<h2>Evaluating preprocessing choices in a predictive setting</h2>
+<p>The goal is not only to “clean text,” but to test whether different preprocessing variants produce different <strong>signals</strong> and whether those signals predict outcomes such as future returns, volatility, or abnormal returns around events.</p>
+<p>A practical framework:</p>
+<ol>
+<li>Define preprocessing variants <code>p in {1,...,P}</code> (e.g., Presentation-only vs Q&amp;A-only; with vs without ECTSum cleaning; sentence embeddings vs topic-passage embeddings; rule-based vs DeepSeek Q&amp;A pairs).</li>
+<li>For each variant, compute a numeric signal <code>s_{i,t}^{(p)}</code> for firm <code>i</code> at time <code>t</code>.</li>
+<li>Compare predictive power using regression tests and/or portfolio sorts, holding all non-text components fixed.</li>
+</ol>
+<h3>Cross-sectional regression (Fama–MacBeth style)</h3>
+<p>For each time period <code>t</code>, estimate:</p>
+<p><img alt="Equation 1" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/group_NLPlus+++_image1.jpg"></p>
+<p>Then evaluate the time-series average of <code>B_t</code> (with an appropriate standard error, e.g., Newey–West if needed). This isolates whether the signal derived from preprocessing variant <code>p</code> has incremental predictive content beyond controls.</p>
+<h3>Combining multiple NLP-derived signals</h3>
+<p>If multiple signals are constructed (e.g., FLS intensity, topic-frequency shifts, summary sentiment), a simple combined factor can be:</p>
+<p><img alt="Equation 2" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/group_NLPlus+++_image2.jpg"></p>
+<p>where <code>z(.)</code> denotes a cross-sectional z-score normalization and weights can be equal-weighted, learned via rolling regressions, or tuned via out-of-sample objectives.</p>
+<h3>Caveats</h3>
+<p>To compare preprocessing methods fairly, all other choices should be fixed:</p>
+<ul>
+<li>universe, horizon, lags (avoid look-ahead),</li>
+<li>the same labeling/classification model (unless model choice is the variable under study),</li>
+<li>the same evaluation window,</li>
+<li>consistent handling of missing transcripts and unusually short calls.</li>
+</ul>
+<hr>
+<h2>Closing remarks</h2>
+<p>A consistent takeaway is that preprocessing is not only an engineering step - it implicitly defines the information set presented to the model. In earnings calls, respecting transcript structure (Presentation vs Q&amp;A), removing boilerplate efficiently, and stabilizing units of analysis (sentences → passages) can materially change the resulting signals and their interpretability.</p>
+<p>At the same time, rule-based methods (splits, phrase lists, masking) can fail in edge cases, and API-based methods can drift if prompts or model behavior change. A robust research pipeline benefits from monitored checks, deterministic fallbacks, and careful documentation of each preprocessing choice, especially when the goal is to attribute differences in predictive performance to preprocessing decisions rather than uncontrolled pipeline variation.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-10T13:00:00+08:00">Sat 10 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-nlplus-ref">Group NLPlus+++
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

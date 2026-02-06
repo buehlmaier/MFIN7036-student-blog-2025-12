@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group DataPulse, Reflective Report, " />
+
+<meta property="og:title" content="Federal Reserve prediction - Feature processing and Model Architecture (by Group &#34;DataPulse&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/federal-reserve-prediction-feature-processing-and-model-architecture-by-group-datapulse.html" />
+<meta property="og:description" content="This is the second blog post. In our previous article, we detailed the systematic approach to collecting and preprocessing FOMC meeting statements and minutes. Data cleaning, standardization, and structuring form the foundation for building reliable analytical models. Today, we will further explore how to extract meaningful features from these standardized …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-21T23:00:00+08:00" />
+<meta name="twitter:title" content="Federal Reserve prediction - Feature processing and Model Architecture (by Group &#34;DataPulse&#34;) ">
+<meta name="twitter:description" content="This is the second blog post. In our previous article, we detailed the systematic approach to collecting and preprocessing FOMC meeting statements and minutes. Data cleaning, standardization, and structuring form the foundation for building reliable analytical models. Today, we will further explore how to extract meaningful features from these standardized …">
+
+        <title>Federal Reserve prediction - Feature processing and Model Architecture (by Group &#34;DataPulse&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/federal-reserve-prediction-feature-processing-and-model-architecture-by-group-datapulse.html">
+                Federal Reserve prediction - Feature processing and Model Architecture  (by Group "DataPulse")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>This is the second blog post. </p>
+<p>In our previous article, we detailed the systematic approach to collecting and preprocessing FOMC meeting statements and minutes. Data cleaning, standardization, and structuring form the foundation for building reliable analytical models. Today, we will further explore how to extract meaningful features from these standardized, highly policy-oriented texts and develop predictive models to identify the Federal Reserve's monetary policy signals.</p>
+<h2>Fed Text Purification Practice: Problems, Reflections, and Solutions</h2>
+<p>In the last version, our basic text processing (just stripping punctuation, basic stop words, etc.) turned out to be nowhere near enough for real analysis. Noise completely took over, models kept getting distracted by all the repetitive, low-information phrases, and the subtle shifts in the Fed’s policy tone and signals were basically lost. That made me stop and rethink: the issue wasn’t that we hadn’t cleaned “enough,” but that we hadn’t really understood what each document type is actually trying to do and what information really matters in it. So this time we built two very different purification approaches — one for <strong>Minutes</strong> (the long meeting minutes) and one for <strong>Statement</strong> (the short policy announcements).</p>
+<h2>Minutes: Why Do All Those Procedural Boilerplate Phrases Cause So Much Trouble?</h2>
+<p><strong>Problem</strong> Minutes are usually extremely long and full of structural boilerplate — things like staff review opening lines, manager reports, liquidity facility descriptions, voting procedures, notation votes, and so on. These parts are highly templated and repeat themselves over and over, but they add almost nothing to understanding real economic views or policy disagreements. In my early experiments, word clouds and top TF-IDF terms were almost entirely flooded with phrases like “the Committee agreed” or “staff judged.” The actual substantive discussion got buried, and stance classification accuracy stayed disappointingly low.</p>
+<p><strong>Reflection</strong> At the beginning I thought these “official-sounding” parts were necessary for the document’s formality. But after reading and comparing many different Minutes releases side by side, I realized they’re basically just fixed scaffolding for meeting records — kind of like the procedural “minutes of the meeting” formalities you see in any board meeting summary. They don’t really connect to actual policy thinking. If you don’t remove them systematically, models spend all their attention on these repetitive patterns, and the real language that shows hawkish vs dovish differences gets drowned out. That was the moment it really hit me: <strong>cleaning strength has to match what the document is actually for</strong>. Minutes are internal records — procedural stuff takes up most of the space. Without aggressive, targeted removal, the important signals simply can’t get through.</p>
+<p><strong>Solution and Validation</strong> We built a multi-category, wide-coverage boilerplate dictionary (more than 10 major categories, hundreds of carefully tuned regular expressions) to systematically wipe out those procedural parts. The cleaning is quite aggressive — usually keeping only 40–50% of the original length. After this, the focus of analysis shifted sharply to participants’ views, economic divergences, risk assessments, and so on. Themes became much clearer, and downstream classification performance improved noticeably. This step confirmed what I had started to suspect: <strong>targeted heavy removal works far better than just trying to “clean deeply” in a generic way</strong>.</p>
+<p>Code Example: Minutes boilerplate dictionary (partial)</p>
+<div class="codehilite"><pre><span></span><code> MINUTES_BOILERPLATE = {
+    &quot;titles&quot;: [
+        r&quot;Review of Monetary Policy Strategy, Tools, and Communications&quot;,
+        r&quot;Staff Review of the Economic Situation&quot;,
+        r&quot;Committee Policy Action&quot;,
+        # ... more titles and sections
+    ],
+    &quot;staff_review_openers&quot;: [
+        r&quot;The information reviewed at the .*? meeting indicated that&quot;,
+        r&quot;Staff judged that&quot;,
+        # ...
+    ],
+    &quot;manager_reports&quot;: [
+        r&quot;manager reported .*? developments&quot;,
+        r&quot;outright purchases&quot;,
+        r&quot;reinvesting proceeds&quot;,
+        # ... Desk operations related
+    ],
+    &quot;liquidity_facilities&quot;: [
+        r&quot;discount window&quot;,
+        r&quot;term auction facility taf&quot;,
+        # ...
+    ],
+    # Total 10+ categories, including voting_patterns, policy_directives, etc.
+ }
+</code></pre></div>
+
+<p>Cleaning function call (broad removal)</p>
+<div class="codehilite"><pre><span></span><code> for patterns in MINUTES_BOILERPLATE.values():
+    for pattern in patterns:
+        text = re.sub(pattern, &#39;&#39;, text, flags=re.I | re.DOTALL)
+</code></pre></div>
+
+<h2>Statement: What Do We Lose When We Over-Clean?</h2>
+<p><strong>Problem</strong> Statements are very short (only a few hundred words) and made up almost entirely of carefully worded policy language. Their real value is in the subtle choices of words — hawkish/dovish turns, changes in forward guidance tone, dual-mandate phrasing, and so on. When I first tried applying the same heavy cleaning style as for Minutes, important signals got removed by accident far too often, and the model could no longer reliably pick up the Fed’s “official final position.”</p>
+<p><strong>Reflection</strong> I originally tried to use one single cleaning approach for both, but I quickly saw that the information density and value distribution are completely different between the two types. Minutes are internal records — you can cut procedural content aggressively. Statements are public statements — every sentence has been weighed carefully. <strong>Chasing “maximum cleanliness” can actually destroy the core value</strong>. That made me ask myself: where should the cleaning stop? We have the technical ability to delete much more, but if we remove the most important “how it’s said,” we’re defeating the whole purpose. The real difficulty isn’t “how much can we delete?” — it’s “what absolutely has to stay?”</p>
+<p><strong>Solution and Validation</strong> We created a lean, highly targeted boilerplate library (only 8 small categories), focusing on fixed opening sentences, mandate restatements, risk assessments, forward guidance commitments, etc. Removal is kept conservative — typically keeping 30–60% or more of the original text. As a result, the core tonal shifts and policy intent were fully preserved, and stance classification accuracy came back strong. This experience really drove home the point: <strong>in high-density documents, restraint is more important than aggressive cleaning.</strong></p>
+<p>Code Example: Statement boilerplate dictionary (partial)</p>
+<div class="codehilite"><pre><span></span><code> STATEMENT_BOILERPLATE = {
+    &quot;opening_summary&quot;: [
+        r&quot;information received since the federal open market committee met in&quot;,
+        r&quot;information received since the committee met&quot;,
+    ],
+    &quot;mandate_patterns&quot;: [
+        r&quot;the committee seeks to foster maximum employment and price stability&quot;,
+        r&quot;the committee is strongly committed to supporting maximum employment and returning inflation to its 2 percent objective&quot;,
+    ],
+    &quot;risk_assessment&quot;: [
+        r&quot;uncertainty about the economic outlook remains elevated&quot;,
+        # ...
+    ],
+    # Only 8 categories, covering opening, mandate, risk, forward guidance, etc.
+ }
+</code></pre></div>
+
+<p>Cleaning function call (precise, limited removal)</p>
+<div class="codehilite"><pre><span></span><code> for patterns in STATEMENT_BOILERPLATE.values():
+    for pattern in patterns:
+        text = re.sub(pattern, &#39;&#39;, text, flags=re.I | re.DOTALL)
+</code></pre></div>
+
+<h2>Shared General Modules: Principles Learned from Mistakes</h2>
+<ol>
+<li>
+<p><strong>Policy Phrase MergingProblem</strong>: Multi-word policy terms got split apart, losing semantic meaning. <strong>Reflection</strong>: At first I didn’t realize how important keeping phrases intact really was. <strong>Solution</strong>: We merged them into single tokens (e.g., "federal_funds_rate"). It took almost no effort but dramatically improved feature quality.</p>
+</li>
+<li>
+<p><strong>Verb NormalizationProblem</strong>: Stemming created nonsense words and wiped out tense nuance, destroying signals about policy expectations. <strong>Reflection</strong>: Automated tools can easily backfire in central bank text; subtle language choices are signals in themselves. <strong>Solution</strong>: Switched to manual mapping (e.g., "promoting"/"fostering" → "support"). It takes more time, but it’s safer and helped me understand Fed expression patterns much better.</p>
+</li>
+<li>
+<p><strong>Aggressive Number &amp; Time FilteringProblem</strong>: Numbers completely dominated the features and masked qualitative signals. <strong>Reflection</strong>: Numbers look like “obvious” information, but in Fed communication the real insight is in how things are described, not the exact number. The ECB paper Monetary Communication Rules reinforced this for me. <strong>Solution</strong>: Completely removed all numerics and dates. The model was forced to learn implicit signals, and classification performance improved a lot.</p>
+</li>
+<li>
+<p><strong>Expanded Stop WordsProblem</strong>: Generic stop words weren’t sensitive to financial text. <strong>Reflection</strong>: Off-the-shelf NLP tools often fall short in specialized domains. <strong>Solution</strong>: Added high-frequency/low-information Fed terms (committee, vote, etc.) while keeping meaningful connectors like "to".</p>
+</li>
+</ol>
+<h2>Closing Thoughts &amp; Outlook</h2>
+<p>This whole process taught me the most important lesson: <strong>text cleaning is really about understanding the document, not just applying technical tricks</strong>. Moving from trying to use one uniform method to accepting different strategies for different documents, from depending on automation to adding manual judgment and restraint — every change came from looking back at the data and questioning what I had assumed. The cleaner text we ended up with now gives a much stronger foundation for everything that comes next.
+Looking ahead, we might try using LLMs to help generate boilerplate patterns and reduce manual work. But the core principle won’t change: <strong>understand the document first, then figure out how to clean it</strong>.</p>
+<h2>Feature Extraction</h2>
+<p>After data preprocessing, we focused on feature extraction from FOMC statements and meeting minutes. Quantitative text-based features were constructed using dictionary-based measures, TF-IDF representations, and embedding to capture economic stance, as well as lexical and semantic information, for downstream prediction tasks.</p>
+<h2>Dictionary-Based Approach</h2>
+<p>For this part, we constructed several dictionaries to capture economically meaningful signals in FOMC communications, including hawkish–dovish, uncertainty, inflation focus and labor focus. As there has been no standardized framework for constructing such dictionaries, we relied on prior literature, official documents, and economic intuition to guide the dictionary design. Among the dictionaries, we deemed the hawkish–dovish dictionaries as the most central, as they directly reflect the monetary policy stance relevant for interest rate decisions. We first constructed the hawkish–dovish dictionaries based on single words, but then realized that complex multi-word expressions can be of great importance to deciphering hawkish or dovish signals, as texts might contain confusing expressions such as ‘rise of unemployment rate’, in which ‘rise’ is believed by some literature to display a hawkish stance, while the whole expression often leans more to the dovish side. Therefore, in the following program we chose to add a second layer to our dictionary structure: phrase-level matching is applied first, followed by word-level counting, to better capture nuanced policy signals.</p>
+<div class="codehilite"><pre><span></span><code>    def mask_phrases(text, phrases):
+        masked = text
+        for p in phrases:
+            pattern = re.escape(p)
+            masked = re.sub(
+                rf&quot;\b{pattern}\b&quot;,
+                &quot; &quot;,
+                masked,
+                flags=re.IGNORECASE
+            )
+        return masked
+    def stance_score(text, dovish_phrases, hawkish_phrases, dovish_words, hawkish_words):
+        # 1. phrase-level
+        dove_p = sum(text.count(p) for p in dovish_phrases)
+        hawk_p = sum(text.count(p) for p in hawkish_phrases)
+        # 2. mask phrases
+        masked_text = mask_phrases(text, dovish_phrases + hawkish_phrases)
+        masked_tokens = masked_text.split()
+        # 3. word-level
+        dove_w = sum(
+            1 for t in masked_tokens
+            if any(t.startswith(s) for s in dovish_words)
+        )
+        hawk_w = sum(
+            1 for t in masked_tokens
+            if any(t.startswith(s) for s in hawkish_words)
+        )
+
+        hawk_total = hawk_p + hawk_w
+        dove_total = dove_p + dove_w
+
+        return pd.Series({
+            &quot;hawk_score&quot;: hawk_total / (hawk_total + dove_total) if (hawk_total + dove_total) &gt; 0 else 0,
+            &quot;dove_score&quot;: dove_total / (hawk_total + dove_total) if (hawk_total + dove_total) &gt; 0 else 0,
+            &quot;net_stance&quot;: (hawk_total - dove_total) / (hawk_total + dove_total) if (hawk_total + dove_total) &gt; 0 else 0  
+    })
+</code></pre></div>
+
+<p>To our surprise, some features from the two documents showed specific diverge in their levels and trends. For example, statements have displayed much larger fluctuations and more extreme stances than minutes over the past fifteen years. We believe this may be due to the fact that statements are intentionally brief and designed to send clear signals to markets, which may encourage stronger language. In contrast, minutes summarize a wide range of internal discussions, leading to more measured and stable textual signals. This difference gave us a better understanding of how the purpose of a document shapes the language used in monetary policy communication, and how it affects our interpretation.</p>
+<h2>TF-IDF</h2>
+<p>In addition to dictionary-based features, we used TF-IDF to capture terms and phrases that are informative but cannot be explicitly encoded in predefined dictionaries. By doing so, we aim to further highlight important language patterns in FOMC communications in a more flexible, data-driven way. Due to the small sample size, we paid high awareness to the parameters in order to control dimensionality and reduce noise, with the parameters showcasing our trade-off between capturing meaningful variation in language and maintaining model stability.</p>
+<div class="codehilite"><pre><span></span><code>    def build_tfidf_features(
+        texts,
+        ngram_range=(1, 2),
+        min_df=2,
+        max_df=0.8,
+        max_features=3000
+    ):
+
+        vectorizer = TfidfVectorizer(
+            lowercase=False,      # text already normalized
+            stop_words=None,      # stopwords removed in preprocessing
+            ngram_range=ngram_range,
+            min_df=min_df,
+            max_df=max_df,
+            max_features=max_features
+        )
+
+        tfidf_matrix = vectorizer.fit_transform(texts)
+        tfidf_df = pd.DataFrame(
+            tfidf_matrix.toarray(),
+            columns=vectorizer.get_feature_names_out()
+        )
+
+    return tfidf_matrix, tfidf_df
+</code></pre></div>
+
+<p>The results revealed both key policy concepts and actionable measures, providing a strong feature foundation for predicting the next FOMC policy decision. They also strongly validated the effectiveness of our data preprocessing and dictionary-based approach. We were able to acquire insights from these results, so that we could improve our preprocessing methods and dictionary construction.</p>
+<h2>Text similarity: TF–IDF and embedding</h2>
+<p>To further understand how FOMC communication evolves over time, we constructed text similarity measures using both TF-IDF and embedding. TF-IDF results were used to capture lexical overlap, reflecting how much wording and phrasing is reused across documents. In parallel, we also applied a pre-trained MiniLM variant to compute embedding-based similarity, which captures semantic similarity even when exact words differ. The motivation behind using both measures was to distinguish changes in surface language from deeper shifts in meaning.</p>
+<div class="codehilite"><pre><span></span><code>    def similarity_tfidf(texts, tfidf_matrix):
+    similarity_tfidf = [np.nan] 
+    for i in range(1, tfidf_matrix.shape[0]):
+        sim = cosine_similarity(tfidf_matrix[i], tfidf_matrix[i-1])[0, 0]
+        similarity_tfidf.append(sim)
+    return similarity_tfidf
+
+    def similarity_embedding(texts):
+    model = SentenceTransformer(&quot;all-MiniLM-L6-v2&quot;)
+    texts = texts.tolist()
+    embeddings = model.encode(
+        texts,
+        show_progress_bar=True,
+        normalize_embeddings=True
+    )
+
+    similarity_embedding = [np.nan]
+    for i in range(1, len(embeddings)):
+        sim = np.dot(embeddings[i], embeddings[i-1])
+        similarity_embedding.append(sim)
+    return similarity_embedding
+</code></pre></div>
+
+<p>The results gave us a deeper understanding of how the communications had changed over time. We found that FOMC statements generally exhibited higher similarity over time than minutes under both measures, and that lexical and semantic similarities for statements moved comparatively more closely together. Both aligned with our previous understanding of the two document types: statements are carefully crafted policy signals with relatively stable structure, whereas minutes summarize diverse internal discussions and therefore display greater variation in their meanings. Combined with the dictionary-based results showing more pronounced stance signals in statements, we believe that even relatively small changes in the wording or semantics of statements may convey meaningful information about federal reserve’s decision intentions.</p>
+<h2>Model Training</h2>
+<p>In this section, we will train four models on the statement and minutes datasets using both word set method and TD-IDF method. These four models are:logistic,random_forest,gradient_boosting,svm</p>
+<h2>Method 1: Dictionary-based Approach</h2>
+<p>Core Concept
+The dictionary method uses pre-defined hawkish and dovish dictionaries to quantify policy stance by calculating the frequency of these words in the text.</p>
+<p>We use four different machine learning models, After debugging, the parameter settings are as follows::</p>
+<div class="codehilite"><pre><span></span><code> def train(self, X_train, y_train, model_type=&#39;random_forest&#39;):
+        &quot;&quot;&quot;Train the model&quot;&quot;&quot;
+        X_train_scaled = self.scaler.fit_transform(X_train)
+
+        if model_type == &#39;logistic&#39;:
+            model = LogisticRegression(multi_class=&#39;multinomial&#39;, max_iter=1000)
+        elif model_type == &#39;random_forest&#39;:
+            model = RandomForestClassifier(n_estimators=100, random_state=42)
+        elif model_type == &#39;gradient_boosting&#39;:
+            model = GradientBoostingClassifier(n_estimators=100, random_state=42)
+        elif model_type == &#39;svm&#39;:
+            model = SVC(kernel=&#39;rbf&#39;, probability=True)
+
+        model.fit(X_train_scaled, y_train)
+ return model
+</code></pre></div>
+
+<h2>Method 2: TF-IDF-based Approach</h2>
+<p>Core Concept
+The TF-IDF (Term Frequency-Inverse Document Frequency) method constructs high-dimensional feature vectors by calculating the importance of words across the entire document collection, capturing deep semantic information of the text.</p>
+<p>Feature Selection
+Since TF-IDF features have high dimensionality (typically thousands of dimensions), we use SelectKBest for feature selection, retaining the most important 50 features:</p>
+<div class="codehilite"><pre><span></span><code> def select_features(self, X, y):
+        &quot;&quot;&quot;Feature selection&quot;&quot;&quot;
+        X_selected = self.selector.fit_transform(X, y)
+        self.selected_features = self.selector.get_support()
+        return X_selected
+    Experimental Design and Evaluation
+    Data Splitting
+    Considering time series characteristics, we split the training and test sets in chronological order:
+
+
+ def prepare_train_test_split(df, features, test_size=0.2):
+        &quot;&quot;&quot;Prepare train-test split (considering time series characteristics)&quot;&quot;&quot;
+        split_idx = int(len(df) * (1 - test_size))
+
+        X = features
+        y = df[&#39;target&#39;].values
+
+        # Time series split
+        X_train, X_test = X[:split_idx], X[split_idx:]
+        y_train, y_test = y[:split_idx], y[split_idx:]
+
+    return X_train, X_test, y_train, y_test
+</code></pre></div>
+
+<h2>Data partitioning</h2>
+<p>We use multiple evaluation metrics to comprehensively assess model performance:</p>
+<div class="codehilite"><pre><span></span><code> def evaluate_model(y_true, y_pred, y_proba=None, model_name=&quot;&quot;):
+    &quot;&quot;&quot;Evaluate model performance&quot;&quot;&quot;
+        results = {}
+        results[&#39;accuracy&#39;] = accuracy_score(y_true, y_pred)
+        results[&#39;precision_macro&#39;] = precision_score(y_true, y_pred, average=&#39;macro&#39;)
+        results[&#39;recall_macro&#39;] = recall_score(y_true, y_pred, average=&#39;macro&#39;)
+        results[&#39;f1_macro&#39;] = f1_score(y_true, y_pred, average=&#39;macro&#39;)
+
+        # ROC-AUC (if multi-class probabilities available)
+        if y_proba is not None:
+            results[&#39;roc_auc_ovr&#39;] = roc_auc_score(y_true, y_proba, multi_class=&#39;ovr&#39;, average=&#39;macro&#39;)
+
+ return results
+</code></pre></div>
+
+<h2>Experimental Results Analysis</h2>
+<h2>Statement Analysis Results</h2>
+<p>For FOMC Statements, the TF-IDF method significantly outperforms the dictionary method across all models:</p>
+<div class="codehilite"><pre><span></span><code>    - Random Forest:
+    Dictionary method accuracy: 0.269,
+    TF-IDF method accuracy: 0.769,
+    Better method: TF-IDF method (difference: 0.500)
+
+    - Logistic Regression:
+    Dictionary method accuracy: 0.462,
+    TF-IDF method accuracy: 0.962,
+    Better method: TF-IDF method (difference: 0.500)
+
+    - Gradient Boosting:
+    Dictionary method accuracy: 0.423,
+    TF-IDF method accuracy: 0.769,
+    Better method: TF-IDF method (difference: 0.346)
+
+    - SVM:
+    Dictionary method accuracy: 0.615,
+    TF-IDF method accuracy: 0.923,
+    Better method: TF-IDF method (difference: 0.308)
+</code></pre></div>
+
+<h2>Minutes Analysis Results</h2>
+<p>For FOMC Minutes, the results are more complex, with different models performing differently:</p>
+<div class="codehilite"><pre><span></span><code>    - Random Forest:
+    Dictionary method accuracy: 0.615,
+    TF-IDF method accuracy: 0.577,
+    Better method: Dictionary method (difference: 0.038)
+
+    - Logistic Regression:
+    Dictionary method accuracy: 0.192,
+    TF-IDF method accuracy: 0.654,
+    Better method: TF-IDF method (difference: 0.462)
+
+    - Gradient Boosting:
+    Dictionary method accuracy: 0.538,
+    TF-IDF method accuracy: 0.692,
+    Better method: TF-IDF method (difference: 0.154)
+
+    - SVM:
+    Dictionary method accuracy: 0.462,
+    TF-IDF method accuracy: 0.231,
+    Better method: Dictionary method (difference: 0.231)
+</code></pre></div>
+
+<h3>Key Findings</h3>
+<ol>
+<li>
+<p>Statement vs Minutes: TF-IDF method performs significantly better on Statements, but both methods have their advantages on Minutes</p>
+</li>
+<li>
+<p>Model Selection: Logistic regression achieves an impressive 96.2% accuracy on Statements, but shows unstable performance on Minutes</p>
+</li>
+<li>
+<p>Method Stability: Random forest shows relatively stable performance in both methods</p>
+</li>
+</ol>
+<h2>Conclusion</h2>
+<p>This article comprehensively compares dictionary-based and TF-IDF methods for FOMC monetary policy forecasting. Experimental results show:</p>
+<ol>
+<li>The TF-IDF method generally outperforms the dictionary method, particularly for Statement prediction</li>
+</ol>
+<p>2.Different document types require different modeling strategies. Model selection significantly impacts prediction performance</p>
+<p>These findings provide important empirical evidence for the fintech field and point directions for future research. The code implementation is open-sourced, and we welcome researchers to further improve and extend it.</p>
+<h2>Results Summarize</h2>
+<p>Evaluating Models on Fed Meeting Records</p>
+<p>Before starting the evaluation, I honestly didn’t hold much confidence in the outcomes. During the initial topic selection, we hesitated over alternatives—mainly because the available sample size for this project was relatively small. For training large language models or similar AI systems, limited data often risks introducing bias. While organizing the dataset, we also noticed that most of the existing meeting records corresponded to a “hold” trend in interest rates. After all, governments don’t adjust rates with high frequency.</p>
+<p>Among the 16 models, surprisingly, the four selected models—fixed under specific document and method categories—performed better than expected. In particular, the logistic regression model based on Statement documents and the TF-IDF method achieved <strong>the best performance with 0.962 accuracy</strong>. We believe this is largely due to the nature of statements themselves: short text length and clear keywords make them highly compatible with logistic regression. However, we cannot rule out the possibility of overfitting given the small sample size.</p>
+<p>We initially planned to compare our results with CME forecasts, but the difference in sample scope made such a comparison less meaningful. We also wrote code for robustness checks, though without additional samples to test against, we only retained the framework without executing it.</p>
+<p>Overall, we were pleased to see that four of our selected models reached promising levels of accuracy and performance. This suggests that <strong>Fed meeting transcripts can indeed be leveraged to predict future interest rate movements</strong>. The analysis of document characteristics, which provided valuable insights for choosing different models in future prediction tasks.</p>
+<div class="codehilite"><pre><span></span><code> def evaluate_model(y_true, y_pred, y_proba=None, model_name=&quot;&quot;):
+    results = {}
+
+    unique_classes = np.unique(np.concatenate([y_true, y_pred]))
+    num_classes = len(unique_classes)
+
+    class_mapping = {-1: &#39;cut&#39;, 0: &#39;hold&#39;, 1: &#39;hike&#39;}
+    available_classes = [class_mapping[c] for c in sorted(unique_classes) if c in class_mapping]
+
+    results[&#39;accuracy&#39;] = accuracy_score(y_true, y_pred)
+    results[&#39;precision_macro&#39;] = precision_score(y_true, y_pred, average=&#39;macro&#39;, zero_division=0)
+    results[&#39;recall_macro&#39;] = recall_score(y_true, y_pred, average=&#39;macro&#39;, zero_division=0)
+    results[&#39;f1_macro&#39;] = f1_score(y_true, y_pred, average=&#39;macro&#39;, zero_division=0)
+
+    try:
+        class_report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
+    except:
+        class_report = {}
+
+    # ROC-AUC
+    if y_proba is not None and num_classes &gt; 1:
+        try:
+            if num_classes == 2:
+                results[&#39;roc_auc&#39;] = roc_auc_score(y_true, y_proba[:, 1])
+            else:
+                results[&#39;roc_auc_ovr&#39;] = roc_auc_score(
+                    y_true, y_proba, multi_class=&#39;ovr&#39;, average=&#39;macro&#39;
+                )
+        except:
+            results[&#39;roc_auc&#39;] = np.nan
+            results[&#39;roc_auc_ovr&#39;] = np.nan
+
+    cm = confusion_matrix(y_true, y_pred)
+
+    print(f&quot;\n{&#39;=&#39;*60}&quot;)
+    print(f&quot;model evaluation: {model_name}&quot;)
+    print(f&quot;{&#39;=&#39;*60}&quot;)
+    print(f&quot;class numbers: {num_classes}&quot;)
+    print(f&quot;actual class: {sorted(unique_classes)}&quot;)
+    print(f&quot;accuracy: {results[&#39;accuracy&#39;]:.4f}&quot;)
+    print(f&quot;precision_macro: {results[&#39;precision_macro&#39;]:.4f}&quot;)
+    print(f&quot;recall_macro: {results[&#39;recall_macro&#39;]:.4f}&quot;)
+    print(f&quot;f1_macro: {results[&#39;f1_macro&#39;]:.4f}&quot;)
+
+    if &#39;roc_auc&#39; in results and not np.isnan(results[&#39;roc_auc&#39;]):
+        print(f&quot;ROC-AUC: {results[&#39;roc_auc&#39;]:.4f}&quot;)
+    elif &#39;roc_auc_ovr&#39; in results and not np.isnan(results[&#39;roc_auc_ovr&#39;]):
+        print(f&quot;ROC-AUC (OVR): {results[&#39;roc_auc_ovr&#39;]:.4f}&quot;)
+
+    print(&quot;\n Classification Report:&quot;)
+    try:
+        #the available category names
+        print(classification_report(
+            y_true, y_pred, 
+            target_names=available_classes,
+            zero_division=0
+        ))
+    except:
+        #If it still fails, use the numeric labels.
+        print(classification_report(y_true, y_pred, zero_division=0))
+
+    return results, cm
+
+def plot_confusion_matrix(cm, model_name, class_names=None):
+    &quot;&quot;&quot;Plot confusion matrix&quot;&quot;&quot;
+    if class_names is None:
+        n_classes = cm.shape[0]
+        if n_classes == 3:
+            class_names = [&#39;Cut&#39;, &#39;Hold&#39;, &#39;Hike&#39;]
+        elif n_classes == 2:
+            if set([-1, 0]).issubset(set(range(-1, 2))):
+                class_names = [&#39;Cut&#39;, &#39;Hold&#39;]
+            elif set([0, 1]).issubset(set(range(-1, 2))):
+                class_names = [&#39;Hold&#39;, &#39;Hike&#39;]
+            elif set([-1, 1]).issubset(set(range(-1, 2))):
+                class_names = [&#39;Cut&#39;, &#39;Hike&#39;]
+            else:
+                class_names = [f&#39;Class{i}&#39; for i in range(n_classes)]
+        else:
+            class_names = [f&#39;Class{i}&#39; for i in range(n_classes)]
+
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt=&#39;d&#39;, cmap=&#39;Reds&#39;,
+                xticklabels=class_names,
+                yticklabels=class_names)
+    plt.title(f&#39;Confusion Matrix - {model_name}&#39;)
+    plt.ylabel(&#39;True Label&#39;)
+    plt.xlabel(&#39;Predicted Label&#39;)
+    plt.tight_layout()
+    plt.show()
+
+
+
+def plot_feature_importance(importance_df, model_name, top_n=20):
+    &quot;&quot;&quot;Plot feature importance&quot;&quot;&quot;
+    if importance_df is not None:
+        plt.figure(figsize=(10, 8))
+        top_features = importance_df.head(top_n)
+        plt.barh(range(len(top_features)), top_features[&#39;importance&#39;], color=&#39;gray&#39;)
+        plt.yticks(range(len(top_features)), top_features[&#39;feature&#39;])
+        plt.xlabel(&#39;Importance&#39;)
+        plt.title(f&#39;Top {top_n} Feature Importance - {model_name}&#39;)
+        plt.gca().invert_yaxis()
+        plt.tight_layout()
+        plt.show()
+
+
+    #Multi-source robustness test (lack of data)
+    #print(robustness_df)
+
+    #Define the robustness test function
+    #from scipy.stats import ttest_ind, ks_2samp
+    #import pandas as pd
+
+    #def generate_robustness_report(df_all, metrics=[&quot;Accuracy&quot;, &quot;Precision (Macro)&quot;, &quot;Recall (Macro)&quot;, &quot;F1 Score (Macro)&quot;, &quot;ROC-AUC (OVR)&quot;]):
+    #    results = []
+    #    for metric in metrics:
+    #        s_vals = df_all[df_all[&quot;Document&quot;]==&quot;Statement&quot;][metric].dropna()
+    #        m_vals = df_all[df_all[&quot;Document&quot;]==&quot;Minutes&quot;][metric].dropna()
+
+    #        if len(s_vals) &gt; 1 and len(m_vals) &gt; 1:
+    #            t_stat, t_p = ttest_ind(s_vals, m_vals, equal_var=False)
+    #            ks_stat, ks_p = ks_2samp(s_vals, m_vals)
+    #        else:
+    #            t_stat, t_p, ks_stat, ks_p = [None]*4
+
+    #        results.append({
+    #            &quot;Metric&quot;: metric,
+    #            &quot;Statement Mean&quot;: s_vals.mean() if len(s_vals)&gt;0 else None,
+    #            &quot;Minutes Mean&quot;: m_vals.mean() if len(m_vals)&gt;0 else None,
+    #            &quot;Welch t-stat&quot;: t_stat,
+    #            &quot;t-test p-value&quot;: t_p,
+    #            &quot;KS stat&quot;: ks_stat,
+    #            &quot;KS p-value&quot;: ks_p
+    #        })
+    #    return pd.DataFrame(results)
+
+    # Call the function DataFrame
+    #robustness_df = generate_robustness_report(df_all)
+    #print(robustness_df)
+
+    # Write the robustness test results into Excel
+    #robustness_df.to_excel(&quot;comparison result.xlsx&quot;, sheet_name=&quot;Robustness Test&quot;, index=False)
+</code></pre></div>
+
+<p>This study demonstrates that semantic and lexical approaches not only enhance model interpretability but also more robustly capture key expressions of policy shifts when processing highly structured, policy-driven texts. While TF-IDF excels in general text classification, in contexts where language directly reflects policy (e.g., central bank language), subtle contextual and lexical variations often outweigh word frequency.
+This study not only provides an effective framework for analyzing central bank communications, but also offers novel textual analysis approaches for policy forecasting, market sentiment analysis, and even macroeconomic modeling. In the future, a hybrid method combining deep learning and policy lexicons may further optimize the balance between prediction accuracy and semantic depth.
+Thank you for reading. We welcome readers interested in central bank text analysis and policy forecasting to follow our ongoing research.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-21T23:00:00+08:00">Wed 21 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-datapulse-ref">Group DataPulse
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="volatility, sentiment, Blog, " />
+
+<meta property="og:title" content="When Market is Swayed by Trump Sentiment, Arbitrage Opportunities Emerged (by Group &#34;PoliVoli&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/when-market-is-swayed-by-trump-sentiment-arbitrage-opportunities-emerged-by-group-polivoli.html" />
+<meta property="og:description" content="By Group &#34;PoliVoli&#34; X Selection Currently, there are two approaches within the team regarding the selection of the X variable. The first involves using the outputs from three distinct sentiment models as the variable. The second approach does not rely on other sentiment models; instead, it exclusively employs the tokenization …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-21T19:22:00+08:00" />
+<meta name="twitter:title" content="When Market is Swayed by Trump Sentiment, Arbitrage Opportunities Emerged (by Group &#34;PoliVoli&#34;) ">
+<meta name="twitter:description" content="By Group &#34;PoliVoli&#34; X Selection Currently, there are two approaches within the team regarding the selection of the X variable. The first involves using the outputs from three distinct sentiment models as the variable. The second approach does not rely on other sentiment models; instead, it exclusively employs the tokenization …">
+
+        <title>When Market is Swayed by Trump Sentiment, Arbitrage Opportunities Emerged (by Group &#34;PoliVoli&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/when-market-is-swayed-by-trump-sentiment-arbitrage-opportunities-emerged-by-group-polivoli.html">
+                When Market is Swayed by Trump Sentiment, Arbitrage Opportunities Emerged (by Group "PoliVoli")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>By Group "PoliVoli"</p>
+<h2>X Selection</h2>
+<p>Currently, there are two approaches within the team regarding the selection of the X variable. The first involves using the outputs from three distinct sentiment models as the variable. The second approach does not rely on other sentiment models; instead, it exclusively employs the tokenization tool provided by ProsusAI within Finbert to vectorize Trump's speech for independent training.</p>
+<p>Corresponding to each different X variable, we conducted separate model training sessions.</p>
+<h2>Y Selection</h2>
+<p>In the previous blog, we proposed three methods for constructing Y: labeling daily volatility using the population sample mean or median; assessing the persistent effect of X using delta+n; and determining the short-term effect by subtracting the day's low from its high. Given the interpretability of the framework and regression results, direct labeling via mean or median proved infeasible. However, the combined approach using methods two and three—estimated by ‘h-l day+1’ (the next day's high-low range)—demonstrated both economic and statistical significance. 'large vol' is calculated based on ‘h-l day+1’ to determine whether this value ranks within the top 25% (75th percentile) over the past 40 days. Using 20% would result in insufficient data meeting the subsequent overlay requirements. The 25% threshold represents one-quarter, aligning with standard practice. Verification confirmed all desired dates (e.g., April 7th tariffs) meet this criterion. The final calculated variable ‘y’ is ‘pos large’, signifying a positive large volatility event. Its underlying logic is: if (‘delta+1’ &gt; 0), then ‘delta+1’; otherwise, 0. This means if the large volatility is a sharp decline in VIX, it would be 0. Only a significant upward volatility on the following day would yield a value of 1. ‘delta+1’ is calculated as the next day's closing price divided by today's closing price minus 1. The reason for distinguishing positive and negative values is our assumption that Trump's speeches will increase volatility. However, if we only judged amplitude (high-low), a significant drop in volatility would also yield a value of 1, contradicting our original intent. Therefore, we need to add a layer of directional judgment.</p>
+<p>The primary code as follows:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span> 
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;(high-low)/today_price&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;recent_40_days_75%_percentile&#39;</span><span class="p">]</span>
+      <span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">39</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;whether_big_vol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;(high-low)/today_value&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;recent_40days_75%_percentile&#39;</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="o">&amp;</span>
+    <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;(high-low)/today_value&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;(high-low)/today_value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<h2>Random Forest Tree Model</h2>
+<h4>Feature Construction (X Selection)</h4>
+<p>Yang et al. (2020) show that FinBERT performs well in financial tasks such as sentiment analysis and event extraction, and that its embeddings preserve financial semantics, making them suitable for time-series financial data. So, in our project, we use the FinBERT model to train the text data to gain the daily superimposed vectors of Trump and use them to find the relation between volatility and these vectors. We use the FinBERT code gained from ProsusAI in Hugging Face (2021) to train the FinBERT model. Firstly, we attempt sentiment analysis of single-date text in 2025-10-10 and this model extracts the text list for the date, and then it performs text encoding via tokenizer to get the logits and transfer the probability of positive, negative or neutral by using the softmax. Finally, it match the built-in label mapping of the model dynamically which aims at avoiding hard coding, and output the three probabilities of each text and the final predicted emotion label. These codes are displayed by 1.py document. After training, we download the result of the vectors in 2.py shown in picture 1 and I find that the FinBERT model adopts 768-dimension vector which is too large for this project because our data volume only is about 2000, so we reduce the dimension of this vector to 128-dimension by pca (Hasan and Abdulazeez,2021).
+<img alt="The parameters of FinBERT model (partly)" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/PoliVoli_02_768.png"></p>
+<h4>Y Selection</h4>
+<p>Additionally, Trump always posts several posts each day and we only have the daily volatility data so we should sum these vectors from text data in the same day to match the date of volatility shown by 7.py. Meanwhile, we merge the 128-dimension vector of text data and volatility data to prepare for machine learning. However, in this step, we original select the the difference of the volatility in two consecutive trading days as the dependent variable, and we assume the dependent variable y as the difference of volatility in two consecutive trading days exceed positive and negative 0.9 standard deviation (using the sd of the closest 40 trading days ) as the label 1, then we can use random forest to train the module, but in fact, we should attempt to adjust the value of sd to gain a suitable result based on the result of machine learning because there is no standard to show what range of fluctuation is considered abnormal, which means y could exceed positive or negative 0.5, 0.9 or other number and 128-dimension vector may also be large so we use for-loop to run the results based up on different values of dimension. Thus, there problem should be addressed while using random forest model.</p>
+<h4>Model Training</h4>
+<p>Random forest is a good model to address the overfitting problem so it could be used in the classification problem because it is suitable for high-dimension data with high robustness (Breiman,2001). We randomly select the train dataset and test dataset with ratio 7:3, and the independent variables are the 128-dimension vectors in each trading day and the dependent variable y defined before. And we define that the type 0 is the volatility of the second day is in range of the first day minus and add the sd with relevant coefficient, and the remaining are of type 1. To maximize the precision, we select n_estimator with 800 and shows the precision when reducing the dimensions of the vector from 3 to 64. We find that there is almost no difference when the dimension is above 21. Therefore, we only display the results with the dimension between 3 to 21. Afterwards, we adjust different numbers of the sd to run random forest model. Meanwhile, in order to use the precision and recall to measure the reliability of the model, the confusion matrix is used. Finally, we find that the best result shown in picture2 (11.py document) is when the dimension is 9 and y should exceed positive or negative 0.514 sd. We find that the recall and precision of type 0 and 1 are both higher than 50%, which shows that Trump’s posts have relationship with volatility in some degree. However, this result does not mean the next step that is our strategy will use the result since it depends on the profit gained based on the model. Therefore, we keep many types of labels with 21 different numbers of the coefficient to use further.</p>
+<p><img alt="The result of random forest" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/PoliVoli_02_RFout.png"></p>
+<h2>XGBoost Tree Model</h2>
+<h4>Feature Construction (X Variables)</h4>
+<p>In the XGBoost model, we constructed independent variables from a textual sentiment perspective, primarily employing three sentiment analysis methods: TextBlob, VADER, and FinBERT. Additionally, we introduced a feature based on text length.</p>
+<p>First, we used the TextBlob module to extract two continuous sentiment variables: Polarity and Subjectivity. Subsequently, the VADER sentiment analyzer calculates four sentiment scores: vader_neg, vader_neu, vader_pos, and vader_compound. Thus, TextBlob and VADER collectively provide six dictionary- and rule-based sentiment variables.</p>
+<p>The primary code for the TextBlob and VADER modules is as follows:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">textblob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
+<span class="kn">import</span> <span class="nn">nltk</span>
+<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;punkt_tab&#39;</span><span class="p">)</span>
+<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;averaged_perceptron_tagger&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="n">polarity_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">subjectivity_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">blob_par</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">polarity_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">blob_par</span><span class="o">.</span><span class="n">sentiment</span><span class="o">.</span><span class="n">polarity</span><span class="p">)</span>
+        <span class="n">subjectivity_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">blob_par</span><span class="o">.</span><span class="n">sentiment</span><span class="o">.</span><span class="n">subjectivity</span><span class="p">)</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Polarity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">polarity_list</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Subjectivity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">subjectivity_list</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">nltk.sentiment.vader</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
+<span class="n">analyzer</span> <span class="o">=</span> <span class="n">SentimentIntensityAnalyzer</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="n">vader_neg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">vader_neu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">vader_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">vader_compound</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">polarity_scores</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">vader_neg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">[</span><span class="s1">&#39;neg&#39;</span><span class="p">])</span>
+        <span class="n">vader_neu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">[</span><span class="s1">&#39;neu&#39;</span><span class="p">])</span>
+        <span class="n">vader_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">])</span>
+        <span class="n">vader_compound</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">[</span><span class="s1">&#39;compound&#39;</span><span class="p">])</span>
+</code></pre></div>
+
+<p>Second, we introduce the pre-trained FinBERT model to predict sentiment classification probabilities for tweet texts, yielding probability outputs for three sentiment categories: positive (p_pos), negative (p_neg), and neutral (p_neu).</p>
+<p>The main code body is as follows:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForSequenceClassification</span>
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;ProsusAI/finbert&quot;</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="p">,</span>
+    <span class="n">use_safetensors</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">finbert_score_df</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">text_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;content&quot;</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span>
+    <span class="n">max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+
+    <span class="n">texts</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">text_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">texts</span><span class="o">.</span><span class="n">ne</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">idxs</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">texts</span> <span class="o">=</span> <span class="n">texts</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="n">probs_all</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">texts</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">)):</span>
+        <span class="n">enc</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span>
+            <span class="n">texts</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch_size</span><span class="p">],</span>
+            <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">max_length</span><span class="o">=</span><span class="n">max_length</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">probs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">enc</span><span class="p">)</span><span class="o">.</span><span class="n">logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">probs_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span>
+
+    <span class="n">probs_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">probs_all</span><span class="p">)</span>
+
+    <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;p_pos&quot;</span><span class="p">,</span> <span class="s2">&quot;p_neg&quot;</span><span class="p">,</span> <span class="s2">&quot;p_neu&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idxs</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;p_pos&quot;</span><span class="p">,</span> <span class="s2">&quot;p_neg&quot;</span><span class="p">,</span> <span class="s2">&quot;p_neu&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">probs_all</span><span class="p">[:,</span> <span class="p">[</span><span class="n">pos_id</span><span class="p">,</span> <span class="n">neg_id</span><span class="p">,</span> <span class="n">neu_id</span><span class="p">]]</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sent_dir&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;p_pos&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;p_neg&quot;</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sent_abs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;sent_dir&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+<span class="k">def</span> <span class="nf">count_words</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^A-Za-z0-9&#39;]&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">count_words</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Based on this, we further construct two derived metrics:</p>
+<p>sent_dir (Sentiment Direction Indicator): Composed of the difference between positive sentiment probability and negative sentiment probability, p_pos−p_neg, used to characterize the overall directionality of text sentiment;</p>
+<p>sent_abs (Sentiment Intensity Indicator): The absolute value of the sentiment direction indicator, used to measure the degree to which text sentiment deviates from a neutral state.</p>
+<p>Here, <code>sent_dir</code> emphasizes the positive or negative orientation of sentiment, while <code>sent_abs</code> captures the intensity of emotional expression. We believe directional and intensity-based sentiment features may carry distinct predictive implications in financial contexts, hence incorporating both into the model.In summary, the final X variable comprises 12 dimensions: 6 from TextBlob and VADER, 5 from FinBERT (3 raw probability variables plus 2 derived variables sent_dir and sent_abs), and 1 text length variable word_count. These features will be uniformly input into the XGBoost model for training and evaluation in subsequent steps.</p>
+<h4>Feature Integration</h4>
+<p>During the modeling process, directly mapping multiple text features (X) from the same trading day to the same daily market outcome variable (Y) for training inevitably introduces structural bias. The root cause lies in the fact that multiple texts released within a single trading day often pertain to different events or themes, thereby reflecting divergent or even conflicting sentiment information. However, during the data construction phase, these texts are uniformly mapped to the same market volatility label. This issue significantly increases intra-sample heterogeneity, making it difficult for the model to identify which sentiment features truly hold explanatory or predictive value. Consequently, it weakens the model's stability and generalization capabilities, potentially introducing systematic estimation bias during training.</p>
+<p>Therefore, in subsequent modeling, we perform daily aggregation on text features from the same trading day. Specifically, for each sentiment variable corresponding to individual texts within the same day, we employ the mean as the primary aggregation method to characterize the overall sentiment level for that day.</p>
+<p>For the Subjectivity variable from TextBlob, aggregation is performed using the sum method. This approach aims to capture the cumulative degree of subjective expression within the day's texts—that is, the overall intensity of sentiment expression on the subjective dimension for the day, rather than the average level of individual texts. Since subjectivity reflects the prominence of emotional or stance expressions in the text, its cumulative effect is more likely to influence the market's overall reaction to that day's information. Therefore, we employ summation for integration on this dimension.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">df1</span>
+    <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;trade_date&quot;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">agg</span><span class="p">({</span>
+        <span class="s1">&#39;p_pos&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;p_neg&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;p_neu&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Polarity&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Subjectivity&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;VADER_compound&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sent_dir&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sent_abs&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;word_count&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;VADER_neg&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;VADER_neu&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;VADER_pos&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;vol&#39;</span><span class="p">:</span> <span class="s1">&#39;max&#39;</span>
+    <span class="p">})</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<h4>Model Training</h4>
+<p>During the model training phase, we first perform a train-test split on the dataset. Given the pronounced time-series characteristics of the research subject, samples exhibit potential temporal autocorrelation. Employing a random split could potentially leak future information into the training set, thereby overestimating the model's actual predictive capability. Therefore, we abandon random sampling and instead partition the data based on temporal order: using earlier samples as the training set and later samples as the test set, thereby better approximating real-world prediction scenarios.</p>
+<p>Additionally, due to significant imbalance between positive (class 1) and negative (class 0) samples in the target variable, directly training the model risks classifiers favoring the majority class, thereby compromising recognition capabilities for the minority class. To mitigate this issue, we implemented oversampling on positive samples during training. This balanced the number of positive and negative samples in the training set, thereby enhancing the model's learning capacity and recognition effectiveness for minority class events.</p>
+<p>Since the objective of this project is to predict price spikes upward in VIXY for the next trading day (classified as the positive class, label=1), and the model output will be directly used to generate trading signals, we place greater emphasis on the effectiveness of positive class identification in our evaluation. Specifically, positive class predictions correspond to potential tradable opportunities, while a high number of false positives leads to unnecessary trades and stop-loss costs, ultimately eroding overall returns. Therefore, we set the core objective for model selection as follows: maximize positive class precision while ensuring the positive class recall meets the minimum requirement.</p>
+<p>The final model parameters (After Random Search) are:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">xgb</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span>
+    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">2350</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">subsample</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">colsample_bytree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">reg_lambda</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">objective</span><span class="o">=</span><span class="s2">&quot;binary:logistic&quot;</span><span class="p">,</span>
+    <span class="n">eval_metric</span><span class="o">=</span><span class="s2">&quot;aucpr&quot;</span><span class="p">,</span>
+    <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">tree_method</span><span class="o">=</span><span class="s2">&quot;hist&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>The Output is: </p>
+<p><img alt="XGBoost Model Output" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/PoliVoli_02_XGout1.png"></p>
+<h2>Model Prediciton Backtesting</h2>
+<p>After obtaining the best prediction results from Random Forest and XGBoost, we wrote the results back to the date labels and attempted to backtest them for trading. Since our prediction target is VIXY price surges, our trading strategy will focus on achieving a significantly high profit-to-loss ratio, disregarding win rate.</p>
+<p>Our final trading strategy employs a predictive signal-driven event-based (intraday to overnight) trading framework. First, the model is trained on historical data, with only the out-of-sample prediction results written back to the trading log to avoid look-ahead bias. When the model generates a valid prediction signal (y_pred) on a given trading day, the strategy initiates a position at the t+1 day's opening price (Open_{t+1}). Profit-taking and stop-loss levels are not fixed ratios but dynamically estimated based on the average spike up/down amplitude over the past 20 trading days to capture market volatility structure: the take-profit level is set at 4 times the historical average upward amplitude above the opening price, while the stop-loss level is set at 1 times the historical average downward amplitude below the opening price, creating an asymmetric risk-reward structure. During the holding period, if the lowest price on day t+1 first hits the stop-loss price, the position is closed via stop-loss exit. Otherwise, if the highest price reaches the take-profit price, the position is closed for profit. If neither is triggered, the position is closed at the t+1 closing price. At the same time, if both take-profit and stop-loss orders are triggered simultaneously, we prioritize executing the stop-loss strategy to stress-test our trading model. Final returns are measured by the yield relative to the opening price based on the actual exit price. </p>
+<h4>Backtesting Result(Random Forest):</h4>
+<p><img alt="Random Forest Model Trade Backtesting Output" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/PoliVoli_02_RFBTDT1.png"></p>
+<p><img alt="Trade Backtesting Equity Curve for RF" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/PoliVoli_02_RFBTDT2.png"></p>
+<h4>Backtesting Result(XGBoost):</h4>
+<p><img alt="XGBoost Model Trade Backtesting Output" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/PoliVoli_02_BTDT1.png"></p>
+<p><img alt="Trade Backtesting Equity Curve" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/PoliVoli_02_BTDT2.png"></p>
+<p><img alt="Signal trade vs. Daily trade" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/PoliVoli_02_BTDT3.png"></p>
+<h2>Experimental model: LSTM Neural Network Model</h2>
+<h4>Why LSTM？</h4>
+<p>Random Forest treats each trading day as an independent observation. However, both volatility and information flow are sequential: market uncertainty can accumulate over days, and tweet narratives can be persistent rather than one-off shocks. Therefore, we use Long Short-Term Memory (LSTM), a recurrent neural network designed to learn temporal dependencies in sequences.</p>
+<p>In our implementation, each observation is no longer “one day”, but a sequence window of past days’ embeddings, and the model predicts whether the current day is an abnormal volatility event.</p>
+<h4>Current Progress</h4>
+<p>Currently, we hold high expectations for the potential performance of LSTM models. Compared to traditional machine learning methods, LSTMs possess a structural advantage in capturing long-term temporal dependencies within time series data. This characteristic holds promise for significantly enhancing the modeling capability of target variables' dynamic evolution processes, thereby further improving predictive performance. However, uncertainties remain regarding the specific design of LSTM training workflows and the systematic tuning of key hyperparameters—such as network architecture, time window length, and regularization mechanisms. These aspects require further exploration through more in-depth experiments and validation in subsequent research.</p>
+<p><img alt="Current Progress: LSTM" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/PoliVoli_02_LSTMout.png"></p>
+<h2>References</h2>
+<p>[1] Yang, Y., Uy, M.C.S. &amp; Huang, A. (2020). FinBERT: A pretrained language model for financial communications. arXiv preprint arXiv:2006.08097. </p>
+<p>[2] ProsusAI. (2020). FinBERT. Hugging Face. <a href="https://huggingface.co/ProsusAI/finbert">ProsusAI</a> Accessed 21 January 2026.</p>
+<p>[3] Hasan, B.M.S. and Abdulazeez, A.M. (2021) 'A review of principal component analysis algorithm for dimensionality reduction', Journal of Soft Computing and Data Mining, 2(1), pp.20–30.</p>
+<p>[4] Breiman, L. (2001) 'Random forests', Machine Learning, 45(1), pp.5–32.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-21T19:22:00+08:00">Wed 21 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#blog-ref">Blog</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#sentiment-ref">sentiment
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#volatility-ref">volatility
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

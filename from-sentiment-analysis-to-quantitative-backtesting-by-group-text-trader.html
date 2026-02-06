@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group Text Trader, Distilbert Model, Backtesting, Reflective Report, " />
+
+<meta property="og:title" content="From Sentiment Analysis to Quantitative Backtesting (by Group &#34;Text Trader&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/from-sentiment-analysis-to-quantitative-backtesting-by-group-text-trader.html" />
+<meta property="og:description" content="By Group &#34;Text Trader&#34; From Sentiment Analysis to Quantitative Backtesting At the intersection of finance and natural language processing, we have completed an end-to-end project that spans from text sentiment analysis to quantitative investment strategies. The previous blog post described the steps and methods we implemented for automated text collection …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-21T15:41:00+08:00" />
+<meta name="twitter:title" content="From Sentiment Analysis to Quantitative Backtesting (by Group &#34;Text Trader&#34;) ">
+<meta name="twitter:description" content="By Group &#34;Text Trader&#34; From Sentiment Analysis to Quantitative Backtesting At the intersection of finance and natural language processing, we have completed an end-to-end project that spans from text sentiment analysis to quantitative investment strategies. The previous blog post described the steps and methods we implemented for automated text collection …">
+
+        <title>From Sentiment Analysis to Quantitative Backtesting (by Group &#34;Text Trader&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/from-sentiment-analysis-to-quantitative-backtesting-by-group-text-trader.html">
+                From Sentiment Analysis to Quantitative Backtesting (by Group "Text Trader")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>By Group "Text Trader"</p>
+<h1>From Sentiment Analysis to Quantitative Backtesting</h1>
+<p>At the intersection of finance and natural language processing, we have completed an end-to-end project that spans from text sentiment analysis to quantitative investment strategies. The previous blog post described the steps and methods we implemented for automated text collection and pre-processing. This blog reflects on our iterative process, the technical hurdles we cleared, and the journey of transforming unstructured financial narratives into actionable trading strategies.</p>
+<h2>I. Sentiment Analysis Pipeline</h2>
+<h3>1. Model Selection: The Efficiency-Accuracy Frontier</h3>
+<p>Choosing the "brain" for our sentiment engine was not a matter of trial and error, but a strategic decision informed by recent literature in financial NLP. We evaluated our options by balancing linguistic depth against computational feasibility, specifically referencing the comparative frameworks provided by <strong>Mahendran et al. (2025)</strong> and <strong>Neshaei et al. (2024)</strong>.</p>
+<p>We considered 3 options: Distilbert-ss, FinBERT and Bert-large. According to <em>Mahendran et al.</em>, while <strong>FinBERT</strong> remains a specialized benchmark for Financial Sentiment Analysis (FSA), the integration of lighter transformer architectures often provides a more agile framework for large-scale data indexing. Furthermore, the research by <em>Neshaei et al.</em> on the robustness of transformer-based classifiers highlighted that smaller, optimized models like <strong>DistilBERT</strong> can maintain high performance while significantly reducing the "computational tax" during the encoding phase.</p>
+<p>Following is our summary of model performances in 3 aspects:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Model</th>
+<th style="text-align: center;">Understanding for financial items</th>
+<th style="text-align: center;">Capture text</th>
+<th style="text-align: center;">Computing efficiency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Distilbert-sst</td>
+<td style="text-align: center;">medium</td>
+<td style="text-align: center;">good</td>
+<td style="text-align: center;">excellent</td>
+</tr>
+<tr>
+<td style="text-align: center;">Finbert</td>
+<td style="text-align: center;">excellent</td>
+<td style="text-align: center;">excellent</td>
+<td style="text-align: center;">medium</td>
+</tr>
+<tr>
+<td style="text-align: center;">Bert-large</td>
+<td style="text-align: center;">excellent</td>
+<td style="text-align: center;">excellent</td>
+<td style="text-align: center;">bad</td>
+</tr>
+</tbody>
+</table>
+<p>Ultimately, the <strong>Distilbert-sst</strong> model was selected as the primary model due to its optimal balance between speed and accuracy.</p>
+<h3>2.Overcoming the "Token Limit" Wall</h3>
+<p>Even with a robust model selected, we immediately encountered a physical constraint common in NLP: <em>512-token limit</em>. The model’s truncation of texts exceeding 512 tokens led to partial information loss, resulting in certain inaccuracies in sentiment analysis. Ultimately. We adopted a <strong>chunking approach</strong>, dividing the text into segments of 500 characters each, and then aggregating the sentiment outcomes. By segmenting the reports into 500-character blocks, we ensured our sentiment score reflected the entire document's tone.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">sentiment_analysis</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">sentiment_analyzer</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">preprocess_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Breaking long narratives into 500-char chunks to bypass the 512-token limit</span>
+        <span class="n">chunks</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">500</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="mi">500</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">sentiment_analyzer</span><span class="p">(</span><span class="n">chunk</span><span class="p">[:</span><span class="mi">500</span><span class="p">],</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sentiment analysis error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+
+<h2>II. Weight Construction: Mapping Sentiment Scores to Portfolio Weights</h2>
+<p>The next task is to construct the portfolio weight. The transition from a sentiment score to a tangible portfolio position is perhaps the most delicate stage of our pipeline. Our primary challenge was the Weight Mapping Problem: how do you convert fluctuating emotional signals into investment weights without sudden and drastic changes.</p>
+<p>In our early brainstorming, we considered a "static" approach where weights were determined solely by the current quarter’s sentiment scores. However, we quickly realized this would lead to erratic shifts in individual stock positions.</p>
+<p>To solve this, we adopted an <strong>Iterative Weight-Tilting Strategy</strong>. Instead of rebuilding the portfolio from scratch each quarter, we adjust the existing weights based on the sentiment scores of the current period. This recursive approach ensures that the portfolio evolves organically, maintaining continuity with the previous period’s allocation while dynamically absorbing new linguistic information.</p>
+<div class="math">$$weight_i = weight_{i-1} \times weight\_change$$</div>
+<p>But here comes the new problem. If the simplest weight adjustment formula were adopted:</p>
+<div class="math">$$ weight\_change = positive\_score - negative\_score $$</div>
+<p>It still leads to the issue of excessive weight adjustment, causing the portfolio weight of a particular stock to fluctuate too drastically within a single quarter.</p>
+<p>To address this, after obtaining the positive and negative sentiment scores for each stock, we employed a refined weight adjustment formula:</p>
+<div class="math">$${weight_change} = ({positive_score} - {negative_score}) × {avg_confidence}$$</div>
+<p>This formula allows for a greater adjustment magnitude when sentiment is strong and the model's confidence is high.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">code_list</span><span class="p">)):</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">pos_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">neg_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">number_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">total</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">pos_score</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">neg_score</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">avg_conf</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># the pos_score represents the fraction of confidence sum of positive label over the whole confidence sum of a company</span>
+            <span class="n">pos_score</span> <span class="o">=</span> <span class="n">pos_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">total</span> 
+            <span class="n">neg_score</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pos_score</span>
+            <span class="c1"># avg_conf represents the average confidence of output</span>
+            <span class="n">avg_conf</span> <span class="o">=</span> <span class="n">confidence_sums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">number_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="n">combine_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span>
+            <span class="n">code_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">name_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">pos_score</span><span class="p">,</span>
+            <span class="n">neg_score</span><span class="p">,</span>
+            <span class="n">avg_conf</span>
+        <span class="p">))</span>
+</code></pre></div>
+
+<p>Subsequently, we applied normalization to these adjustments, resulting in more stable weight changes that better align with investment logic.</p>
+<div class="codehilite"><pre><span></span><code> <span class="c1"># compute the portfolio weights in quarterly order</span>
+    <span class="k">for</span> <span class="n">quarter</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;quarter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()):</span>
+        <span class="n">quarter_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;quarter&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">quarter</span><span class="p">]</span>
+
+        <span class="c1"># update portfolio weights</span>
+        <span class="n">updated_weights</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">quarter_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">stock</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;stock&#39;</span><span class="p">]</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+            <span class="n">wc</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;weight_change&#39;</span><span class="p">]</span>
+
+            <span class="n">updated_weights</span><span class="p">[</span><span class="n">stock</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">stock</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">wc</span><span class="p">)</span>
+
+        <span class="c1"># normalization: the total weights of the constituent companies should add up to 1</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">updated_weights</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">quarter_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">stock</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;stock&#39;</span><span class="p">]</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+            <span class="n">wc</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;weight_change&#39;</span><span class="p">]</span>
+            <span class="n">new_weight</span> <span class="o">=</span> <span class="n">updated_weights</span><span class="p">[</span><span class="n">stock</span><span class="p">]</span> <span class="o">/</span> <span class="n">total</span>
+
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">quarter</span><span class="p">,</span> <span class="n">stock</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">new_weight</span><span class="p">])</span>
+</code></pre></div>
+
+<h2>III. Backtesting Framework Design</h2>
+<p>Writing the backtesting engine taught us that data is rarely "ready-to-use." We faced a temporal mismatch: sentiment data arrives quarterly (with the reports), but prices move daily.</p>
+<p>We had to design a resampler that compounded daily returns into quarterly buckets to match our rebalancing frequency. </p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># use resample function to change daily data to quarterly data</span>
+<span class="n">q_data</span> <span class="o">=</span> <span class="n">re_data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;Q&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">x</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">prod</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">q_data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">q_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="s1">&#39;Q&#39;</span><span class="p">)</span>
+<span class="n">q_data</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="s1">&#39;quarter&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Based on the aforementioned sentiment analysis and weight calculations, the weighted return of the investment portfolio is calculated for each quarter.</p>
+<div class="math">$$quarterly\_returns_{t} = \sum_{i=1}^{300} stock\_weight_{i} \times stock\_return_{i}$$</div>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">backtest</span><span class="p">(</span><span class="n">return_data</span><span class="p">,</span> <span class="n">quarter_weights</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">quarter_weights</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;quarter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">compute_weighted_return</span><span class="p">(</span><span class="n">return_data</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">compute_weighted_return</span><span class="p">(</span><span class="n">return_data</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+    <span class="n">quarter</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">return_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">return_data</span><span class="p">[</span><span class="s1">&#39;quarter&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">quarter</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;quarter&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">group</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;stock&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>IV. Comparison of Different Backtesting Frameworks</h2>
+<p>We designed two distinct backtesting frameworks: a Sentiment analysis-based weight adjustment strategy and an End-to-End BERT regression strategy.</p>
+<p>The primary difference between the two backtesting designs lies in their methodological approaches. The first strategy begins with sentiment analysis, then converts sentiment scores into weight adjustments, reflecting the intrinsic logic of behavioral finance—where emotions influence investment behavior and, consequently, prices. The second strategy directly maps textual information to stock returns and adjusts weights based on predicted returns, aligning with the efficient market hypothesis, which posits that information determines prices.</p>
+<p><strong>Backtesting results based on Sentiment-analysis Bert Model:</strong></p>
+<div align="center">
+    <img src="./images/TextTrader_01_From-sentiment-analysis-to-quantitative-backtesting.png" 
+         alt="Quarterly Return of NLP Strategy"
+         width="85%" />
+    <br>
+    <span style="font-size: 0.9em; color: #666; font-style: italic;">
+        Figure1：Quarterly Return of NLP Strategy
+    </span>
+</div>
+
+<div align="center">
+    <img src="./images/TextTrader_02_From-sentiment-analysis-to-quantitative-backtesting.png" 
+         alt="Quarterly Return of NLP Strategy"
+         width="85%" />
+    <br>
+    <span style="font-size: 0.9em; color: #666; font-style: italic;">
+        Figure2：Cumulative Return of NLP Strategy
+    </span>
+</div>
+<p><br></p>
+<p><strong>Backtesting results based on End-to-End Bert model:</strong></p>
+<div align="center">
+    <img src="./images/TextTrader_03_From-sentiment-analysis-to-quantitative-backtesting.png" 
+         alt="Quarterly Return of End-to-End Bert Strategy"
+         width="85%" />
+    <br>
+    <span style="font-size: 0.9em; color: #666; font-style: italic;">
+        Figure3：Quarterly Return of End-to-End Bert Strategy
+    </span>
+</div>
+
+<div align="center">
+    <img src="./images/TextTrader_04_From-sentiment-analysis-to-quantitative-backtesting.png" 
+         alt="Cumulative Return of End-to-End Bert Strategy"
+         width="85%" />
+    <br>
+    <span style="font-size: 0.9em; color: #666; font-style: italic;">
+        Figure4：Cumulative Return of End-to-End Bert Strategy
+    </span>
+</div>
+<p><br></p>
+<p><strong>Investment performance of the 2 models:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Model</th>
+<th style="text-align: center;">Sentiment-analysis Bert Model</th>
+<th style="text-align: center;">End-to-End Bert model</th>
+<th style="text-align: center;">Increase(compared with sentiment base bert model)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Sharpe Ratio</td>
+<td style="text-align: center;">0.3648</td>
+<td style="text-align: center;">0.4743</td>
+<td style="text-align: center;">30.0164%</td>
+</tr>
+<tr>
+<td style="text-align: center;">Information Rario</td>
+<td style="text-align: center;">0.4456</td>
+<td style="text-align: center;">0.7332</td>
+<td style="text-align: center;">64.5422%</td>
+</tr>
+<tr>
+<td style="text-align: center;">Absolute return</td>
+<td style="text-align: center;">320.63%</td>
+<td style="text-align: center;">582.87%</td>
+<td style="text-align: center;">81.7889%</td>
+</tr>
+</tbody>
+</table>
+<div style="height: 30px;"></div>
+<p><strong>key insight:</strong><br>
+As can be seen from the table, the backtesting results of the End-to-End BERT regression model are significantly better than those of the sentiment analysis-based BERT model. We believe the main reasons for this are: </p>
+<ol>
+<li>
+<p>Sentiment analysis only extracts emotional information, whereas the End-to-end model can extract additional information beyond sentiment (such as risks, opportunities, etc.).  </p>
+</li>
+<li>
+<p>The end-to-end model achieves a direct mapping from text to investment returns, which provides a clearer objective.  </p>
+</li>
+</ol>
+<h2>V. Future Direction</h2>
+<p>Currently, our team is still in the exploratory phase. Our future direction is to <strong>implement multi-task learning</strong>, combining the two different backtesting strategies to conduct investment predictions based on factors such as <strong>sentiment, risk, and future opportunities</strong> simultaneously.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','color.js','mhchem.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-21T15:41:00+08:00">Wed 21 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#backtesting-ref">Backtesting
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#distilbert-model-ref">Distilbert Model
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-text-trader-ref">Group Text Trader
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

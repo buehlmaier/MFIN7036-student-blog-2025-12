@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group TextWizards, Reflective Report, " />
+
+<meta property="og:title" content="Do Sentiment Shifts Matter for Treasury Yields? A Text Analytics Approach on FOMC Minutes (by Group &#34;TextWizards&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/do-sentiment-shifts-matter-for-treasury-yields-a-text-analytics-approach-on-fomc-minutes-by-group-textwizards.html" />
+<meta property="og:description" content="Introduction Financial markets respond to monetary policy primarily through expectations about the future path of interest rates. In the sovereign debt market, this transmission mechanism is particularly direct: expectations of higher or more persistent policy rates drive bond prices down and yields up, while signals of easing support higher valuations …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-09T22:12:00+08:00" />
+<meta name="twitter:title" content="Do Sentiment Shifts Matter for Treasury Yields? A Text Analytics Approach on FOMC Minutes (by Group &#34;TextWizards&#34;) ">
+<meta name="twitter:description" content="Introduction Financial markets respond to monetary policy primarily through expectations about the future path of interest rates. In the sovereign debt market, this transmission mechanism is particularly direct: expectations of higher or more persistent policy rates drive bond prices down and yields up, while signals of easing support higher valuations …">
+
+        <title>Do Sentiment Shifts Matter for Treasury Yields? A Text Analytics Approach on FOMC Minutes (by Group &#34;TextWizards&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/do-sentiment-shifts-matter-for-treasury-yields-a-text-analytics-approach-on-fomc-minutes-by-group-textwizards.html">
+                Do Sentiment Shifts Matter for Treasury Yields? A Text Analytics Approach on FOMC Minutes (by Group "TextWizards")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h1>Introduction</h1>
+<p>Financial markets respond to monetary policy primarily through expectations about the future path of interest rates. In the sovereign debt market, this transmission mechanism is particularly direct: expectations of higher or more persistent policy rates drive bond prices down and yields up, while signals of easing support higher valuations. Consequently, the Federal Reserve’s policy stance, which is often classified along the spectrum of <strong>hawkish and dovish</strong>, serves as the primary anchor for Treasury market dynamics. To understand how these expectations are formed, it is important to consider the Federal Reserve’s communication process. Policy signals are released in multiple stages. On the meeting day, the policy statement communicates the interest rate decision and provides an initial signal to markets. This is followed by the Chair’s press conference, during which policymakers elaborate on their assessment of inflation, economic risks, and the future policy path. By the end of this stage, markets have already had considerable opportunity to update expectations. However, our study focuses on the critical third stage, which is the release of the <strong>FOMC meeting minutes</strong> approximately three weeks later. Unlike the policy statement or the press conference, the minutes do not introduce a new policy decision. Instead, they provide a detailed account of internal discussions, highlighting how different participants assess risks and trade-offs. We argue that <strong>internal divergence</strong> often serves as a precursor to future policy pivots, as it reveals the fragility of the prevailing consensus even when the headline policy stance remains unchanged. Besides, they may convey unexpected shifts in emphasis, such as heightened concern over inflation persistence or emerging downside risks to economic activity. These elements can prompt a reassessment of previously held expectations, even if the policy rate itself remains unchanged. The primary challenge, as we have identified in our research, is the qualitative nature of “Fedpeak.” The deliberate ambiguity and carefully balanced language used by policymakers make these nuances difficult to capture with traditional keyword-based tools. To overcome this, we utilize advanced Large Language Models (LLMs) to quantify the subtle narrative, transforming qualitative deliberations into a structured Divergence Score and Sentiment Delta.
+ # Web Scraping</p>
+<h2>FOMC Meeting Minutes Collection</h2>
+<p>The process starts by scraping the FOMC calendar page at <code>https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm</code>. A custom header is defined to avoid being identified as automated traffic. The following code demonstrates this process:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">#import packages</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="kn">import</span> <span class="nn">yfinance</span>
+
+<span class="c1"># 1. Define constants</span>
+
+<span class="c1"># FOMC Calendar URL</span>
+
+<span class="n">CALENDAR_URL</span> <span class="o">=</span> <span class="s2">&quot;https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm&quot;</span>
+
+
+
+<span class="c1"># Custom headers to avoid being blocked</span>
+
+<span class="n">HEADERS</span> <span class="o">=</span> <span class="p">{</span>
+
+<span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36&#39;</span><span class="p">,</span>
+
+<span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&#39;</span><span class="p">,</span>
+
+<span class="s1">&#39;Accept-Language&#39;</span><span class="p">:</span> <span class="s1">&#39;en-US,en;q=0.5&#39;</span><span class="p">,</span>
+
+<span class="s1">&#39;Accept-Encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;gzip, deflate&#39;</span><span class="p">,</span>
+
+<span class="s1">&#39;Connection&#39;</span><span class="p">:</span> <span class="s1">&#39;keep-alive&#39;</span><span class="p">,</span>
+
+<span class="p">}</span>
+</code></pre></div>
+
+<p>After fetching the page using the <code>requests</code> package, BeautifulSoup parses the HTML to extract meeting minutes URLs. We need to identify links starting with <code>&lt;a&gt;</code> tags and containing 'fomcminutes' in <code>.htm</code> format. The links extracted from the page (<code>href</code>) are often relative paths (e.g., <code>/monetarypolicy/fomcminutes20230104.htm</code>). The code converts them to complete, working web addresses by prepending the base domain (<code>https://www.federalreserve.gov</code>). The following code demonstrates this process:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 2. Fetch and parse the webpage</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">CALENDAR_URL</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">HEADERS</span><span class="p">)</span>
+
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+
+<span class="n">links_data</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># 3. Extract all relevant hyperlinks</span>
+
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+<span class="n">href</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;href&#39;</span><span class="p">]</span>
+
+<span class="c1"># 4. Filter for FOMC minutes HTML files</span>
+
+<span class="k">if</span> <span class="s1">&#39;fomcminutes&#39;</span> <span class="ow">in</span> <span class="n">href</span> <span class="ow">and</span> <span class="n">href</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.htm&#39;</span><span class="p">):</span>
+
+<span class="c1"># 5. Extract meeting date from URL</span>
+
+<span class="n">date_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\d</span><span class="si">{8}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">href</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">date_match</span><span class="p">:</span>
+
+<span class="n">date_str</span> <span class="o">=</span> <span class="n">date_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># 6. Construct complete URLs</span>
+
+<span class="n">BASE_URL</span> <span class="o">=</span> <span class="s1">&#39;https://www.federalreserve.gov&#39;</span>
+
+<span class="n">final_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">BASE_URL</span><span class="si">}{</span><span class="n">href</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="c1"># 7. Store meeting data</span>
+
+<span class="n">links_data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+
+<span class="s2">&quot;meeting_date&quot;</span><span class="p">:</span> <span class="n">date_str</span><span class="p">,</span>
+
+<span class="s2">&quot;minutes_url&quot;</span><span class="p">:</span> <span class="n">final_url</span>
+
+<span class="p">})</span>
+</code></pre></div>
+
+<p>Our FOMC meeting minutes data collection covers the period from January 29, 2020 to December 10, 2025 (20200129 to 20251210), ensuring comprehensive coverage of recent monetary policy cycles. After deduplication and chronological sorting, the results are saved to <code>URL.csv</code>.</p>
+<p>The following code demonstrates this process:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 8. Process and clean the data</span>
+
+<span class="n">df_links</span> <span class="o">=</span> <span class="p">(</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">links_data</span><span class="p">)</span>
+
+<span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;meeting_date&#39;</span><span class="p">])</span> <span class="c1"># Remove duplicates</span>
+
+<span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;meeting_date&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># Sort chronologically</span>
+
+<span class="p">)</span>
+
+<span class="n">df_links</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;URL.csv&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>Financial Data from Yahoo Finance</h2>
+<p>We choose the 10-year US Treasury yield (<code>^TNX</code>) and US Dollar Index (<code>DX-Y.NYB</code>) as our financial data to capture market reactions following the release of meeting minutes. We utilize the <code>yfinance</code> library to efficiently download historical market data spanning from a specified start date (e.g., 2019-01-01) and extract the 'Close' prices for daily data of these two key tickers <code>^TNX</code> and <code>DX-Y.NYB</code>. The following code demonstrates this process:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. Define time range</span>
+
+<span class="n">start_date</span> <span class="o">=</span> <span class="s2">&quot;2019-01-01&quot;</span>
+
+<span class="c1"># 2. Download data (10-year Treasury yield + Dollar Index)</span>
+
+<span class="n">assets</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">([</span><span class="s2">&quot;^TNX&quot;</span><span class="p">,</span> <span class="s2">&quot;DX-Y.NYB&quot;</span><span class="p">],</span> <span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">)</span>
+
+<span class="c1"># 3. Data structuring</span>
+
+<span class="c1"># Extract only closing prices</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">assets</span><span class="p">[</span><span class="s1">&#39;Close&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+<span class="c1"># 4. Rename columns</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+
+<span class="s2">&quot;^TNX&quot;</span><span class="p">:</span> <span class="s2">&quot;yield_10y&quot;</span><span class="p">,</span>
+
+<span class="s2">&quot;DX-Y.NYB&quot;</span><span class="p">:</span> <span class="s2">&quot;usd_index&quot;</span><span class="p">,</span>
+
+<span class="s2">&quot;Date&quot;</span><span class="p">:</span> <span class="s2">&quot;date&quot;</span>
+
+<span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Then we calculate the daily change in the 10-year US Treasury yield, which quantifies market movements. The processed data is saved to <code>market_data_daily.csv</code>, ready for merging with textual analysis results. The following code demonstrates this process:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 5. Calculate daily yield changes (key: capturing market shocks)</span>
+
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;yield_change&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;yield_10y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+
+
+
+<span class="c1"># 6. Save data, prepare for merging with AI sentiment scores</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;market_data_daily.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Financial baseline data prepared! First 5 rows:&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</code></pre></div>
+
+<h2>Considerations for Future Work</h2>
+<p>The 10-year Treasury yield reflects broad macroeconomic forces including long-term inflation expectations, global risk sentiment, and broader central bank policies, which may obscure immediate reactions to FOMC meeting minutes details. Short-term yields are typically more sensitive to direct monetary policy expectations and could provide a clearer, more timely signal of the market's interpretation of FOMC communications. Therefore, based on our analysis results, we may switch to short-term yields for more precise policy impact measurement in future work.</p>
+<h1>Text Extracing and Cleaning:</h1>
+<p>From the previous part, we have got two CSV files that contain:</p>
+<ul>
+<li>
+<p><strong>the URL of each FOMC meeting minutes page</strong>, saved in "URL.csv".</p>
+</li>
+<li>
+<p><strong>the daily historical market data during the time we focus</strong>, saved in "market_data_daily.csv".</p>
+</li>
+</ul>
+<p>In this post, I document the second part of the project, which focuses on <strong>extracting and cleaning textual data from Federal Open Market Committee (FOMC) meeting minutes</strong>.</p>
+<p>The goal of this part is simple but crucial —</p>
+<p>to build a clean, structured text dataframe that can later be used efficiently for <strong>NLP tasks such as sentiment analysis</strong>.</p>
+<h2>1. Data Frame Setup:</h2>
+<p>We first load the data and convert the meeting date into a proper datetime format for later time-series analysis.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">df_url</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;URL.csv&quot;</span><span class="p">)</span>
+
+<span class="n">df_url</span><span class="p">[</span><span class="s2">&quot;meeting_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+
+<span class="n">df_url</span><span class="p">[</span><span class="s2">&quot;meeting_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+
+<span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
+
+<span class="p">)</span>
+</code></pre></div>
+
+<h2>2. Extract the Main Content from Articles:</h2>
+<p>We design a function that:</p>
+<ol>
+<li>
+<p>Fetches the HTML page</p>
+</li>
+<li>
+<p>Locates the main article content</p>
+</li>
+<li>
+<p>Removes irrelevant elements (scripts, navigation bars, footers)</p>
+</li>
+<li>
+<p>Converts the cleaned HTML into plain text</p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_minutes_text</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">HEADERS</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="n">r</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;lxml&quot;</span><span class="p">)</span>
+
+<span class="n">main</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">soup</span><span class="o">.</span><span class="n">body</span>
+
+<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">main</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span>
+
+<span class="p">[</span><span class="s2">&quot;script&quot;</span><span class="p">,</span><span class="s2">&quot;style&quot;</span><span class="p">,</span><span class="s2">&quot;nav&quot;</span><span class="p">,</span><span class="s2">&quot;header&quot;</span><span class="p">,</span><span class="s2">&quot;footer&quot;</span><span class="p">,</span><span class="s2">&quot;aside&quot;</span><span class="p">]</span>
+
+<span class="p">):</span>
+
+<span class="n">tag</span><span class="o">.</span><span class="n">decompose</span><span class="p">()</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\n{3,}&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="k">return</span> <span class="n">text</span>
+</code></pre></div>
+
+<h2>3. Processing and Store Text Data in different fields:</h2>
+<p>To process all meeting minutes URLs, I loop through the dataset and apply the text extraction function to each page.</p>
+<p>And for each minutes, I store:</p>
+<ol>
+<li>
+<p>meeting date</p>
+</li>
+<li>
+<p>source URL</p>
+</li>
+<li>
+<p>cleaned text</p>
+</li>
+<li>
+<p>word count (as a rough length indicator)</p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">df_url</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+
+<span class="k">try</span><span class="p">:</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="n">fetch_minutes_text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;minutes_url&quot;</span><span class="p">])</span>
+
+<span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+
+<span class="s2">&quot;meeting_date&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;meeting_date&quot;</span><span class="p">],</span>
+
+<span class="s2">&quot;minutes_url&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;minutes_url&quot;</span><span class="p">],</span>
+
+<span class="s2">&quot;text_clean&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span>
+
+<span class="s2">&quot;word_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+<span class="p">})</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Also, to check the errors during the process, we use the followings to log the possible errors instead of dropping them directly.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+
+<span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+
+<span class="s2">&quot;meeting_date&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;meeting_date&quot;</span><span class="p">],</span>
+
+<span class="s2">&quot;minutes_url&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;minutes_url&quot;</span><span class="p">],</span>
+
+<span class="s2">&quot;text_clean&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+
+<span class="s2">&quot;word_count&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+
+<span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+<span class="p">})</span>
+</code></pre></div>
+
+<h2>4. Final Output</h2>
+<p>All results are merged into a DataFrame and exported as a UTF-8 encoded CSV file:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">df_minutes_text</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;meeting_date&quot;</span><span class="p">)</span>
+
+<span class="n">df_minutes_text</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+
+<span class="s2">&quot;minutes_text.csv&quot;</span><span class="p">,</span>
+
+<span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+
+<span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8-sig&quot;</span>
+
+<span class="p">)</span>
+</code></pre></div>
+
+<p>Now we can get <strong>a "minutes_text.csv" file</strong> that contains the cleaned text data for each minutes. And <strong>it is organized as the order of "meeting_date, minutes_url, text_clean, word_count"</strong>, which can be used for the next analysis.</p>
+<p>Though the process works, we noticed <strong>several things that can be improved</strong>:</p>
+<ol>
+<li>
+<p>the output dataframe appears as <strong>an extremely long and continous block of content</strong>, where sections are difficult to distinguish and rapid navigation is challenging.</p>
+</li>
+<li>
+<p><strong>FOMC minutes are inherently structured</strong>, typically including presented members and the information of the scretary, which are useless for sentimental analysis.</p>
+</li>
+</ol>
+<p>Thus, we may need to upgrade our code to further cleaning the text data and screen out the unnecessary.</p>
+<h1>Text sentiment analysis</h1>
+<p>After extracting the text from web links via BeautifulSoup, we perform sentiment analysis on the text. Long-text processing is a key strength of large language models (LLMs). However, since each meeting minutes document contains a large volume of text—ranging from 50,000 to 80,000 characters—the free quota provided by major AI platforms' APIs is generally less than 2,000,000 characters, which can be exhausted quickly. Additionally, API calls for services like ChatGPT come with relatively high costs. Eventually, we identified the <strong>Spark Lite model API</strong> of the Spark Large Model, which offers free and unlimited access, and we adopted it for text analysis.</p>
+<p>The invocation method and text prompts for it are provided in the following code:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="c1"># Please define SPARK_API_KEY and SPARK_URL before using</span>
+
+<span class="c1"># SPARK_API_KEY = &quot;Your Spark API Key&quot;</span>
+
+<span class="c1"># SPARK_URL = &quot;Spark API Endpoint URL&quot; </span>
+
+<span class="k">def</span> <span class="nf">analyze_fomc_with_spark</span><span class="p">(</span><span class="n">text_content</span><span class="p">):</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">Call Spark API to analyze Federal Reserve FOMC meeting minutes text</span>
+
+<span class="sd">:param text_content: FOMC meeting minutes text content</span>
+
+<span class="sd">:return: Analysis result dictionary (including hawkish, dovish, divergence, guidance)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Build precise prompt, force to return JSON format results</span>
+
+<span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">Please analyze the following Federal Reserve FOMC meeting minutes text and output the analysis results in standard JSON format in strict accordance with the following requirements:</span>
+
+<span class="s2">1. hawkish: Hawkish intensity, value range 0-1, the higher the value, the stronger the hawkish tendency</span>
+
+<span class="s2">2. dovish: Dovish intensity, value range 0-1, the higher the value, the stronger the dovish tendency</span>
+
+<span class="s2">3. divergence: Committee divergence degree, value range 0-1, the higher the value, the greater the divergence among committee members</span>
+
+<span class="s2">4. guidance: Next monetary policy action, must select only one from Hike (interest rate hike), Hold (maintain status quo), Cut (interest rate cut)</span>
+
+<span class="s2">Notes:</span>
+
+<span class="s2">- Must return standard JSON format, do not add any additional explanatory text</span>
+
+<span class="s2">- The sum of hawkish and dovish values does not need to equal 1, but both must be within the range of 0-1</span>
+
+<span class="s2">- guidance must be one of Hike, Hold, Cut, no other values are allowed</span>
+
+<span class="s2">Text to be analyzed:</span>
+
+<span class="si">{</span><span class="n">text_content</span><span class="p">[:</span><span class="mi">80000</span><span class="p">]</span><span class="si">}</span><span class="s2"> # Limit text length to avoid exceeding API token limits</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+
+<span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="n">SPARK_API_KEY</span><span class="p">,</span>
+
+<span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span>
+
+<span class="p">}</span>
+
+<span class="c1"># Build request body (disable stream output for simplified processing)</span>
+
+<span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
+
+<span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="s2">&quot;4.0Ultra&quot;</span><span class="p">,</span>
+
+<span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;fomc_analyzer&quot;</span><span class="p">,</span>
+
+<span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+
+<span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="c1"># Disable stream output to get complete results directly</span>
+
+<span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">0.1</span> <span class="c1"># Reduce randomness to ensure result stability</span>
+
+<span class="p">}</span>
+
+<span class="k">try</span><span class="p">:</span>
+
+<span class="c1"># Send request</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+
+<span class="n">url</span><span class="o">=</span><span class="n">SPARK_URL</span><span class="p">,</span>
+
+<span class="n">json</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
+
+<span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+
+<span class="n">timeout</span><span class="o">=</span><span class="mi">60</span>
+
+<span class="p">)</span>
+
+<span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+<span class="c1"># Parse response</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="s2">&quot;choices&quot;</span> <span class="ow">in</span> <span class="n">result</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;choices&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+<span class="n">content</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;choices&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
+
+<span class="c1"># Extract JSON content (handle possible extra text)</span>
+
+<span class="n">json_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\{[\s\S]*\}&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">json_match</span><span class="p">:</span>
+
+<span class="n">json_str</span> <span class="o">=</span> <span class="n">json_match</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+
+<span class="n">analysis</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span>
+
+<span class="c1"># Validate and correct fields</span>
+
+<span class="n">validated_analysis</span> <span class="o">=</span> <span class="p">{</span>
+
+<span class="s2">&quot;hawkish&quot;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hawkish&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)))),</span>
+
+<span class="s2">&quot;dovish&quot;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dovish&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)))),</span>
+
+<span class="s2">&quot;divergence&quot;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;divergence&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)))),</span>
+
+<span class="s2">&quot;guidance&quot;</span><span class="p">:</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;guidance&quot;</span><span class="p">,</span> <span class="s2">&quot;Hold&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;guidance&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Hike&quot;</span><span class="p">,</span> <span class="s2">&quot;Hold&quot;</span><span class="p">,</span> <span class="s2">&quot;Cut&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;Hold&quot;</span>
+
+<span class="p">}</span>
+
+<span class="k">return</span> <span class="n">validated_analysis</span>
+
+<span class="c1"># Default return value</span>
+
+<span class="k">return</span> <span class="p">{</span><span class="s2">&quot;hawkish&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;dovish&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;divergence&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;guidance&quot;</span><span class="p">:</span> <span class="s2">&quot;Hold&quot;</span><span class="p">}</span>
+
+<span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;JSON parsing failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">return</span> <span class="p">{</span><span class="s2">&quot;hawkish&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;dovish&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;divergence&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;guidance&quot;</span><span class="p">:</span> <span class="s2">&quot;Hold&quot;</span><span class="p">}</span>
+
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API call failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">return</span> <span class="p">{</span><span class="s2">&quot;hawkish&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;dovish&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;divergence&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;guidance&quot;</span><span class="p">:</span> <span class="s2">&quot;Hold&quot;</span><span class="p">}</span>
+</code></pre></div>
+
+<p>The output results are as follows:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">date</th>
+<th style="text-align: left;">hawkish</th>
+<th style="text-align: left;">dovish</th>
+<th style="text-align: left;">divergence</th>
+<th style="text-align: left;">guidance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">20250129</td>
+<td style="text-align: left;">0.3</td>
+<td style="text-align: left;">0.2</td>
+<td style="text-align: left;">0.1</td>
+<td style="text-align: left;">Hold</td>
+</tr>
+<tr>
+<td style="text-align: left;">20250319</td>
+<td style="text-align: left;">0.3</td>
+<td style="text-align: left;">0.4</td>
+<td style="text-align: left;">0.2</td>
+<td style="text-align: left;">Hold</td>
+</tr>
+<tr>
+<td style="text-align: left;">20250507</td>
+<td style="text-align: left;">0.4</td>
+<td style="text-align: left;">0.3</td>
+<td style="text-align: left;">0.2</td>
+<td style="text-align: left;">Hold</td>
+</tr>
+<tr>
+<td style="text-align: left;">20250618</td>
+<td style="text-align: left;">0.3</td>
+<td style="text-align: left;">0.4</td>
+<td style="text-align: left;">0.2</td>
+<td style="text-align: left;">Hold</td>
+</tr>
+</tbody>
+</table>
+<p>Further construct <strong>sentiment increment indicators</strong> based on the above metrics, conduct <strong>correlation analysis</strong> with the volatility of bond yields, and explore whether the meeting minutes are consistent with market expectations. The specific construction of indicators and correlation analysis will be further completed in subsequent practice, and we will carry out more visualization work in the future.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-09T22:12:00+08:00">Fri 09 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-textwizards-ref">Group TextWizards
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

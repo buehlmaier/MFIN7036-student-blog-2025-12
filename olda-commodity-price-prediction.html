@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="oLDA, Commodity Price, NLP, Sentiment Analysis, Project Report, " />
+
+<meta property="og:title" content="Predicting Commodity Prices with oLDA (by Group &#34;Market Decoders&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/olda-commodity-price-prediction.html" />
+<meta property="og:description" content="Abstract Our project aims to explore the relationship between financial news narratives and commodity price fluctuations. Specifically, we utilize Online Latent Dirichlet Allocation (oLDA) to identify latent topics in news streams, quantify the news attention allocated to these topics over time, and use these attention signals to forecast future commodity …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-09T00:00:00+08:00" />
+<meta name="twitter:title" content="Predicting Commodity Prices with oLDA (by Group &#34;Market Decoders&#34;) ">
+<meta name="twitter:description" content="Abstract Our project aims to explore the relationship between financial news narratives and commodity price fluctuations. Specifically, we utilize Online Latent Dirichlet Allocation (oLDA) to identify latent topics in news streams, quantify the news attention allocated to these topics over time, and use these attention signals to forecast future commodity …">
+
+        <title>Predicting Commodity Prices with oLDA (by Group &#34;Market Decoders&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/olda-commodity-price-prediction.html">
+                Predicting Commodity Prices with oLDA (by Group "Market Decoders")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h2><strong>Abstract</strong></h2>
+<p>Our project aims to explore the relationship between financial news narratives and commodity price fluctuations. Specifically, we utilize <strong>Online Latent Dirichlet Allocation (oLDA)</strong> to identify latent topics in news streams, quantify the news attention allocated to these topics over time, and use these attention signals to forecast future commodity prices.</p>
+<p>First, we built a comprehensive dataset that includes <strong>real-time financial news</strong> (covering things like commodity market trends, macroeconomic shifts, and policy announcements). During the data preprocessing stage, we <strong>standardized the text format, removed irrelevant stuff (like unnecessary metadata and duplicate content)</strong>, and converted the unstructured news text into a format that works for topic modeling algorithms.</p>
+<p>Since we’re still in the middle of model training, there are no visual charts in this blog post for now.</p>
+<h2><strong>Workflow Overview</strong></h2>
+<h3>(a) Data Collection</h3>
+<p>To figure out how news affects commodity prices, we needed news data that meets three key needs:</p>
+<p><strong>1.Market-relevant:</strong> Commodity prices depend on business/economic/policy news, so we stuck to the "business" category (it’s what moves markets).</p>
+<p><strong>2.Time-consistent:</strong> Prices change daily, so we pulled 2022–2025 news to align with long-term price trends.</p>
+<p><strong>3.Enough volume:</strong> We needed ~1,100–1,200 articles/month (56,578 total) to spot shifting themes (like "supply shortages" or "rate hikes").</p>
+<p><strong>Mediastack News API</strong> was perfect here: it lets us filter by category, grab historical data, and scale up easily—so our dataset matches real market news flow.</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1"># Sample code for fetching news metadata via Mediastack API</span>
+   <span class="kn">import</span> <span class="nn">http.client</span><span class="o">,</span> <span class="nn">urllib.parse</span><span class="o">,</span> <span class="nn">json</span>
+
+   <span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="s1">&#39;api.mediastack.com&#39;</span><span class="p">)</span>
+   <span class="n">params</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">({</span>
+      <span class="s1">&#39;access_key&#39;</span><span class="p">:</span> <span class="s1">&#39;YOUR_ACCESS_KEY&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;categories&#39;</span><span class="p">:</span> <span class="s1">&#39;business&#39;</span><span class="p">,</span> 
+      <span class="s1">&#39;sort&#39;</span><span class="p">:</span> <span class="s1">&#39;popularity&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;limit&#39;</span><span class="p">:</span> <span class="mi">100</span>
+   <span class="p">})</span>
+
+   <span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;/v1/news?</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
+   <span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+   <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Timeframe:</strong> 2022 - 2025(We can only get 4-your data from this source,but it  is enough for our project)</li>
+<li><strong>Volume:</strong> Approximately 1,100 to 1,200 articles per month.</li>
+<li><strong>Total Dataset:</strong> 56,578 articles.</li>
+</ul>
+<h3>(b) Data Preprocess_1.0</h3>
+<p>First, we import necessary libraries, load the raw news dataset from an Excel file, and check the basic structure of our data.</p>
+<div class="codehilite"><pre><span></span><code>   <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+   <span class="kn">import</span> <span class="nn">nltk</span>
+   <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+   <span class="kn">import</span> <span class="nn">jieba</span>
+   <span class="kn">import</span> <span class="nn">re</span>
+   <span class="kn">import</span> <span class="nn">json</span>
+   <span class="kn">import</span> <span class="nn">os</span>
+
+   <span class="c1"># 1. Load the dataset</span>
+   <span class="n">file_path</span> <span class="o">=</span> <span class="s1">&#39;news/news_2025_12_with_content.xlsx&#39;</span>
+   <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span>
+
+   <span class="c1"># 2. Data Exploration</span>
+   <span class="c1"># Display basic information about the dataframe</span>
+   <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data length: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data columns: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Column names: &quot;</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+   <span class="c1"># Show the first 5 rows to verify the data</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</code></pre></div>
+
+<p>The structure of the dataset is shown in the figure below:</p>
+<p><img alt="datastructure1" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/MarketDecoders_01_datastructure1.png"></p>
+<p>Next, we clean and organize the dataset with three key steps:</p>
+<p>1.<strong>Data Cleaning</strong>: We replace the placeholder text "Failed to retrieve content" in the <code>content</code> column with empty strings to remove invalid entries.</p>
+<p>2.<strong>Data Transformation</strong>: We convert the <code>published_date</code> column to datetime format (to handle time-based grouping later).</p>
+<p>3.<strong>Date-Based Grouping</strong>: We group news entries by their publication date, organizing them into a dictionary where each key is a date (as a string) and the value is a list of daily news details (like title, abstract, and content).</p>
+<p>Here’s the code for these steps:</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1"># Data Cleaning</span>
+   <span class="c1"># We replace the &quot;Failed to retrieve content&quot; with empty string.</span>
+   <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;Failed to retrieve content&#39;</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="s1">&#39;content&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+   <span class="c1"># Data Transformation</span>
+   <span class="c1"># Convert &#39;published_date&#39; column to datetime objects</span>
+   <span class="n">df</span><span class="p">[</span><span class="s1">&#39;published_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;published_date&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+
+   <span class="c1"># Grouping Data by Date</span>
+   <span class="c1"># We organize the news entries into a dictionary</span>
+   <span class="n">date_grouped_data</span> <span class="o">=</span> <span class="p">{}</span>
+   <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;published_date&#39;</span><span class="p">):</span>
+      <span class="n">date_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+      <span class="n">daily_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+      <span class="c1"># Build a list of dictionaries</span>
+      <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+         <span class="n">daily_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+               <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">],</span>
+               <span class="s1">&#39;abstract&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">],</span>
+               <span class="c1"># Convert timestamp to ISO format string</span>
+               <span class="s1">&#39;published_date&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;published_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> 
+               <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;published_date&#39;</span><span class="p">])</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+               <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">],</span>
+               <span class="s1">&#39;URL&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">],</span>
+               <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
+         <span class="p">})</span>
+
+      <span class="n">date_grouped_data</span><span class="p">[</span><span class="n">date_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_list</span>
+</code></pre></div>
+
+<p>Finally, we save the cleaned and grouped data for later use in topic modeling:</p>
+<p>1.<strong>Prepare Output Folder</strong>: We first create a folder (<code>transformed_data</code>) to store the processed data (if it doesn’t already exist).</p>
+<p>2.<strong>Save Grouped Data</strong>: We export the date-grouped news data (from the previous step) as a JSON-formatted text file (<code>2025_12.txt</code>), using UTF-8 encoding to preserve special characters.</p>
+<p>3.<strong>Verify Saving</strong>: We print the file path and size to confirm the data is saved successfully.</p>
+<p>Here’s the code for this step:</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1"># Save Processed Data</span>
+   <span class="n">output_directory</span> <span class="o">=</span> <span class="s1">&#39;transformed_data&#39;</span>
+   <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_directory</span><span class="p">):</span>
+      <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_directory</span><span class="p">)</span>
+
+   <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_directory</span><span class="p">,</span> <span class="s1">&#39;2025_12.txt&#39;</span><span class="p">)</span>
+
+   <span class="c1"># Save the data as a JSON formatted text file with UTF-8 encoding</span>
+   <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+      <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">date_grouped_data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+   <span class="c1"># Final Verification</span>
+   <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data saved as </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File size: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1024</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> KB&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>This is a example of our JSON formatted text data:</p>
+<div class="codehilite"><pre><span></span><code><span class="w">   </span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;2025-12-01&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;News Title&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;abstract&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;News Abstract&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;published_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-01T00:00:00&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Source Name&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;URL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;News URL&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Cleaned news content&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">   </span><span class="p">]</span>
+<span class="w">   </span><span class="p">}</span>
+</code></pre></div>
+
+<h3>(c) Model and Methodology</h3>
+<p>Our workflow draws inspiration from recent literature in financial text analysis. The core idea is to move beyond simple sentiment analysis to tracking thematic shifts in news.</p>
+<ol>
+<li>
+<p><strong>Topic Modeling (oLDA):</strong> We apply oLDA to decompose the high dimensional text data into <span class="math">\(K\)</span> latent topics. Unlike static LDA, oLDA adapts to the streaming nature of news.</p>
+</li>
+<li>
+<p><strong>Quantifying News Attention:</strong> For each document <span class="math">\(d\)</span> at time <span class="math">\(t\)</span>, we infer the topic proportion <span class="math">\(\theta_d\)</span>. We aggregate these to define the News Attention <span class="math">\(N_{k,t}\)</span> for topic <span class="math">\(k\)</span> at time <span class="math">\(t\)</span>.</p>
+</li>
+<li>
+<p><strong>Correlation &amp; Forecasting:</strong> We employ sparse regression and multivariate time-series models to isolate robust predictive signals.</p>
+<ul>
+<li><strong>LASSO Regression:</strong> We utilize LASSO (Least Absolute Shrinkage and Selection Operator) to handle the high dimensionality of our topic space (<span class="math">\(K\)</span> topics). By imposing an <span class="math">\(L_1\)</span> penalty, LASSO selects the most relevant topics for forecasting commodity returns while avoiding overfitting.</li>
+</ul>
+<p>
+<div class="math">$$\min_{\beta} \Big( ||r_{t+1} - \mathbf{N}_t\beta||_2^2 + \lambda ||\beta||_1 \Big)$$</div>
+</p>
+<ul>
+<li><strong>Vector Autoregression (VAR):</strong> We implement a VAR model to capture the dynamic interdependencies between news attention and commodity price movements. This allows us to analyze impulse response functions identifying how a sudden spike in a specific narrative (e.g., "Inflation") impacts commodity returns over subsequent periods.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2><strong>Problems encountered and Solutions</strong></h2>
+<p>Transitioning from raw text to predictive signals involved overcoming significant hurdles. Below we detail the three major challenges we faced and our technical solutions.</p>
+<h3>(a) The Abstract Limitation</h3>
+<p>The Mediastack API efficiently provides metadata, but often restricts content to abstracts or snippets. Relying solely on abstracts fails to capture the rich semantic context required for accurate topic modeling.</p>
+<ul>
+<li><strong>Solution:</strong> We integrated the <code>newspaper3k</code> Python package. We built a scraper pipeline that iterates through the URLs provided by the API to fetch and parse the full article text, ensuring our model learns from the complete narrative.</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>   <span class="kn">from</span> <span class="nn">newspaper</span> <span class="kn">import</span> <span class="n">Article</span>
+
+   <span class="k">def</span> <span class="nf">get_full_article</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+      <span class="k">try</span><span class="p">:</span>
+         <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+         <span class="n">article</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
+         <span class="n">article</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
+         <span class="k">return</span> <span class="n">article</span><span class="o">.</span><span class="n">text</span>
+      <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+         <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div>
+
+<h3>(b) Choosing the Right Model: LDA vs. oLDA</h3>
+<p>Standard <strong>Latent Dirichlet Allocation (LDA)</strong> assumes that documents are <em>exchangeable</em>, meaning the order of documents does not matter. However, financial news is intrinsically dynamic; the vocabulary and themes evolving in 2022 differ from those in 2025. Standard LDA essentially learns a static topic distribution <span class="math">\(\Phi\)</span> over the entire period.</p>
+<p>We adopted <strong>Online LDA (oLDA)</strong> to respect the time-series nature of our data. In oLDA, the model processes data in mini-batches (time windows). The topic-word distribution <span class="math">\(\Phi_t\)</span> is updated based on the previous state <span class="math">\(\Phi_{t-1}\)</span> and the new batch of documents.</p>
+<p>Let <span class="math">\(\beta_{k, v}\)</span> represent the weight of term <span class="math">\(v\)</span> in topic <span class="math">\(k\)</span>. In oLDA, we update the variational parameters <span class="math">\(\lambda\)</span> based on the gradient from the current mini-batch to approximate the posterior:
+</p>
+<div class="math">$$ \lambda_{t} \leftarrow (1 - \rho_t)\lambda_{t-1} + \rho_t \tilde{\lambda}_t $$</div>
+<p>
+This moving average approach allows the model to "evolve" with the market narratives.</p>
+<h3>(c) Refining Topic Quality</h3>
+<p>Our initial oLDA results yielded topics that were incoherent and dominated by noise. A slice of our initial raw output looked like this:</p>
+<ul>
+<li><strong>Topic 00:</strong> apology, beta, friend, misleading, style...</li>
+<li><strong>Topic 01:</strong> trump, burst, spikes, upside, naidu...</li>
+<li><strong>Topic 07:</strong> silver, radar, codes, pro, suggest...</li>
+</ul>
+<p><strong>Why was this not expected?</strong>
+The terms were a mix of stop words, irrelevant proper nouns (e.g., "naidu", "chouhan"), and generic verbs that carried no specific economic meaning. This "bag-of-words" noise obscures the underlying economic signal. To fix this, we implemented a three-step enhancement strategy.</p>
+<h4>(i) Rigorous Preprocessing(Data Preprocess_2.0)</h4>
+<p>We implemented a strict preprocessing pipeline. We first stripped non-alphabetical characters and lowercased all text to reduce vocabulary size. We then applied a custom rule-based lemmatizer/stemmer designed to normalize derivative words without over-stemming.</p>
+<p>The rules are applied in the following order (where <span class="math">\(x\)</span> is a candidate term):</p>
+<ol>
+<li>
+<p><strong>"sses" <span class="math">\(\to\)</span> "ss"</strong>: Simplify plural forms ending in double-s.</p>
+</li>
+<li>
+<p><strong>"ies" <span class="math">\(\to\)</span> "y"</strong>: Normalize plural/variant endings like "stories" to "story".</p>
+</li>
+<li>
+<p><strong>Trailing "s"</strong>: Remove standard plurality.</p>
+</li>
+<li>
+<p><strong>Trailing "ly"</strong>: Remove adverbial suffixes.</p>
+</li>
+<li>
+<p><strong>Trailing "ed"</strong>: Remove past tense markers (replace with "e" if needed for root preservation).</p>
+</li>
+<li>
+<p><strong>Trailing "ing"</strong>: Handle continuous tenses. If "ing" follows double consonants, remove "ing" and one consonant; otherwise just remove "ing".</p>
+</li>
+<li>
+<p><strong>Length Filter</strong>: Remove words with fewer than 3 letters to eliminate abbreviations and noise.</p>
+</li>
+</ol>
+<p>This part of the code is quite extensive, the code below is a <strong>Code Skeleton</strong> of our process.For the complete and rigorous data preprocessing code, please refer to the <strong>data_preprocess_word_reconstruct.ipynb</strong> file in the GitHub repository of our Project, which includes detailed preprocessing steps with comprehensive comments:</p>
+<p><a href="https://github.com/DJQ83/data-preprocess">Rigorous Preprocessing Code</a></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. Configuration &amp; Dependency Section</span>
+<span class="c1"># Define INPUT/OUTPUT directories and initialize cleaning paths.</span>
+<span class="c1"># Ensure environment readiness before processing starts.</span>
+
+<span class="c1"># 2. Rule Loading Module</span>
+<span class="k">def</span> <span class="nf">load_cleaning_rules</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Scans CLEANING_DIR for CSV (Metadata tags) and TXT (Stopwords) files.</span>
+<span class="sd">    Aggregates noise-reduction rules into high-speed memory sets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="c1"># 3. Core NLP Engine (Processing Blocks)</span>
+<span class="k">def</span> <span class="nf">light_lemmatize_term</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Implements light stemming rules (a-f):</span>
+<span class="sd">    Handling suffix stripping (sses/ies), plural removal, </span>
+<span class="sd">    adverb reduction (ly), and silent-e/consonant-doubling (ing).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">process_field_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Main cleaning pipeline for text fields:</span>
+<span class="sd">    Regex cleaning -&gt; Tokenization -&gt; Stemming -&gt; Length Filtering.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="c1"># 4. Noise Reduction &amp; Metadata Filtering</span>
+<span class="k">def</span> <span class="nf">apply_last_step_noise_reduction</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Two-tier filtering strategy:</span>
+<span class="sd">    1. Term-level: Removes URL remnants and loaded stopwords.</span>
+<span class="sd">    2. Article-level: Drops records matching CSV &#39;Bad Tags&#39; (Title/Source).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="c1"># 5. Pipeline Orchestration (Main Execution)</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Iterates through all JSON files in INPUT_DIR.</span>
+<span class="sd">    Coordinates the pipeline flow and saves non-empty refined datasets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<h4>(ii) Rescaling Topic-Term Weights</h4>
+<p>Standard LDA defines a topic by high-probability words. However, common words (e.g., "market", "price") have high probability across <em>all</em> financial topics, making them poor discriminators.</p>
+<p>We rescaled the weights to prioritize words that are <em>specific</em> to a topic relative to the general corpus.
+Let <span class="math">\(\phi_{k,v}\)</span> be the probability of term <span class="math">\(v\)</span> in topic <span class="math">\(k\)</span> (from LDA components).
+Let <span class="math">\(f_v\)</span> be the marginal probability of term <span class="math">\(v\)</span> in the entire corpus.</p>
+<p>We calculate the <strong>Scaled Weight</strong> <span class="math">\(\tilde{w}_{k,v}\)</span> as:</p>
+<div>
+$$\tilde{w}_{k,v}=\frac{\phi_{k,v}}{f_v + \epsilon}$$
+</div>
+
+<div class="codehilite"><pre><span></span><code>   <span class="c1"># 1. Get Topic-Term distribution (Phi)</span>
+   <span class="n">topic_term_counts</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">components_</span>
+   <span class="n">topic_term_distr</span> <span class="o">=</span> <span class="n">topic_term_counts</span> <span class="o">/</span> <span class="n">topic_term_counts</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="c1"># K x V</span>
+
+   <span class="c1"># 2. Get Corpus Term Frequency (f_v)</span>
+   <span class="n">corpus_term_counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_all</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+   <span class="n">corpus_term_distr</span> <span class="o">=</span> <span class="n">corpus_term_counts</span> <span class="o">/</span> <span class="n">corpus_term_counts</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="c1"># 1 x V</span>
+
+   <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-10</span>
+
+   <span class="c1"># 3. Phi_{k,v} / f_v</span>
+   <span class="n">scaled_weights</span> <span class="o">=</span> <span class="n">topic_term_distr</span> <span class="o">/</span> <span class="p">(</span><span class="n">corpus_term_distr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
+</code></pre></div>
+
+<ul>
+<li><span class="math">\(\phi_{k,v}\)</span>: The importance of the word in the topic.</li>
+<li><span class="math">\(f_v\)</span>: The importance of the word generally.</li>
+</ul>
+<p>By dividing by <span class="math">\(f_v\)</span>, we penalize generic words and boost distinctive terms. (e.g., "inflation" might be common, but "hyperinflation" is rare and topic-specific).</p>
+<h4>(iii) Topic Number Selection</h4>
+<p>Selecting the optimal number of topics <span class="math">\(K\)</span> is crucial. If <span class="math">\(K\)</span> is too small, distinct themes (e.g., "Geopolitical Risk" vs. "Monetary Policy") merge. If <span class="math">\(K\)</span> is too large, topics become fragmented and unintelligible. We try to iterate through potential values of <span class="math">\(K\)</span>, balancing model complexity with interpretability.</p>
+<hr>
+<h2>3. Future Direction</h2>
+<p>We are currently evaluating the effectiveness of our refined topics.</p>
+<ul>
+<li>
+<p><strong>Topic Quality Assessment:</strong> We are quantitatively measuring the coherence and distinctiveness of the topics generated by the oLDA model with the new scaling weights.</p>
+</li>
+<li>
+<p><strong>Forecasting Model:</strong> The next step is to feed these News Attention signals into the regression model defined in section 1(c) to test their predictive power on Commodity Prices.</p>
+</li>
+</ul>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$']]
+    }
+  };
+</script>
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','color.js','mhchem.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-09T00:00:00+08:00">Fri 09 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#project-report-ref">Project Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#commodity-price-ref">Commodity Price
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#nlp-ref">NLP
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#olda-ref">oLDA
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#sentiment-analysis-ref">Sentiment Analysis
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

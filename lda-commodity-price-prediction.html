@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="LDA, oLDA, Commodity Price, NLP, Topic Model, Project Report, " />
+
+<meta property="og:title" content="Predicting Commodity Prices with LDA (by Group &#34;Market Decoders&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/lda-commodity-price-prediction.html" />
+<meta property="og:description" content="Abstract Our project aims to explore the relationship between financial news narratives and commodity price fluctuations. Specifically, we utilize Latent Dirichlet Allocation (LDA) to identify latent topics in news streams, quantify the news attention allocated to these topics over time, and use these attention signals to forecast future commodity prices …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-09T00:00:00+08:00" />
+<meta name="twitter:title" content="Predicting Commodity Prices with LDA (by Group &#34;Market Decoders&#34;) ">
+<meta name="twitter:description" content="Abstract Our project aims to explore the relationship between financial news narratives and commodity price fluctuations. Specifically, we utilize Latent Dirichlet Allocation (LDA) to identify latent topics in news streams, quantify the news attention allocated to these topics over time, and use these attention signals to forecast future commodity prices …">
+
+        <title>Predicting Commodity Prices with LDA (by Group &#34;Market Decoders&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/lda-commodity-price-prediction.html">
+                Predicting Commodity Prices with LDA (by Group "Market Decoders")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h2><strong>Abstract</strong></h2>
+<p>Our project aims to explore the relationship between financial news narratives and commodity price fluctuations. Specifically, we utilize <strong>Latent Dirichlet Allocation (LDA)</strong> to identify latent topics in news streams, quantify the news attention allocated to these topics over time, and use these attention signals to forecast future commodity prices.</p>
+<hr>
+<h2><strong>LDA Workflow: From News Text to Temporal Attention Signals</strong></h2>
+<p>In the previous blog, we discussed the idea of using online topic modeling (oLDA) to capture the temporal evolution of financial news narratives from a methodological perspective. In this post, we focus on the implementation details and describe our topic modeling workflow.
+In practice, we adopt a Batch LDA approach rather than oLDA, combined with temporal grouping. This design allows us to maintain stable and interpretable topics while constructing news topic attention signals that vary over time.</p>
+<h3>Step 1: Data Preparation</h3>
+<p>We organize the cleaned news data into a time-ordered document collection by standardizing publication timestamps, selecting valid text content, and filtering out noisy or low-information articles, which serves as the input for subsequent topic modeling. </p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1">#Sample code for data preparation</span>
+   <span class="k">def</span> <span class="nf">prepare_articles</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Article</span><span class="p">]:</span>
+    <span class="n">articles</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.txt&quot;</span><span class="p">)):</span>
+        <span class="n">daily_news</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">news_list</span> <span class="ow">in</span> <span class="n">daily_news</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">news_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;published_date&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="n">published_at</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                    <span class="n">item</span><span class="p">[</span><span class="s2">&quot;published_date&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S&quot;</span>
+                <span class="p">)</span>
+
+                <span class="n">text</span> <span class="o">=</span> <span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;abstract&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">articles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Article</span><span class="p">(</span>
+                        <span class="n">description</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                        <span class="n">published_at</span><span class="o">=</span><span class="n">published_at</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">published_at</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>Step 2: Text Representation</h3>
+<p>To convert text content into numerical features that can be directly processed by the topic model, we adopt a classic Bag-of-Words representation. We apply basic text normalization, English stopword removal, unigram and bigram features, and document frequency filtering to reduce noise and improve topic quality.</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1">#Example code for text representation</span>
+   <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span>
+       <span class="n">stop_words</span><span class="o">=</span><span class="s2">&quot;english&quot;</span><span class="p">,</span>
+       <span class="n">max_df</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+       <span class="n">min_df</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+       <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+       <span class="n">max_features</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span>
+   <span class="p">)</span>
+
+   <span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">article</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">]</span>
+   <span class="n">X_all</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+   <span class="n">vocabulary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">())</span>
+</code></pre></div>
+
+<h3>Step 3: Batch LDA Topic Modeling</h3>
+<p>After constructing the text features, we train the topic model using Batch LDA on the full news corpus. In our implementation, we set the number of topics to K=100 to balance topic granularity and interpretability. We also apply sparse priors so that each document is associated with only a few topics and each topic is represented by a limited set of keywords, which improves topic focus and supports manual labeling.</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1">#Example training code</span>
+   <span class="n">lda</span> <span class="o">=</span> <span class="n">LatentDirichletAllocation</span><span class="p">(</span>
+       <span class="n">n_components</span><span class="o">=</span><span class="n">n_topics</span><span class="p">,</span>
+       <span class="n">learning_method</span><span class="o">=</span><span class="s2">&quot;batch&quot;</span><span class="p">,</span>
+       <span class="n">max_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+       <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+       <span class="n">doc_topic_prior</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+       <span class="n">topic_word_prior</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+   <span class="p">)</span>
+
+   <span class="n">lda</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_all</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>Step 4: Temporal Aggregation</h3>
+<p>We group news articles by date and construct daily topic attention signals. For each day, we infer topic distributions for all published articles using the trained LDA model and then take their average to obtain a daily topic attention vector. In this way, the static topic modeling results are transformed into dynamic signals suitable for time-series analysis.</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1">#Example code for temporal aggregation</span>
+   <span class="n">daily_attention</span> <span class="o">=</span> <span class="p">{}</span>
+
+   <span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">published_at</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">]</span>
+   <span class="n">article_indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">articles</span><span class="p">))</span>
+
+   <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">article_indices</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+       <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">group</span><span class="p">]</span>
+       <span class="n">X_slice</span> <span class="o">=</span> <span class="n">X_all</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+       <span class="n">doc_topic_distr</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_slice</span><span class="p">)</span>
+   <span class="n">daily_attention</span><span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=</span> <span class="n">doc_topic_distr</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>Step 5: Result Export and Analysis</h3>
+<p>Finally, we extract representative keywords for each topic from the LDA model to support manual topic labeling and economic interpretation. We also export the daily topic attention signals in matrix form so that they can be directly used as input features in subsequent regression or time-series modeling frameworks.</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1">#Example code for result export</span>
+   <span class="n">topic_term_counts</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">components_</span>
+   <span class="n">topic_term_distr</span> <span class="o">=</span> <span class="n">topic_term_counts</span> <span class="o">/</span> <span class="n">topic_term_counts</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+   <span class="n">topic_terms</span> <span class="o">=</span> <span class="p">[]</span>
+   <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_topics</span><span class="p">):</span>
+       <span class="n">top_indices</span> <span class="o">=</span> <span class="n">topic_term_distr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">10</span><span class="p">]</span>
+       <span class="n">top_words</span> <span class="o">=</span> <span class="n">vocabulary</span><span class="p">[</span><span class="n">top_indices</span><span class="p">]</span>
+   <span class="n">topic_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">top_words</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>   <span class="n">export_topic_terms</span><span class="p">(</span><span class="n">topic_terms</span><span class="p">,</span> <span class="n">topic_terms_path</span><span class="p">)</span>
+   <span class="n">export_daily_attention</span><span class="p">(</span><span class="n">daily_attention</span><span class="p">,</span> <span class="n">topic_attention_path</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Since the model learns a total of K=100 topics, we select a small number of representative results for visualization based on their semantic content and temporal patterns. The following figures present a subset of the results.</p>
+<p><img alt="Figure 1: Topic hierarchical clustering based on topic-word distributions" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/MarketDecoders_02_Topic_hierarchical_clustering.png"></p>
+<p><img alt="Figure 2: Selected Examples of LDA Results" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/MarketDecoders_02_Selected_Examples_of_LDA_Results.png"></p>
+<h2><strong>Regression Analysis</strong></h2>
+<p>Based on topic attentions we obtained above, we did Lasso Regression to do the feature selection and then Multiple Regression to do the validation.</p>
+<p>Our model logic flow shows as follows:</p>
+<p>1.<strong>Input Data</strong>: Our input data involves all topic attention scores (θₖ,ₜ) generated by LDA model.</p>
+<p>2.<strong>Lasso Regression (Feature Selection)</strong>: We use L1 penalty to shrink irrelevant topics to 0, retaining top 5-8 core topics (e.g., Geopolitics, Supply). The formular we used is shown below:</p>
+<div class="math">$$ Y_t = \alpha + \sum{\beta_k} \times \theta_{k,t} + \epsilon_t$$</div>
+<p>3.<strong>Multiple Regression (Validation)</strong>: We incorporate selected topics with traditional controls (USD Index, PMI) to test incremental value.</p>
+<p>4.<strong>Output Result</strong>: We quantified coefficients (βₖ) for core topics and verification of ΔR².</p>
+<p>Here’s the code for the core regression part:</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1"># Lasso Five-Factor Selection Algorithm (corresponds to Section III.A of the paper)</span>
+   <span class="k">def</span> <span class="nf">lasso_selection_fixed_5</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">topic_names</span><span class="p">):</span>
+<span class="w">      </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Find alpha using bisection method such that Lasso retains exactly 5 non-zero variables.</span>
+<span class="sd">      Then uses Post-Lasso OLS to estimate statistics (p-val, SE, CI).</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="c1"># Standardization - corresponds to the procedure on page 3121 of the paper </span>
+      <span class="n">scaler_x</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+      <span class="n">scaler_y</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+      <span class="n">X_std</span> <span class="o">=</span> <span class="n">scaler_x</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+      <span class="n">y_std</span> <span class="o">=</span> <span class="n">scaler_y</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+      <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="mf">0.000001</span><span class="p">,</span> <span class="mf">1.0</span>
+      <span class="n">best_alpha</span> <span class="o">=</span> <span class="mf">0.1</span>
+      <span class="c1"># Iterate to find the appropriate alpha penalty parameter</span>
+      <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">):</span>
+         <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">low</span> <span class="o">+</span> <span class="n">high</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+         <span class="n">model</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">mid</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+         <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_std</span><span class="p">,</span> <span class="n">y_std</span><span class="p">)</span>
+         <span class="n">non_zero_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">non_zero_count</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">best_alpha</span> <span class="o">=</span> <span class="n">mid</span>
+            <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">non_zero_count</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+               <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span>
+            <span class="k">else</span><span class="p">:</span>
+               <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span>     
+      <span class="c1"># Re-run the model using the optimal alpha found</span>
+      <span class="n">final_model</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">best_alpha</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+      <span class="n">final_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_std</span><span class="p">,</span> <span class="n">y_std</span><span class="p">)</span>
+      <span class="c1"># Identify non-zero coefficients</span>
+      <span class="n">selected_mask</span> <span class="o">=</span> <span class="n">final_model</span><span class="o">.</span><span class="n">coef_</span> <span class="o">!=</span> <span class="mi">0</span>
+      <span class="n">selected_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">selected_mask</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_indices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(),</span> <span class="mf">0.0</span>
+      <span class="c1"># --- Post-Lasso OLS for Inference ---</span>
+      <span class="c1"># Select the features identified by Lasso</span>
+      <span class="n">X_selected</span> <span class="o">=</span> <span class="n">X_std</span><span class="p">[:,</span> <span class="n">selected_indices</span><span class="p">]</span>
+      <span class="c1"># Add constant for OLS (intercept)</span>
+      <span class="n">X_selected_const</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X_selected</span><span class="p">)</span>
+      <span class="c1"># Fit OLS</span>
+      <span class="n">ols_model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y_std</span><span class="p">,</span> <span class="n">X_selected_const</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+      <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+      <span class="c1"># Loop through selected indices</span>
+      <span class="c1"># Note: OLS params has intercept at index 0, so features are at i+1</span>
+      <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">selected_indices</span><span class="p">):</span>
+         <span class="n">topic</span> <span class="o">=</span> <span class="n">topic_names</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>      
+         <span class="c1"># OLS Stats</span>
+         <span class="n">coef</span> <span class="o">=</span> <span class="n">ols_model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+         <span class="n">std_err</span> <span class="o">=</span> <span class="n">ols_model</span><span class="o">.</span><span class="n">bse</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+         <span class="n">p_val</span> <span class="o">=</span> <span class="n">ols_model</span><span class="o">.</span><span class="n">pvalues</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+         <span class="n">conf_int</span> <span class="o">=</span> <span class="n">ols_model</span><span class="o">.</span><span class="n">conf_int</span><span class="p">()[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>       
+         <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;Topic&#39;</span><span class="p">:</span> <span class="n">topic</span><span class="p">,</span>
+            <span class="s1">&#39;Coefficient&#39;</span><span class="p">:</span> <span class="n">coef</span><span class="p">,</span>
+            <span class="s1">&#39;Std_Err&#39;</span><span class="p">:</span> <span class="n">std_err</span><span class="p">,</span>
+            <span class="s1">&#39;P_Value&#39;</span><span class="p">:</span> <span class="n">p_val</span><span class="p">,</span>
+            <span class="s1">&#39;CI_Lower&#39;</span><span class="p">:</span> <span class="n">conf_int</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;CI_Upper&#39;</span><span class="p">:</span> <span class="n">conf_int</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+         <span class="p">})</span>    
+      <span class="n">selected_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+      <span class="n">selected_df</span> <span class="o">=</span> <span class="n">selected_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Coefficient&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>    
+      <span class="c1"># Use OLS R-squared for the explanatory power of the selected factor model</span>
+      <span class="n">r2</span> <span class="o">=</span> <span class="n">ols_model</span><span class="o">.</span><span class="n">rsquared</span>   
+      <span class="k">return</span> <span class="n">selected_df</span><span class="p">,</span> <span class="n">r2</span>
+</code></pre></div>
+
+<p>As the output for our lasso regression, we can see from the table that International Relations and Corporate Performance carry significantly positive correlations (e.x. 1% increase in attention to international relations raises prices by about 0.07%), which indicates that gold benefits from macro political uncertainty</p>
+<p><img alt="datastructure1" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/MarketDecoders_02_regression.png"></p>
+<h2><strong>Prediction based VAR</strong></h2>
+<p>Further to make our analysis more practical for guiding trading strategies, we use VAR model to predict future gold returns. Except for the topic attentions we created, we also add macroeconomic variables into the model, which can be seen in the formular below:</p>
+<div class="math">$$y_t = \begin{bmatrix} r_t^{gold} \\\\ r_t^{dxy} \\\\ \Delta vix_t \\\\ \alpha^{IR}_t \end{bmatrix}$$</div>
+<p>,where model: </p>
+<div class="math">$$y_t=c+A_1 y_{t+1}+u_t$$</div>
+<p>Specifically, we utilized 80% of the data for training and the remaining 20% for testing. The model's performance was evaluated using key metrics: the Mean Squared Error (MSE) was 0.0243%, and the Mean Absolute Error (MAE) was 1.1313%. These metrics indicate that our model is highly effective in capturing the dynamics of gold returns, providing a reliable approach for short-term market forecasting.</p>
+<p>As the outcome of our analysis, in the graph below, the blue line represents the actual gold return data, while the red dashed line indicates the model's rolling forecast.</p>
+<p><img alt="datastructure1" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/MarketDecoders_02_VAR_model_lag(1).png"></p>
+<hr>
+<h2><strong>Problems encountered and Solutions</strong></h2>
+<p>Transitioning from raw text to predictive signals involved overcoming significant hurdles. Below we detail the three major challenges we faced and our technical solutions.</p>
+<h3>(a) Choosing the Right Model: LDA vs. oLDA</h3>
+<p>Standard <strong>Latent Dirichlet Allocation (LDA)</strong> assumes that documents are <em>exchangeable</em>, meaning the order of documents does not matter. However, financial news is intrinsically dynamic; the vocabulary and themes evolving in 2022 differ from those in 2025. Standard LDA essentially learns a static topic distribution <span class="math">\(\Phi\)</span> over the entire period.</p>
+<p><strong>Online LDA (oLDA)</strong> to respect the time-series nature of our data. In oLDA, the model processes data in mini-batches (time windows). The topic-word distribution <span class="math">\(\Phi_t\)</span> is updated based on the previous state <span class="math">\(\Phi_{t-1}\)</span> and the new batch of documents.</p>
+<p>However, while theoretically appealing for time-series data, the practical implementation yielded suboptimal results. The topics generated exhibited low semantic coherence, with each topic's top keywords often spanning multiple unrelated domains rather than converging into a single interpretable theme.</p>
+<p>A slice of our initial raw output looked like this:</p>
+<ul>
+<li><strong>Topic 00:</strong> apology, beta, friend, misleading, style...</li>
+<li><strong>Topic 01:</strong> trump, burst, spikes, upside, naidu...</li>
+<li><strong>Topic 07:</strong> silver, radar, codes, pro, suggest...</li>
+</ul>
+<p>Given the challenge with the <strong>Online LDA (oLDA)</strong>, we revisited the Standard <strong>Latent Dirichlet Allocation (LDA)</strong> but introduced several targeted enhancements to address its limitations while preserving topic quality. The key modifications involved both <strong>Feature Engineering</strong>, <strong>Model Configuration</strong> and <strong>Topic Choice</strong>：</p>
+<p>1.<strong>Feature Engineering :</strong> We incorporate <strong>Bigrams</strong> into our text processing pipeline to capture meaningful multi-word expressions that frequently appear in financial discourse. By extending beyond individual words to include two-word combinations, we can better represent compound financial terms that carry specific semantic meaning distinct from their constituent parts.</p>
+<p>For instance, the phrase "interest_rate" functions as a cohesive financial concept that differs significantly from analyzing "interest" and "rate" separately; similarly, "federal_reserve," "central_bank" and "stock_market" represent institutional and market entities whose meanings would be diluted if broken into individual components.</p>
+<p>Here’s the code for this step:</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1"># Extract the raw text content from all Article objects</span>
+   <span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">article</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">]</span>
+
+   <span class="c1"># Initialize CountVectorizer for converting text documents to a matrix of token counts</span>
+   <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span>
+      <span class="n">stop_words</span><span class="o">=</span><span class="s2">&quot;english&quot;</span><span class="p">,</span>   <span class="c1"># Remove common English stop words (the, and, is, etc.)</span>
+      <span class="n">max_df</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>             <span class="c1"># Ignore terms that appear in more than 60% of documents</span>
+      <span class="n">min_df</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>               <span class="c1"># Ignore terms that appear in fewer than 5 documents</span>
+      <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>     <span class="c1"># Include both single words (unigrams) and word pairs (bigrams)</span>
+      <span class="n">max_features</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span>     <span class="c1"># Limit to top 50,000 features by frequency to control memory usage</span>
+   <span class="p">)</span>
+   <span class="c1"># Transform the text collection to a document-term matrix</span>
+   <span class="n">X_all</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+
+   <span class="c1"># Get the feature names (vocabulary) as a numpy array</span>
+   <span class="n">vocabulary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">())</span>
+</code></pre></div>
+
+<p>2.<strong>Model Configuration :</strong></p>
+<p>2.1 We configure the <strong>doc_topic_prior (<span class="math">\(\alpha\)</span>)</strong> and <strong>topic_word_prior (<span class="math">\(\beta\)</span>)</strong> hyperparameters with intentionally sparse values to align with the inherent structure of financial discourse.</p>
+<p>The <strong>doc_topic_prior</strong> of 0.1 encodes our assumption that financial news articles typically concentrate on a limited number of thematic domains, encouraging each document to associate strongly with only one or two primary topics rather than distributing its attention uniformly across all possibilities. This reflects the practical reality that a news piece about "central bank policy decisions" primarily belongs to monetary policy discussions, with only peripheral connections to other financial themes.</p>
+<p>The <strong>topic_word_prior</strong> of 0.01 implements our expectation that meaningful financial topics should be characterized by a focused set of terminology, promoting each topic to be defined by a coherent cluster of semantically related terms rather than a diffuse collection of unrelated vocabulary.</p>
+<p>This dual sparsity constraint produces more interpretable and actionable topic structures where both documents and topics exhibit clear thematic identities, which proves particularly valuable for financial analysis where precise categorization and clear conceptual boundaries enhance downstream applications like sentiment tracking and thematic trend analysis.</p>
+<p>Here’s the code for this step:</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1"># LDA model configuration for financial text analysis</span>
+   <span class="n">lda</span> <span class="o">=</span> <span class="n">LatentDirichletAllocation</span><span class="p">(</span>
+      <span class="n">n_components</span><span class="o">=</span><span class="n">n_topics</span><span class="p">,</span>        <span class="c1"># Topic count</span>
+      <span class="n">learning_method</span><span class="o">=</span><span class="s2">&quot;batch&quot;</span><span class="p">,</span>      <span class="c1"># Train once on all data</span>
+      <span class="n">max_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>                  <span class="c1"># Ensure convergence</span>
+      <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>              <span class="c1"># Reproducible results</span>
+      <span class="n">doc_topic_prior</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>          <span class="c1"># Documents focus on few topics</span>
+      <span class="n">topic_word_prior</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>        <span class="c1"># Topics focus on few key words</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>2.2 We fundamentally replace the incremental partial_fit approach (<code>lda.partial_fit(X_slice)</code>) with a comprehensive single-pass fit operation on the entire document collection.</p>
+<p>This paradigm shift prioritizes thematic stability over temporal adaptability, establishing a fixed set of topic definitions that remain semantically constant throughout our analysis timeframe. By training the model once on the complete corpus, we obtain a consistent reference framework where each topic retains its conceptual identity across all time periods, enabling reliable longitudinal comparison of topic prevalence and eliminating the interpretive ambiguity introduced by evolving topic compositions. This methodological choice recognizes that for financial news analysis, the ability to track how attention to well-defined thematic areas fluctuates over time outweighs the theoretical benefit of modeling gradual conceptual evolution.</p>
+<p>Here’s the code for this step:</p>
+<div class="codehilite"><pre><span></span><code>   <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">date_groups</span><span class="p">:</span>
+    <span class="n">X_slice</span> <span class="o">=</span> <span class="n">X_all</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>                      <span class="c1"># Get documents for this date</span>
+    <span class="n">doc_topic_distr</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_slice</span><span class="p">)</span>      <span class="c1"># Get topic distributions</span>
+    <span class="n">avg_attention</span> <span class="o">=</span> <span class="n">doc_topic_distr</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Average across articles</span>
+    <span class="n">daily_attention</span><span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=</span> <span class="n">avg_attention</span>         <span class="c1"># Store daily topic attention</span>
+</code></pre></div>
+
+<p>3.<strong>Topic Choice :</strong> We select topic keywords based directly on their <strong><span class="math">\(\phi\)</span> probabilities</strong> (the conditional probability P(word|topic)) rather than using lift scores that scale these probabilities by corpus-wide term frequencies. This methodological choice prioritizes term relevance within topics over statistical distinctiveness, ensuring that each topic's most characteristic words are those that appear most frequently when the topic is expressed, regardless of their overall prevalence in the financial discourse.</p>
+<p>By focusing on high-probability terms, we obtain more semantically coherent and interpretable topic descriptors that better align with recognizable financial concepts, which proves essential for downstream analytical tasks where clear topic identification directly supports investment decision-making and market narrative analysis.</p>
+<p>Here’s the code for this step:</p>
+<div class="codehilite"><pre><span></span><code>   <span class="c1"># Topic-term count matrix from trained LDA</span>
+   <span class="n">topic_term_counts</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">components_</span>
+   <span class="c1"># Convert to probability distribution φ</span>
+   <span class="n">topic_term_distr</span> <span class="o">=</span> <span class="n">topic_term_counts</span> <span class="o">/</span> <span class="n">topic_term_counts</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+   <span class="n">topic_terms</span> <span class="o">=</span> <span class="p">[]</span>
+   <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_topics</span><span class="p">):</span>
+      <span class="n">top_indices</span> <span class="o">=</span> <span class="n">topic_term_distr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">10</span><span class="p">]</span>  <span class="c1"># Sort terms by φ probability for topic k</span>
+      <span class="n">top_words</span> <span class="o">=</span> <span class="n">vocabulary</span><span class="p">[</span><span class="n">top_indices</span><span class="p">]</span>                     <span class="c1"># Get actual words from vocabulary array</span>
+      <span class="n">topic_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">top_words</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>                  <span class="c1"># Store as list for this topic</span>
+</code></pre></div>
+
+<h3>(b) The Modification of the VAR Model</h3>
+<ul>
+<li><strong>Problem:</strong> In the initial VAR(1) forecasting results, the predicted gold returns appear excessively smooth and close to zero, forming an almost flat line in the forecast horizon. This phenomenon arises because the standard VAR forecast reports the conditional mean forecast, which assumes that future shocks are zero. Since financial return series, including gold returns, are typically close to mean zero and exhibit weak persistence, the conditional expectation naturally converges quickly to its long-run mean. As a result, although the model is statistically well specified, the deterministic VAR forecast fails to reflect the volatility and uncertainty that characterize real-world financial markets.</li>
+</ul>
+<p><img alt="datastructure1" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/MarketDecoders_02_var(1).jpg"></p>
+<ul>
+<li><strong>Solution:</strong> To address this limitation, we adopt an alternative forecasting approach based on stochastic simulation of the VAR model. Instead of setting future innovations to zero, this method repeatedly draws random shocks from the estimated residual distribution and propagates them through the VAR dynamics. By explicitly incorporating these random shocks, the simulated forecasts capture both the conditional mean dynamics and the inherent uncertainty of the system. Consequently, the resulting forecast paths exhibit realistic fluctuations and volatility, producing predictions that more closely resemble observed market behavior. This approach does not alter the underlying VAR structure; rather, it provides a more informative representation of potential future outcomes by moving from a deterministic forecast to a probabilistic, simulation-based forecast framework.</li>
+</ul>
+<p>Here's the code for the solution:</p>
+<div class="codehilite"><pre><span></span><code>   <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+   <span class="kn">from</span> <span class="nn">statsmodels.tsa.api</span> <span class="kn">import</span> <span class="n">VAR</span>
+   <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+   <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_stata</span><span class="p">(</span><span class="s2">&quot;data_dropna.dta&quot;</span><span class="p">)</span>
+   <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
+   <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
+   <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gold_ret&#39;</span><span class="p">,</span> <span class="s1">&#39;topic7&#39;</span><span class="p">,</span> <span class="s1">&#39;dvix&#39;</span><span class="p">,</span> <span class="s1">&#39;ddxy&#39;</span><span class="p">]</span>
+   <span class="n">df_var</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+   <span class="n">model</span> <span class="o">=</span> <span class="n">VAR</span><span class="p">(</span><span class="n">df_var</span><span class="p">)</span>
+   <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+   <span class="n">sim</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">simulate_var</span><span class="p">(</span>
+      <span class="n">steps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+      <span class="n">seed</span><span class="o">=</span><span class="mi">42</span>
+   <span class="p">)</span>
+   <span class="n">sim_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+      <span class="n">sim</span><span class="p">,</span>
+      <span class="n">columns</span><span class="o">=</span><span class="n">df_var</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+      <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">df_var</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">periods</span><span class="o">=</span><span class="mi">31</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+   <span class="p">)</span>
+   <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+   <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_var</span><span class="p">[</span><span class="s1">&#39;gold_ret&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">200</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Actual&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+   <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sim_df</span><span class="p">[</span><span class="s1">&#39;gold_ret&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Forecast&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+   <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+   <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulated VAR(1) Forecast of Gold Returns&quot;</span><span class="p">)</span>
+   <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+<p>The simulated forecast result below introduces random shocks and illustrates one possible future path rather than the conditional mean forecast.</p>
+<p><img alt="datastructure1" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/MarketDecoders_02_simulated_var(1).png"></p>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$']]
+    }
+  };
+</script>
+
+<h2><strong>Conclusion</strong></h2>
+<p>In conclusion, this project demonstrates the predictive power of unstructured financial news in forecasting commodity markets. By transforming textual information into quantitative signals using LDA and validating them through Lasso and VAR frameworks, we uncovered significant correlations between topic attention and price movements. While we focused exclusively on limit metal forcast due to time constraints, our methodology provides a robust foundation for analyzing commodity and even broader asset classes, highlighting the immense value of NLP in modern financial decoders.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','color.js','mhchem.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-09T00:00:00+08:00">Fri 09 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#project-report-ref">Project Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#commodity-price-ref">Commodity Price
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#lda-ref">LDA
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#nlp-ref">NLP
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#olda-ref">oLDA
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#topic-model-ref">Topic Model
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Sarcastic Arbitrage, Reflective Report, " />
+
+<meta property="og:title" content="Silver Price Prediction Based on Reddit Sentiment Analysis: A Data-Driven Approach "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/silver-price-prediction-based-on-reddit-sentiment-analysis-a-data-driven-approach.html" />
+<meta property="og:description" content="By Group &#34;Sarcastic Arbitrage &#34; Codes and Blogs By [Yang Zhifu], [Qian Borui], [Tian Gesi], [Gao Jie], and [Li Yalun]. This is our First Blog post outlining our project proposal and initial data collection progress. 1. Abstract Silver is a precious metal valued for its exceptional electrical conductivity and is widely …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-09T10:00:00+08:00" />
+<meta name="twitter:title" content="Silver Price Prediction Based on Reddit Sentiment Analysis: A Data-Driven Approach ">
+<meta name="twitter:description" content="By Group &#34;Sarcastic Arbitrage &#34; Codes and Blogs By [Yang Zhifu], [Qian Borui], [Tian Gesi], [Gao Jie], and [Li Yalun]. This is our First Blog post outlining our project proposal and initial data collection progress. 1. Abstract Silver is a precious metal valued for its exceptional electrical conductivity and is widely …">
+
+        <title>Silver Price Prediction Based on Reddit Sentiment Analysis: A Data-Driven Approach  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/silver-price-prediction-based-on-reddit-sentiment-analysis-a-data-driven-approach.html">
+                Silver Price Prediction Based on Reddit Sentiment Analysis: A Data-Driven Approach
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>By Group <em>"Sarcastic Arbitrage "</em></p>
+<p style="font-size: 14px;">
+  Codes and Blogs By
+  <span style="font-weight: bold; font-style: italic;">[Yang Zhifu]</span>, 
+  <span style="font-weight: bold; font-style: italic;">[Qian Borui]</span>, 
+  <span style="font-weight: bold; font-style: italic;">[Tian Gesi]</span>, 
+  <span style="font-weight: bold; font-style: italic;">[Gao Jie]</span>, 
+  and
+  <span style="font-weight: bold; font-style: italic;">[Li Yalun]</span>.
+  This is our <span style="font-weight: bold; font-style: italic;">First Blog </span> post outlining our project proposal and initial data collection progress.
+</p>
+
+<h2>1. Abstract</h2>
+<p>Silver is a precious metal valued for its exceptional electrical conductivity and is widely used in jewelry, coins, electronics, and photography. In recent months, the silver price has fluctuated dramatically, which has caused us to be curious about the relationship between public sentiment and silver price changes.</p>
+<p>Our project aims to predict daily movements of silver prices by applying natural language processing (NLP) for sentiment analysis. Specifically, we plan to analyze posts and comments related to silver prices on social media (Reddit) over the past three months.</p>
+<p>Below is a Sequence Diagram of our proposed workflow:</p>
+<div style="text-align: center;">
+    <img src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Sarcastic Arbitrage_01_image_chart.png" alt="mermaid1"  style="width: 50%; height: auto;">
+</div>
+<p><br></p>
+<h2>2. Data Collection from Reddit under New Policy</h2>
+<p><strong>Objective:</strong><br>
+To gather high-quality, relevant discussions regarding silver prices from the Reddit community, specifically targeting subreddits like <code>r/PreciousMetals</code> and <code>r/Wallstreetsilver</code>.</p>
+<p><strong>The Challenge:</strong>
+At the beginning, we tried the previous method introduced on the lecture note, using PRAW to get Reddit data. However, we found that there was a policy change and individual users are no longer able to apply the previous API method for getting text data.</p>
+<div style="text-align: center;">
+    <img src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Sarcastic Arbitrage_01_image_RedditPolicy.png" alt="mermaid1" >
+</div>
+<p><br></p>
+<p><strong>Our Solution:</strong>
+To solve this problem, we developed a hybrid approach using <strong>RSS Feeds</strong> combined with <strong>JSON endpoints</strong>. This allows us to bypass some heavy API restrictions while ensuring we capture the most relevant posts. Here is our step-by-step methodology with corresponding code snippets:</p>
+<ol>
+<li>
+<p><strong>RSS Feed Search</strong>:<br>
+    Instead of iterating through all posts, we use Reddit's RSS search feature with a specific query structure (<code>title:silver price</code>) to target posts where the discussion is explicitly about the price.</p>
+<div class="codehilite"><pre><span></span><code># Constructing the RSS URL for specific search query
+TARGET_SUBREDDITS = &quot;PreciousMetals+Wallstreetsilver&quot;
+SEARCH_KEYWORD = &quot;title:silver price&quot;  # Strict title search
+
+rss_url = (
+    f&quot;https://www.reddit.com/r/{TARGET_SUBREDDITS}/search.rss&quot;
+    f&quot;?q={SEARCH_KEYWORD}&amp;sort=relevance&amp;t=all&amp;limit={LIMIT_POSTS}&quot;
+)
+</code></pre></div>
+
+</li>
+<li>
+<p><strong>Relevance Filtering</strong>:<br>
+    We implemented a strict filter to ensure the post title contains core keywords (e.g., "silver forecast", "ounce", "silver $"), filtering out noise at the source.</p>
+<div class="codehilite"><pre><span></span><code>def is_post_title_related(title):
+    # Core keywords required in the title
+    core_words = [&quot;silver price&quot;, &quot;silver $&quot;, &quot;ounce&quot;, &quot;silver forecast&quot;]
+    title_lower = title.lower()
+    return any(word in title_lower for word in core_words)
+</code></pre></div>
+
+</li>
+<li>
+<p><strong>JSON Extraction</strong>:<br>
+    For each valid post found via RSS, we access its <code>.json</code> endpoint to retrieve comments recursively. This method provides structured data without needing complex HTML parsing.</p>
+<div class="codehilite"><pre><span></span><code># Accessing the JSON endpoint of a specific post
+post_api_url = post_link.rstrip(&quot;/&quot;) + &quot;.json&quot;
+resp = requests.get(post_api_url, headers=HEADERS)
+post_json = resp.json()
+
+# Extracting the comment tree
+comment_children = post_json[1][&quot;data&quot;][&quot;children&quot;]
+</code></pre></div>
+
+</li>
+<li>
+<p><strong>Comment Filtering</strong>:<br>
+    We filter comments based on <strong>Time</strong> (last 90 days), <strong>Quality</strong> (minimum upvotes), and <strong>Content</strong> (investment-related keywords).</p>
+<div class="codehilite"><pre><span></span><code># 1. Time and Quality Filter (inside the collection loop)
+if comment_utc &lt; THREE_MONTHS_AGO: continue
+if comment_score &lt; MIN_UPVOTES: continue
+
+# 2. Content Relevance Filter
+price_related_words = [&quot;price&quot;, &quot;ounce&quot;, &quot;dollar&quot;, &quot;invest&quot;, &quot;forecast&quot;, &quot;trend&quot;]
+
+# Keeping only comments containing relevant keywords
+filtered_df = comments_df[comments_df[&quot;comment_content&quot;].apply(
+    lambda x: any(word in x.lower() for word in price_related_words)
+)]
+</code></pre></div>
+
+</li>
+</ol>
+<p><strong>Preliminary Results</strong>:
+Our collected data looks as follows. We have successfully filtered out generic noise, ensuring that most of the text data are strictly about the silver price.</p>
+<div style="text-align: center;">
+    <img src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Sarcastic Arbitrage_01_image_RedditData.png" alt="mermaid1" >
+</div>
+<p><br></p>
+<h2>3. Silver Price Data Collection</h2>
+<p>We used <strong>Capital IQ</strong> for collecting silver prices between the past three months. The reason why we chose this period was because the silver price surged rapidly during the time and attracted more speculators to join the market.</p>
+<p>As a common belief, the market would be much more irrational i.e. emotional when the price changes rapidly. Therefore, we believe the Reddit users’ sentiment information would be more telling under this type of situation. Moreover, we found that there are significantly more posts about the silver prices during such periods than stable price periods, which provides enough data for collection.</p>
+<p>We collected the silver data as followed:</p>
+<div style="text-align: center;">
+    <img src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Sarcastic Arbitrage_01_image_SilverPrice.png" alt="Capital IQ Silver Price Data Interface"  style="width: 40%; height: auto;">
+</div>
+<p><br></p>
+<h2>4. Core Project Goals</h2>
+<p>Our project is structured into four distinct layers to ensure a comprehensive analysis:</p>
+<ul>
+<li><strong>Data Layer</strong>: Construct a high-quality dataset, including about 500 Reddit comments related to "silver price" (covering core subreddits like <code>r/WallStreetSilver</code>), along with synchronized structured data such as spot silver prices.</li>
+<li><strong>Technical Layer</strong>: Implement the full workflow of data crawling, text preprocessing, and NLP analysis (sentiment mining + topic modeling) using Python. Master core technologies including PRAW/Requests crawler, NLTK/VADER text processing, adapting to the uniqueness of social media text.</li>
+<li><strong>Analysis Layer</strong>: Quantify the correlation between Reddit community sentiment and silver price fluctuations (returns, volatility), identify core topics influencing silver prices (e.g., inflation hedging, industrial demand, policy changes), and verify the predictive value of textual signals for market movements.</li>
+<li><strong>Deliverable Layer</strong>: Produce project deliverables meeting course requirements, including a project report, two presentation slides, two technical blogs, and fully reproducible code, providing data support and reference for short-term silver investment decisions.</li>
+</ul>
+<h2>5. Project Importance</h2>
+<p>We believe this project holds significant value in three key areas:</p>
+<ol>
+<li><strong>Academic Value</strong>: Responding to the course’s core requirement of "interdisciplinary application of NLP and finance," this project validates the incremental value of unstructured textual data in commodity price prediction. It complements the limitations of traditional quantitative models in capturing market sentiment(which only care about news), aligning with the application scenarios of "social media sentiment analysis in financial markets" outlined in Chapter 4.</li>
+<li><strong>Practical Value</strong>: As an asset with both commodity and financial attributes, silver prices are highly sensitive to market sentiment. Reddit, as a globally influential investment community, hosts authentic opinions from both retail and professional investors. The analysis results can directly provide short-term risk early warnings and decision support for investors and analysts.</li>
+<li><strong>Technical Value</strong>: Covering the full workflow of "data crawling → preprocessing → text analysis → empirical validation," this project strengthens the comprehensive application of Python programming, NLP technologies, and financial data analysis, meeting the course’s requirement for group projects to "balance technical depth and practical implementation."</li>
+</ol>
+<h2>6. Ongoing Works</h2>
+<p>In the next stage, we are going to clean our text data, and prepare for applying sentiment analysis toolpackages. We will focus on:
+1.  Removing stopwords and irrelevant symbols from the Reddit comments.
+2.  Aligning the timestamps of the comments with the trading hours of the silver market.
+3.  Testing initial sentiment scoring using VADER to see if any immediate patterns emerge.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-09T10:00:00+08:00">Fri 09 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#sarcastic-arbitrage-ref">Sarcastic Arbitrage
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

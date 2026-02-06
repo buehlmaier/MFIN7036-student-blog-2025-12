@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="NLP, Translation, Data Collection, OCR, Financial Reports, data cleaning, sentence embedding, Reflective and Report, " />
+
+<meta property="og:title" content="Breaking through data walls：from raw reports to analytical content (by Group &#34;Text Trader&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/breaking-through-data-wallsfrom-raw-reports-to-analytical-content-by-group-text-trader.html" />
+<meta property="og:description" content="By Group &#34;Text Trader&#34; From the very beginning, our project set out to analyze research reports written by institutional experts in the stock market. The idea was simple but ambitious: could we measure whether professional analysts’ opinions were able to predict stock market and guide our investment? Almost immediately, we …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2025-12-13T01:12:00+08:00" />
+<meta name="twitter:title" content="Breaking through data walls：from raw reports to analytical content (by Group &#34;Text Trader&#34;) ">
+<meta name="twitter:description" content="By Group &#34;Text Trader&#34; From the very beginning, our project set out to analyze research reports written by institutional experts in the stock market. The idea was simple but ambitious: could we measure whether professional analysts’ opinions were able to predict stock market and guide our investment? Almost immediately, we …">
+
+        <title>Breaking through data walls：from raw reports to analytical content (by Group &#34;Text Trader&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/breaking-through-data-wallsfrom-raw-reports-to-analytical-content-by-group-text-trader.html">
+                Breaking through data walls：from raw reports to analytical content (by Group "Text Trader")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>By Group "Text Trader"</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-Text_Trader_01_blog-post-image.png"></p>
+<p>From the very beginning, our project set out to analyze research reports written by institutional experts in the stock market. The idea was simple but ambitious: could we measure whether professional analysts’ opinions were able to predict stock market and guide our investment?  </p>
+<p>Almost immediately, we hit a wall. English-language research reports were nearly impossible to obtain for free. Most were locked behind paywalls, sold to institutional buyers, or protected as business secrets. That forced us to pivot. Instead of chasing scarce English reports, we turned our attention to the Chinese market, where research reports are widely published and freely accessible. With approval from Prof. Buehlmaier, we committed to translating Chinese reports into English to meet the project requirements.</p>
+<hr>
+<h2>Discovering Hidden APIs and Collecting Data</h2>
+<p>Our first step was data collection. After digging into the Eastmoney report center’s F12 developer page, we uncovered an undocumented API that allowed us to navigate the site and directly access original PDF download links. This discovery was a turning point — it gave us a way to systematically collect reports at scale.</p>
+<ul>
+<li><strong>undocumented API founded and pdf link discovered in F12 page of website</strong>：</li>
+</ul>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-Text_Trader_01_blog-post-API.png">
+<img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-Text_Trader_01_blog-post-pdf_link.png"></p>
+<p>We then built an automated downloader, targeting all CSI300 index stocks from 2017 to 2025. The dataset was massive, and downloading it took two full days. To avoid being blocked by the website, we implemented several web scraping tricks:</p>
+<ul>
+<li><strong>Random User-Agent rotation</strong>: cycling through different browser signatures to disguise requests.</li>
+<li><strong>Request throttling</strong>: adding delays between downloads to avoid triggering anti-scraping protections.</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="n">USER_AGENTS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64)...&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)...&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0)...&quot;</span>
+<span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">get_random_user_agent</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">random</span>
+    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">USER_AGENTS</span><span class="p">)</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="n">get_random_user_agent</span><span class="p">(),</span>
+    <span class="s2">&quot;Referer&quot;</span><span class="p">:</span> <span class="s2">&quot;https://data.eastmoney.com/&quot;</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="n">code</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">stock_list</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start downloading </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> reports&quot;</span><span class="p">)</span>
+    <span class="n">set_stock_code</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+    <span class="n">process_all_reports</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># delay between stocks</span>
+</code></pre></div>
+
+<p>This approach worked well, and once the dataset was downloaded, we immediately made backup copies — a precaution that later proved invaluable.</p>
+<h2>Testing the Idea with a Minimum Viable Product</h2>
+<p>Before diving into complex NLP, we wanted to test whether the project idea was viable. We built a minimum viable product (MVP) that skipped preprocessing and sentiment analysis. Instead, we simply matched keywords in each report’s conclusion: buy, hold, or sell. Using these signals, we constructed a weighted portfolio and rebalanced quarterly.</p>
+<p>The results were surprisingly strong. The MVP portfolio significantly outperformed the CSI300 benchmark, giving us confidence that the project was worth pursuing.</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-Text_Trader_01_blog-post-output.png"></p>
+<h2>Facing the PDF Extraction Challenge</h2>
+<p>With feasibility confirmed, we moved on to preprocessing. The workflow we envisioned was:</p>
+<p><strong>PDF → Chinese text → Cleaned Chinese text → English translation → Cleaned English text → Tokenization → Text analysis</strong></p>
+<p>It looked straightforward on paper, but reality was much messier. Extracting text from PDFs using packages like PyPDF2 or Apache Tika quickly became a nightmare. Financial reports are full of tables, charts, headers, footers, and non-UTF-8 characters.</p>
+<ul>
+<li>
+<p>PyPDF2 often jumbled text with table content, splitting sentences into meaningless fragments.</p>
+</li>
+<li>
+<p>Tika struggled with non-standard encodings, producing unreadable garbage.</p>
+</li>
+<li>
+<p>Translation models choked on these malformed inputs, yielding nonsensical English outputs.</p>
+</li>
+</ul>
+<p><strong>Naive approach we used at the beginning:</strong> </p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">PyPDF2</span> <span class="kn">import</span> <span class="n">PdfReader</span>
+
+<span class="n">reader</span> <span class="o">=</span> <span class="n">PdfReader</span><span class="p">(</span><span class="s2">&quot;example.pdf&quot;</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+<span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">pages</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">+=</span> <span class="n">page</span><span class="o">.</span><span class="n">extract_text</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+
+<p>This naive approach highlighted the problem: traditional PDF-to-text tools couldn’t handle the complexity of financial reports.</p>
+<h2>Rebuilding the Pipeline with OCR and Layout Analysis</h2>
+<p><strong>The Logic We Followed</strong>
+- <strong>1.Render PDF pages into images</strong><br>
+Convert each page into a PIL image at 150 DPI.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">pdf_to_images_fast</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">fitz</span>
+    <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">fitz</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">)</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">pix</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">get_pixmap</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">annots</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">frombytes</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">pix</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">pix</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">pix</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span>
+            <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Warning] Rendering failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+    <span class="k">return</span> <span class="n">images</span>
+</code></pre></div>
+
+<ul>
+<li><strong>2.Run OCR and layout detection</strong><br>
+OCR produced text lines with bounding boxes, while layout models classified regions (Text, Table, SectionHeader, etc.).</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="n">foundation</span> <span class="o">=</span> <span class="n">FoundationPredictor</span><span class="p">()</span>
+<span class="n">detector</span> <span class="o">=</span> <span class="n">DetectionPredictor</span><span class="p">()</span>
+<span class="n">recognizer</span> <span class="o">=</span> <span class="n">RecognitionPredictor</span><span class="p">(</span><span class="n">foundation</span><span class="p">)</span>
+<span class="n">layout_predictor</span> <span class="o">=</span> <span class="n">LayoutPredictor</span><span class="p">(</span>
+    <span class="n">FoundationPredictor</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">LAYOUT_MODEL_CHECKPOINT</span><span class="p">)</span>
+<span class="p">)</span>
+
+    <span class="n">images</span> <span class="o">=</span> <span class="n">pdf_to_images_fast</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">images</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="c1"># Full-page OCR</span>
+    <span class="n">ocrs</span> <span class="o">=</span> <span class="n">recognizer</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">det_predictor</span><span class="o">=</span><span class="n">detector</span><span class="p">)</span>
+
+    <span class="c1"># Full-page layout detection</span>
+    <span class="n">layouts</span> <span class="o">=</span> <span class="n">layout_predictor</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+</code></pre></div>
+
+<ul>
+<li><strong>3.Filter by region labels</strong><br>
+Keep only text-like regions (e.g., body text, headers, list items) and drop tables, charts, and metadata.</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">is_in_text_region</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">layout_page</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">layout_page</span><span class="o">.</span><span class="n">bboxes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Text&quot;</span><span class="p">,</span> <span class="s2">&quot;SectionHeader&quot;</span><span class="p">,</span> <span class="s2">&quot;ListItem&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">line_in_bbox</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">bbox</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
+
+<ul>
+<li>
+<p><strong>4.Apply cleaning rules</strong></p>
+</li>
+<li>
+<p>Basic cleaning: remove page numbers, headers, footers.</p>
+</li>
+<li>
+<p>Strict cleaning: drop footnotes, contact info, disclaimers, fragments, and HTML tags.</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">clean_line_basic</span><span class="p">(</span><span class="n">line</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">is_page_number</span><span class="p">(</span><span class="n">line</span><span class="p">):</span> <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">is_toc_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span> <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">is_header_footer</span><span class="p">(</span><span class="n">line</span><span class="p">):</span> <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">line</span>
+</code></pre></div>
+
+<ul>
+<li><strong>5.Aggregate and batch process</strong>
+Surviving lines were joined into coherent text, and the pipeline was applied across the entire dataset.
+Instead of forcing PDFs into text extraction libraries, we reimagined the process. We decided to treat reports as images and apply computer vision techniques. By rendering each page into an image and running OCR combined with layout detection, we could selectively extract only the meaningful text regions.</li>
+</ul>
+<hr>
+<h2>Cleaning Out Noise and Disclaimers</h2>
+<p>Even after all the OCR and layout filtering, some unwanted text inevitably slipped through — disclaimers, researcher introductions, and institutional boilerplate. After examining the structure of reports, we noticed a consistent pattern: these sections almost always appeared at the end, with no useful content following them.  </p>
+<p>That insight allowed us to apply a simple rule: stop processing once a disclaimer keyword appeared. This removed large chunks of noise efficiently.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">stop_keywords</span> <span class="o">=</span> <span class="n">disclaimer_keywords</span> <span class="o">+</span> <span class="n">rating_keywords</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="c1"># If any stop keyword appears, stop processing further lines</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">line</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">stop_keywords</span><span class="p">):</span>
+        <span class="k">break</span>
+    <span class="n">cleaned_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+<span class="n">cleaned_text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cleaned_lines</span><span class="p">)</span>
+<span class="n">cleaned_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\n{2,}&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cleaned_text</span><span class="p">)</span>  <span class="c1"># collapse blank lines</span>
+</code></pre></div>
+
+<p>This step removed large chunks of useless noise at the end of reports. But there was still a problem: some unwanted fragments appeared unpredictably throughout the text, without a clear structural pattern. Keyword rules alone couldn’t catch them.</p>
+<h2>Using Embeddings to Detect Noise</h2>
+<p>Faced with this challenge, we came up with a more nuanced idea: use sentence-level embeddings to distinguish between meaningful text and noise. The motivation was simple — while disclaimers and introductions don’t follow consistent positions, they do have consistent semantic characteristics. By comparing each line against prototype embeddings of “real text” versus “noise,” we could classify sentences more intelligently.</p>
+<p>The pipeline we designed followed this logic:</p>
+<p><strong>Raw Chinese reports → LLM filtering (text vs noise) → Labeled text files → Label processing → Cleaned text corpus</strong></p>
+<h3>Stage 1: LLM Filtering with Embeddings + Heuristics</h3>
+<p><strong>We used the BGE-m3 embedding model collect two pools of examples for prototype building and calculate similarity score:</strong></p>
+<ul>
+<li>
+<p>Positive examples: representative body text from reports.</p>
+</li>
+<li>
+<p>Negative examples: disclaimers, metadata, table headers, and other noise.</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">EmbeddingClassifier</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading BGE-m3 embedding model...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;BAAI/bge-m3&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos_examples</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;text example 1&quot;</span><span class="p">,</span> <span class="s2">&quot;text example 2&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neg_examples</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;noise example 1&quot;</span><span class="p">,</span> <span class="s2">&quot;noise example 2&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos_emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos_examples</span><span class="p">,</span> <span class="n">convert_to_tensor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neg_emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neg_examples</span><span class="p">,</span> <span class="n">convert_to_tensor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">classify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;noise&quot;</span>
+
+        <span class="n">emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">convert_to_tensor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pos_sim</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">cos_sim</span><span class="p">(</span><span class="n">emb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_emb</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">neg_sim</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">cos_sim</span><span class="p">(</span><span class="n">emb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">neg_emb</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">neg_sim</span> <span class="o">&gt;</span> <span class="mf">0.65</span> <span class="ow">and</span> <span class="n">neg_sim</span> <span class="o">&gt;</span> <span class="n">pos_sim</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;noise&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;text&quot;</span>
+</code></pre></div>
+
+<p><strong>Context-Aware Recheck</strong>
+One issue we encountered was that short fragments (like numbers or symbols) were often misclassified as noise, even when they were part of meaningful sentences. To reduce false positives, we added a recheck step: short lines were re-evaluated in the context of their neighboring lines. If the combined text looked like valid content, we reclassified it as “text.”</p>
+<div class="codehilite"><pre><span></span><code><span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">line</span><span class="p">,</span>
+    <span class="n">prev1</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">line</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">clf</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;text&quot;</span>
+<span class="k">return</span> <span class="s2">&quot;noise&quot;</span>
+</code></pre></div>
+
+<p>This context-aware recheck significantly improved accuracy, ensuring that fragments weren’t discarded prematurely.</p>
+<h3>Stage 2: Label Postprocessing and Noise Filtering</h3>
+<p>Once each line was labeled, we applied two straightforward rules:</p>
+<ul>
+<li>
+<p>1.If a .txt file contained too many noisy lines, discard the entire file.</p>
+</li>
+<li>
+<p>2.Otherwise, remove lines tagged as “noise” and keep the “text” lines, stripping away the label prefixes.</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">process_label</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="n">cleaned_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">noise_counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">noise_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">continue</span>
+
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+        <span class="c1"># Skip line if labeled as noise</span>
+        <span class="k">if</span> <span class="n">tokens</span> <span class="ow">and</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;noise&quot;</span><span class="p">:</span>
+            <span class="n">noise_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Remove label prefix</span>
+        <span class="n">cleaned_line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">cleaned_line</span><span class="p">:</span>
+            <span class="n">cleaned_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cleaned_line</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">noise_counter</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cleaned_lines</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processed: </span><span class="si">{</span><span class="n">input_file</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipped </span><span class="si">{</span><span class="n">input_file</span><span class="si">}</span><span class="s2"> due to excessive noise.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>This stage gave us a much cleaner corpus, with noisy files discarded and useful text preserved.</p>
+<h2>Translation Step</h2>
+<p>With high-quality Chinese text in hand, we finally moved to translation. The process had two key steps:</p>
+<ul>
+<li>
+<p>1.Merge lines into paragraphs to improve fluency and prevent crashes.</p>
+</li>
+<li>
+<p>2.Batch translation with error handling, ensuring residual Chinese characters were removed and fallback logic preserved outputs even if translation failed.</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Merge lines → paragraphs</span>
+<span class="n">paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">buffer</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="n">buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">merge_lines</span><span class="p">:</span>
+        <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">if</span> <span class="n">buffer</span><span class="p">:</span>
+    <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span>
+
+<span class="n">paragraphs</span> <span class="o">=</span> <span class="p">[</span><span class="n">pre_clean</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paragraphs</span><span class="p">]</span>
+
+<span class="c1"># Translate non-empty texts</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">translator</span><span class="p">(</span>
+        <span class="n">to_translate</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="n">max_length</span>
+    <span class="p">)</span>
+    <span class="n">translated</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">remove_chinese</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;translation_text&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">and</span> <span class="s2">&quot;translation_text&quot;</span> <span class="ow">in</span> <span class="n">r</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span>
+    <span class="p">]</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Batch translation failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">translated</span> <span class="o">=</span> <span class="n">to_translate</span>  <span class="c1"># fallback</span>
+</code></pre></div>
+
+<p>At this point, we had <strong>clean, high-quality</strong> English text — a milestone that marked the transition from preprocessing to analysis.</p>
+<h2>Lessons from Accidents</h2>
+<p>Beyond the technical challenges, we also faced accidents. One particularly painful incident came from a Git mishap. Early in the project, our repository was messy, so I decided to clean up the structure. In the process, I renamed the raw data folder that had been excluded via .gitignore. That change caused the dataset to be accidentally committed.</p>
+<p>When I tried to push, Git froze. Attempts to fix it — rolling back versions, using git rm -r --cached, and resolving conflicts — eventually led to the catastrophic deletion of the entire dataset. Unlike files sent to the recycle bin, this kind of removal was unrecoverable.</p>
+<p>The only thing that saved us was the <strong>offline backup copy</strong> we had made earlier. That accident taught me a hard but valuable lesson: <strong>always keep a backup of your work.</strong></p>
+<h2>At the end, to whom reading this:</h2>
+<blockquote>
+<p>Thanks for reading and wish you never lose your work to accidents, and wish your own NLP journey be full of breakthroughs rather than breakdowns.</p>
+</blockquote>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-12-13T01:12:00+08:00">Sat 13 December 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-and-report-ref">Reflective and Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#data-cleaning-ref">data cleaning
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#data-collection-ref">Data Collection
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#financial-reports-ref">Financial Reports
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#nlp-ref">NLP
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#ocr-ref">OCR
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#sentence-embedding-ref">sentence embedding
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#translation-ref">Translation
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

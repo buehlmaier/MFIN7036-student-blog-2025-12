@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group AstroNLP, Reflective Report, " />
+
+<meta property="og:title" content="Blog Post 2 (by Group &#34;AstroNLP&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/blog-post-2-by-group-astronlp.html" />
+<meta property="og:description" content="By Group &#34;AstroNLP&#34; The analysis shown in the blog is strictly from a financial and market impact perspective. In Blog Post 1, we documented the practical realities of collecting and cleaning financial news data. In this second post, we focus on a different angle: how much useful structure we can …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-17T01:12:00+08:00" />
+<meta name="twitter:title" content="Blog Post 2 (by Group &#34;AstroNLP&#34;) ">
+<meta name="twitter:description" content="By Group &#34;AstroNLP&#34; The analysis shown in the blog is strictly from a financial and market impact perspective. In Blog Post 1, we documented the practical realities of collecting and cleaning financial news data. In this second post, we focus on a different angle: how much useful structure we can …">
+
+        <title>Blog Post 2 (by Group &#34;AstroNLP&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/blog-post-2-by-group-astronlp.html">
+                Blog Post 2 (by Group "AstroNLP")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>By Group "AstroNLP"</p>
+<blockquote>
+<blockquote>
+<p><em>The analysis shown in the blog is strictly from a financial and market impact perspective.</em></p>
+</blockquote>
+</blockquote>
+<p>In Blog Post 1, we documented the practical realities of collecting and cleaning financial news data. In this second post, we focus on a different angle: <strong>how much useful structure we can extract from short news titles using K-means</strong>, and whether those text-derived clusters show*any measurable linkage with next-day gold price movements—especially under different volatility regimes. We work with a dataset of gold-related financial news headlines collected from publicly available financial news sources and matched with daily gold price movements.</p>
+<p>A key lesson we learned is that <em>getting results is easy; knowing which results are useful is the hard part</em>. Therefore, this post is deliberately <strong>numbers-first</strong> and <strong>judgment-heavy</strong>: we explain what is informative, what is not, and what we will change next.</p>
+<hr>
+<h2>1. Why clustering headlines is harder than it looks</h2>
+<p>We cluster <strong>gold-related news titles</strong> (not full articles). This is important because titles are short, compressed, and often reuse overlapping phrases (e.g., “gold prices”, “settles”, “dollar”, “ounce”). That design choice is realistic (titles are widely available), but it comes with a cost:</p>
+<ul>
+<li>The vocabulary overlap is high.</li>
+<li>Many titles are “template-like” (e.g., end-of-day summaries).</li>
+<li>TF-IDF vectors built from short texts are sparse and noisy.</li>
+</ul>
+<p>So our goal is <strong>not</strong> to produce perfectly separated clusters in the geometric sense. Instead, we aim to get <strong>economically interpretable partitions</strong> that can serve as an information layer for market linkage analysis.</p>
+<hr>
+<h2>2. Choosing K: silhouette scores are low</h2>
+<p>We evaluated K from 2 to 8 using a subsample for speed. The code snippet below is reproducible and small enough for a blog context:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">silhouette_elbow</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ks</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sample_size</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">X_small</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> 
+
+    <span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">Ks</span><span class="p">:</span>
+        <span class="n">km</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">km</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X_small</span><span class="p">)</span>
+        <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">silhouette_score</span><span class="p">(</span><span class="n">X_small</span><span class="p">,</span> <span class="n">labels</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">scores</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">load_tfidf</span><span class="p">()</span>
+    <span class="n">Ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">silhouette_elbow</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ks</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">scores</span><span class="p">)))</span>
+</code></pre></div>
+
+<p>Our output (headline TF-IDF) was:</p>
+<div class="codehilite"><pre><span></span><code>[(2, np.float64(0.012574001577492958)), (3, np.float64(0.017861588261286507)), (4, np.float64(0.021068812973244085)), (5, np.float64(0.022575536810476866)), (6, np.float64(0.021716745657916026)), (7, np.float64(0.023710576644436997)), (8, np.float64(0.023979766133093612))]
+</code></pre></div>
+
+<p><strong>Interpretation (what this means and why it matters):</strong></p>
+<ul>
+<li>All silhouette scores are below 0.03 → weak cluster separation in TF-IDF space.</li>
+<li>This is expected for short titles with shared vocabulary.</li>
+<li>The low silhouette scores are a warning: clusters should not be treated as “clean labels” or “hard truth”.</li>
+</ul>
+<p>Still, choosing K=4 gives a reasonable trade-off between interpretability and fragmentation, and it matches the thematic patterns we observed in keyword inspection.</p>
+<hr>
+<h2>3. What the clusters actually represent</h2>
+<p>We used TF-IDF with unigrams and bigrams and applied K-means with K=4:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># TF-IDF vectorization</span>
+<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span>
+    <span class="n">stop_words</span><span class="o">=</span><span class="s2">&quot;english&quot;</span><span class="p">,</span>
+    <span class="n">max_features</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span>
+    <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">min_df</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;clean_news&quot;</span><span class="p">])</span>
+
+<span class="c1"># KMeans</span>
+<span class="n">K</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">K</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</code></pre></div>
+
+<p>the output shows:</p>
+<div class="codehilite"><pre><span></span><code>Cluster 0 top terms:
+gold ends, ends, ounce, gold ounce, gold, nymex, ounce nymex, higher, ends lower, ends higher, lower, ends ounce
+
+Cluster 1 top terms:
+oz, dec gold, gold oz, dec, gold, settle oz, settle, settles oz, june gold, gold settles, settles, june
+
+Cluster 2 top terms:
+gold futures, futures, gold, rs, ounce, futures ounce, cues, close, week, global cues, global, futures close
+
+Cluster 3 top terms:
+gold, prices, gold prices, silver, dollar, rs, gold silver, gains, demand, week, trade, high
+                                          news_title  cluster
+0  april gold down 20 cents to settle at $1,116.1...        1
+1          gold suffers third straight daily decline        3
+2     Gold futures edge up after two-session decline        2
+3  dent research : is gold&#39;s day in the sun comin...        3
+4  Gold snaps three-day rally as Trump, lawmakers...        3
+</code></pre></div>
+
+<p>Based on top TF-IDF terms, we interpret clusters as:</p>
+<ul>
+<li>
+<p>Cluster 0 (low information): “ends / settles”</p>
+<ul>
+<li>Mostly backward-looking descriptive titles (e.g., “gold ends lower”).</li>
+<li><strong>Usefulness:</strong> low. These titles reflect what already happened.</li>
+</ul>
+</li>
+<li>
+<p>Cluster 1 (low-to-medium information): “contract month / settlement mechanics”</p>
+<ul>
+<li>Often technical market microstructure (delivery months, settlement references).</li>
+<li><strong>Usefulness:</strong> limited. More about contract labeling than fundamentals.</li>
+</ul>
+</li>
+<li>
+<p>Cluster 2 (medium information): “global cues / broader financial conditions”</p>
+<ul>
+<li>Captures cross-market / risk sentiment cues.</li>
+<li><strong>Usefulness:</strong> meaningful as a macro-sentiment channel.</li>
+</ul>
+</li>
+<li>
+<p>Cluster 3 (higher information): “dollar / demand / silver / macro drivers”</p>
+<ul>
+<li>Macro and cross-asset drivers appear frequently.</li>
+<li><strong>Usefulness:</strong> higher, because these relate to expectation-setting and risk pricing.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Cluster imbalance (an important diagnostic)</strong></p>
+<p>Our cluster distribution is highly uneven:</p>
+<ul>
+<li>Cluster 3: 68.79%</li>
+<li>Cluster 2: 15.18%</li>
+<li>Cluster 1: 10.46%</li>
+<li>Cluster 0: 5.58%</li>
+</ul>
+<p>This explains two things:</p>
+<ul>
+<li>why silhouette scores are low (a dominant “macro-like” cluster absorbs many points), and</li>
+<li>why clustering on short titles is not sufficient as a standalone trading signal generator.</li>
+</ul>
+<p>In short: clustering is helpful as an information organizer, not as a magic alpha machine.</p>
+<hr>
+<h2>4. Market linkage: do clusters correlate with next-day returns?</h2>
+<p>We merge cluster labels with gold next-day return and build a direction label <code>up</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">chi2_contingency</span><span class="p">,</span> <span class="n">ttest_1samp</span>
+
+<span class="n">gold</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;gold_price_cleaned.csv&quot;</span><span class="p">)</span>
+<span class="n">gold</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">gold</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span>
+<span class="n">gold</span> <span class="o">=</span> <span class="n">gold</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+<span class="n">gold</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gold</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span>
+<span class="n">gold</span><span class="p">[</span><span class="s2">&quot;next_day_return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gold</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">news_df</span><span class="p">[</span><span class="s2">&quot;news_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">news_df</span><span class="p">[</span><span class="s2">&quot;news_date&quot;</span><span class="p">])</span>
+<span class="n">merged</span> <span class="o">=</span> <span class="n">news_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+    <span class="n">gold</span><span class="p">[[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;next_day_return&quot;</span><span class="p">]],</span>
+    <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;news_date&quot;</span><span class="p">,</span>
+    <span class="n">right_on</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">,</span>
+    <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+<span class="p">)</span>
+
+<span class="n">merged</span><span class="p">[</span><span class="s2">&quot;up&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">merged</span><span class="p">[</span><span class="s2">&quot;next_day_return&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>4.1 Average next-day return by cluster</h3>
+<p>Mean next-day returns by cluster were:</p>
+<div class="codehilite"><pre><span></span><code>Cluster 0: 0.000115
+
+Cluster 1: 0.000226
+
+Cluster 2: 0.000253
+
+Cluster 3: 0.000358
+</code></pre></div>
+
+<p>This gives a ranking (3 &gt; 2 &gt; 1 &gt; 0), consistent with the “information density” interpretation. However, ranking is not the same as statistically reliable alpha.</p>
+<hr>
+<h3>4.2 Directional linkage: chi-square test says “weak but detectable”</h3>
+<p>We tested whether <code>cluster</code> and <code>up</code> are independent:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">contingency_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">merged</span><span class="p">[</span><span class="s1">&#39;cluster&#39;</span><span class="p">],</span> <span class="n">merged</span><span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">])</span>
+<span class="n">chi2</span><span class="p">,</span> <span class="n">p_chi2</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">chi2_contingency</span><span class="p">(</span><span class="n">contingency_table</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Chi-Square Test:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Chi-Square Statistic: </span><span class="si">{</span><span class="n">chi2</span><span class="si">}</span><span class="s2">, p-value: </span><span class="si">{</span><span class="n">p_chi2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Output：</p>
+<div class="codehilite"><pre><span></span><code>Chi-Square Test:
+Chi-Square Statistic: 8.53737682701176, p-value: 0.03611808803010272
+</code></pre></div>
+
+<p>Our p-value was <strong>0.036</strong>, which rejects independence at the 5% level. This is one of the most meaningful results so far:</p>
+<ul>
+<li>It suggests cluster membership carries some information about direction, even if weak.</li>
+<li>It supports the idea that clustering captures a real structure in the text—not just noise.</li>
+</ul>
+<hr>
+<h3>4.3 But: return magnitude is not significant (t-tests fail)</h3>
+<p>When we compare each cluster’s mean return to the overall baseline using t-tests, all p-values were large (not significant). In other words:</p>
+<ul>
+<li>Cluster membership alone does not generate statistically significant excess returns.</li>
+</ul>
+<p><strong>So clusters are not a direct trading rule by themselves.</strong></p>
+<p>This distinction is critical: clusters can be informative without being directly tradable.</p>
+<hr>
+<h2>5. Volatility regimes: where the signal becomes more meaningful</h2>
+<p>We introduce a volatility regime variable (high vs low) using the median of the gold volatility index:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">vol_regime_stats</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;vol_regime&#39;</span><span class="p">,</span> <span class="s1">&#39;cluster&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+    <span class="n">mean_return</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;next_day_return&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">),</span>
+    <span class="n">upward_probability</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mean Next-Day Return by Volatility Regime and Cluster:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">vol_regime_stats</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Output：</p>
+<div class="codehilite"><pre><span></span><code>Mean Next-Day Return by Volatility Regime and Cluster:
+   vol_regime  cluster  mean_return  upward_probability
+0         0.0        0    -0.000070            0.463768
+1         0.0        1    -0.000051            0.514821
+2         0.0        2    -0.000344            0.504587
+3         0.0        3     0.000090            0.506768
+4         1.0        0     0.000612            0.512097
+5         1.0        1    -0.000006            0.497537
+6         1.0        2     0.001509            0.525912
+7         1.0        3     0.000676            0.501615
+</code></pre></div>
+
+<p><strong>Conditional mean returns (key finding)</strong></p>
+<p>Mean next-day returns by regime and cluster:</p>
+<ul>
+<li>
+<p><strong>Low volatility (vol_regime=0):</strong></p>
+<ul>
+<li>C0: -0.000070</li>
+<li>C1: -0.000051</li>
+<li>C2: -0.000344</li>
+<li>C3: 0.000090</li>
+</ul>
+</li>
+<li>
+<p><strong>High volatility (vol_regime=1):</strong></p>
+<ul>
+<li>C0: 0.000612</li>
+<li>C1: -0.000006</li>
+<li>C2: 0.001509</li>
+<li>C3: 0.000676</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interpretation:</strong></p>
+<ul>
+<li>Under low volatility, cluster differences are small or even negative.</li>
+<li>Under high volatility, macro-related clusters (2 and 3) show larger positive next-day returns, especially Cluster 2 (+0.1509%).</li>
+</ul>
+<p>This appears to be a relatively informative conditional pattern:</p>
+<ul>
+<li>Clusters become more informative when the market is already uncertain.</li>
+</ul>
+<p>At the same time, we remain cautious:</p>
+<ul>
+<li>Even 0.15% is not necessarily tradable after costs.</li>
+<li>We treat this as informational linkage, not guaranteed profit.</li>
+</ul>
+<hr>
+<h2>6. Digging Deeper: Relative Upward Probabilities and Returns</h2>
+<p>To better interpret the economic importance of clusters, we computed <strong>relative upward probability</strong> and <strong>relative return</strong> for each cluster. These metrics compare each cluster’s performance against the overall baseline expectations.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">cluster_stats</span><span class="p">[</span><span class="s2">&quot;relative_upward_probability&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cluster_stats</span><span class="p">[</span><span class="s2">&quot;upward_probability&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">overall_upward_probability</span>
+<span class="n">cluster_stats</span><span class="p">[</span><span class="s2">&quot;relative_return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cluster_stats</span><span class="p">[</span><span class="s2">&quot;avg_return&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">overall_avg_return</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Relative Upward Probability:</strong> Measures whether the chance of next-day "upward movement" (return &gt; 0) is above or below the global baseline. Positive values suggest the cluster captures signals leading to upward trends with higher probability than the baseline.
+  [
+  \text{Relative Upward Probability} = \text{Cluster Upward Probability} - \text{Overall Upward Probability}
+  ]</li>
+<li><strong>Relative Return:</strong> Measures whether the average next-day return of a cluster is higher or lower than the global average return. Positive values suggest the cluster potentially generates higher returns relative to the baseline.
+  [
+  \text{Relative Return} = \text{Cluster Average Return} - \text{Overall Average Return}
+  ]</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>   cluster  sample_size  ...  relative_upward_probability  relative_return
+0        0          589  ...                     0.010496        -0.000197
+1        1         1105  ...                     0.029336        -0.000086
+2        2         1603  ...                     0.017650        -0.000059
+3        3         7266  ...                    -0.009206         0.000045
+</code></pre></div>
+
+<p><strong>Interpretation:</strong>
+1. <strong>Cluster 1 (Technical/Settlement News):</strong> 
+   - Exhibits the <strong>highest relative upward probability</strong> at +0.0293, meaning that news titles falling in this cluster are more likely to correlate with upward next-day market moves compared to the overall dataset.
+   - However, relative return is still slightly negative, indicating that this information may not translate into meaningful price increases after considering the baseline.</p>
+<ol>
+<li><strong>Cluster 2 (Global Cues/Financial Sentiment):</strong></li>
+<li>Shows a strong <strong>relative upward probability</strong> (+0.0177), suggesting that risk sentiment and cross-market cues are informative about directionality.</li>
+<li>
+<p>Relative returns are less negative than Cluster 0 and Cluster 1, making these signals more economically relevant.</p>
+</li>
+<li>
+<p><strong>Cluster 3 (Macro Drivers):</strong></p>
+</li>
+<li>While it dominates in terms of sample size (7,266 samples, 68% of the dataset), Cluster 3 demonstrates a <strong>negative relative upward probability</strong> (-0.0092), indicating a slightly lower likelihood of upward moves.</li>
+<li>
+<p>However, <strong>positive relative returns</strong> suggest macro trends may still hint at minor risk-adjusted profitability, especially under certain filter conditions.</p>
+</li>
+<li>
+<p><strong>Cluster 0 (Low-Information Summaries):</strong></p>
+</li>
+<li>As expected, this cluster adds little actionable value:<ul>
+<li>Relative upward probability is small (+0.0105), reflecting little improvement over randomness.</li>
+<li>Returns are also weak or slightly negative.</li>
+</ul>
+</li>
+</ol>
+<p>In summary:
+- Clusters 1 and 2 signal potential economic value, but <strong>Cluster 2’s global/macro content</strong> appears slightly more promising overall.
+- Cluster 3, while containing the dominant share of data, shows mixed signals; its potential utility likely depends on volatility regimes or additional modeled filters.
+- Cluster 0 confirms that backward-looking, low-information summaries are <strong>not useful predictors</strong>.</p>
+<p><strong>Implications</strong>
+While relative metrics offer meaningful insights, they also expose the limitations of clustering:
+- Even “standout” clusters have relative effects that are <strong>small in magnitude</strong>. For example, a +0.03 increase in upward probability is unlikely to generate immediate gains after incorporating transaction costs.
+- Clustering should therefore be treated as a <strong>signal refinement step</strong>, not an independent trading signal generator.</p>
+<hr>
+<h2>7. Conclusion and Reflection</h2>
+<p>Working with short financial news headlines and unsupervised clustering taught us an important lesson: extracting structure from text is much easier than extracting economically meaningful signals. While modern NLP tools make it straightforward to produce clusters and statistical results, interpreting whether those results carry genuine informational value requires careful judgment and restraint.</p>
+<p>Throughout this project, we learned that clustering performance metrics alone—such as silhouette scores—can be misleading when applied to short, highly repetitive texts. In our case, low silhouette values did not indicate failure, but rather reflected the inherent limitations of headline-level data. This reinforced the idea that interpretability and economic reasoning matter more than purely geometric separation in financial text analysis.</p>
+<p>The key takeaways from this stage of the project are:</p>
+<ul>
+<li>Short news titles contain limited but non-random structure, even when traditional clustering metrics suggest weak separation.</li>
+<li>Cluster membership can capture directional information, but does not directly translate into statistically significant excess returns.</li>
+<li>Context matters: the informational value of text-derived clusters becomes more visible under high-volatility regimes.</li>
+<li>Clustering is best viewed as an information-organizing layer, not a standalone trading signal generator.</li>
+<li>Statistical detectability is not the same as tradability, especially after accounting for transaction costs and market noise.</li>
+</ul>
+<p>Equally important were the conceptual lessons about model evaluation. This project reminded us that producing numerical outputs is only the starting point; the harder task is deciding which results are robust, which are fragile, and which should be discarded entirely. In several instances, results that initially appeared promising lost significance under closer inspection, highlighting the importance of skepticism in empirical financial research.</p>
+<p>Looking ahead, this experience will shape how we approach the next stages of the project. Rather than relying on headline clustering alone, we plan to treat textual clusters as conditional signals—to be combined with volatility filters, richer text representations, and complementary market features. Overall, this blog post documents not just what we built, but how our understanding of the limits and proper use of NLP in finance has evolved.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-17T01:12:00+08:00">Sat 17 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-astronlp-ref">Group AstroNLP
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

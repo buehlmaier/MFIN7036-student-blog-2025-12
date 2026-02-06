@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group Semantic Fragments Synthesizer, Reflective Report, " />
+
+<meta property="og:title" content="Regression Analysis of Sentiment and Stock Prices (by Group &#34;Semantic Fragments Synthesizer&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/regression-analysis-of-sentiment-and-stock-prices-by-group-semantic-fragments-synthesizer.html" />
+<meta property="og:description" content="Introduction Every quarter, companies hold earnings calls to report their performance to investors. Does the tone of company leadership—whether optimistic or concerned—genuinely influence stock prices? We investigated this question within the automotive industry, analyzing over 400 earnings calls from nine major manufacturers, including Tesla, Toyota, and Volkswagen. Our …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-21T18:30:00+08:00" />
+<meta name="twitter:title" content="Regression Analysis of Sentiment and Stock Prices (by Group &#34;Semantic Fragments Synthesizer&#34;) ">
+<meta name="twitter:description" content="Introduction Every quarter, companies hold earnings calls to report their performance to investors. Does the tone of company leadership—whether optimistic or concerned—genuinely influence stock prices? We investigated this question within the automotive industry, analyzing over 400 earnings calls from nine major manufacturers, including Tesla, Toyota, and Volkswagen. Our …">
+
+        <title>Regression Analysis of Sentiment and Stock Prices (by Group &#34;Semantic Fragments Synthesizer&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/regression-analysis-of-sentiment-and-stock-prices-by-group-semantic-fragments-synthesizer.html">
+                Regression Analysis of Sentiment and Stock Prices (by Group "Semantic Fragments Synthesizer")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h3>Introduction</h3>
+<p>Every quarter, companies hold earnings calls to report their performance to investors. Does the tone of company leadership—whether optimistic or concerned—genuinely influence stock prices? </p>
+<p>We investigated this question within the automotive industry, analyzing over 400 earnings calls from nine major manufacturers, including Tesla, Toyota, and Volkswagen. Our study aimed to answer two key questions:</p>
+<ol>
+<li>Does a positive sentiment in earnings conference calls correlate with greater stock price increases in the short term versus the long term?</li>
+<li>How does executive sentiment affect stock price volatility?</li>
+</ol>
+<h3>1 Methodology</h3>
+<p>To analyze the impact of earnings calls, we collected stock price data for the five trading days following each call. Using Python and data from Stooq, we extracted daily closing prices for each earnings announcement date (T₀) and the subsequent five trading days (T₁–T₅).</p>
+<p>The data collection process automatically adjusts for non-trading days such as weekends and holidays. By modifying only the stock symbol and earnings date list, the same script can gather data for any publicly traded company.</p>
+<h3>Example: General Motors Data Processing</h3>
+<p>Here is the Python code used to extract and process General Motors' stock price data:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="c1"># Download General Motors historical data from Stooq</span>
+<span class="n">df_gm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://stooq.com/q/d/l/?s=gm.us&amp;i=d&quot;</span><span class="p">)</span>
+<span class="n">df_gm</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_gm</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">])</span>
+<span class="n">df_gm</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Earnings announcement dates for General Motors (2015-2025)</span>
+<span class="n">gm_dates</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;2015-02-04&quot;</span><span class="p">,</span> <span class="s2">&quot;2015-04-23&quot;</span><span class="p">,</span> <span class="s2">&quot;2015-07-23&quot;</span><span class="p">,</span> <span class="s2">&quot;2015-10-21&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2016-02-03&quot;</span><span class="p">,</span> <span class="s2">&quot;2016-04-21&quot;</span><span class="p">,</span> <span class="s2">&quot;2016-07-21&quot;</span><span class="p">,</span> <span class="s2">&quot;2016-10-25&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2017-02-07&quot;</span><span class="p">,</span> <span class="s2">&quot;2017-04-28&quot;</span><span class="p">,</span> <span class="s2">&quot;2017-07-25&quot;</span><span class="p">,</span> <span class="s2">&quot;2017-10-24&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2018-02-06&quot;</span><span class="p">,</span> <span class="s2">&quot;2018-04-26&quot;</span><span class="p">,</span> <span class="s2">&quot;2018-07-25&quot;</span><span class="p">,</span> <span class="s2">&quot;2018-10-31&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2019-02-06&quot;</span><span class="p">,</span> <span class="s2">&quot;2019-04-30&quot;</span><span class="p">,</span> <span class="s2">&quot;2019-08-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2019-10-29&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2020-05-06&quot;</span><span class="p">,</span> <span class="s2">&quot;2020-07-29&quot;</span><span class="p">,</span> <span class="s2">&quot;2020-11-05&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-02-10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2021-05-05&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-08-04&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-10-27&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-02-01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2022-04-26&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-07-26&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-10-25&quot;</span><span class="p">,</span> <span class="s2">&quot;2023-01-31&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2023-04-25&quot;</span><span class="p">,</span> <span class="s2">&quot;2023-07-25&quot;</span><span class="p">,</span> <span class="s2">&quot;2023-10-24&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-01-30&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2024-04-23&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-07-23&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-10-22&quot;</span><span class="p">,</span> <span class="s2">&quot;2025-01-28&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2025-05-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2025-07-22&quot;</span><span class="p">,</span> <span class="s2">&quot;2025-10-21&quot;</span>
+<span class="p">]</span>
+
+<span class="c1"># Collect stock prices for 5 trading days after each earnings call</span>
+<span class="n">gm_data</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">gm_dates</span><span class="p">:</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Adjust for non-trading days</span>
+    <span class="k">if</span> <span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_gm</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+        <span class="n">before</span> <span class="o">=</span> <span class="n">df_gm</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">df_gm</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">target</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">before</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">before</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Use last available trading date</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+    <span class="n">t0_close</span> <span class="o">=</span> <span class="n">df_gm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;Close&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Collect closing prices for next 5 trading days</span>
+    <span class="n">t_closes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">current</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">current</span> <span class="ow">in</span> <span class="n">df_gm</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="n">t_closes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_gm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">current</span><span class="p">,</span> <span class="s1">&#39;Close&#39;</span><span class="p">])</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">current</span> <span class="o">+=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Store results</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;T0_Date&#39;</span><span class="p">:</span> <span class="n">target</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
+        <span class="s1">&#39;T0_Close&#39;</span><span class="p">:</span> <span class="n">t0_close</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">t_closes</span><span class="p">):</span>
+            <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;T</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">_Close&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t_closes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="n">gm_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+<span class="c1"># Create DataFrame and save results</span>
+<span class="n">gm_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">gm_data</span><span class="p">)</span>
+<span class="n">gm_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;gm_result.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gm_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> earnings events for General Motors&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>Result：</h3>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-SemanticFragmentsSynthesizer_02_image-description1.png"></p>
+<h3>1.1 Calculating Market Reactions</h3>
+<p>After obtaining stock prices for the required dates, we proceed to calculate Cumulative Abnormal Returns (CAR) and volatility measures.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">companies_reaction</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;General Motors&#39;</span><span class="p">:</span> <span class="n">gm_df</span><span class="p">,</span>
+    <span class="s1">&#39;Tesla&#39;</span><span class="p">:</span> <span class="n">tsla_df</span><span class="p">,</span>
+    <span class="s1">&#39;BMW&#39;</span><span class="p">:</span> <span class="n">bmw_df</span><span class="p">,</span>
+    <span class="s1">&#39;Ford&#39;</span><span class="p">:</span> <span class="n">ford_df</span><span class="p">,</span>
+    <span class="s1">&#39;Volkswagen&#39;</span><span class="p">:</span> <span class="n">volkswagen_df</span><span class="p">,</span>
+    <span class="s1">&#39;Ferrari&#39;</span><span class="p">:</span> <span class="n">ferrari_df</span><span class="p">,</span>
+    <span class="s1">&#39;Honda&#39;</span><span class="p">:</span> <span class="n">honda_df</span><span class="p">,</span>
+    <span class="s1">&#39;Toyota&#39;</span><span class="p">:</span> <span class="n">toyota_df</span><span class="p">,</span>
+    <span class="s1">&#39;Mercedes&#39;</span><span class="p">:</span> <span class="n">mercedes_df</span>
+<span class="p">}</span>
+
+<span class="n">reaction_data</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">companies_reaction</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="c1"># Calculate immediate reaction (T0 to T1)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Immediate_Reaction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;T1_Close&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;T0_Close&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;T0_Close&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Calculate cumulative reaction (T0 to T5)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;T0_T5_Reaction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;T5_Close&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;T0_Close&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;T0_Close&#39;</span><span class="p">]</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Company&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="n">reaction_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Company&#39;</span><span class="p">,</span> <span class="s1">&#39;T0_Date&#39;</span><span class="p">,</span> <span class="s1">&#39;T0_Close&#39;</span><span class="p">,</span> <span class="s1">&#39;T1_Close&#39;</span><span class="p">,</span> 
+                             <span class="s1">&#39;Immediate_Reaction&#39;</span><span class="p">,</span> <span class="s1">&#39;T0_T5_Reaction&#39;</span><span class="p">]])</span>
+
+<span class="n">reaction_result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">reaction_data</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">reaction_result</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;Car_Companies_Reaction.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>Result：</h2>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-SemanticFragmentsSynthesizer_02_image-description2.png"></p>
+<h3>1.2 Volatility Analysis</h3>
+<p>To measure market uncertainty following earnings announcements, we calculated price volatility:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">companies_vol</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;General Motors&#39;</span><span class="p">:</span> <span class="n">gm_df</span><span class="p">,</span>
+    <span class="s1">&#39;Tesla&#39;</span><span class="p">:</span> <span class="n">tsla_df</span><span class="p">,</span>
+    <span class="s1">&#39;BMW&#39;</span><span class="p">:</span> <span class="n">bmw_df</span><span class="p">,</span>
+    <span class="s1">&#39;Ford&#39;</span><span class="p">:</span> <span class="n">ford_df</span><span class="p">,</span>
+    <span class="s1">&#39;Volkswagen&#39;</span><span class="p">:</span> <span class="n">volkswagen_df</span><span class="p">,</span>
+    <span class="s1">&#39;Ferrari&#39;</span><span class="p">:</span> <span class="n">ferrari_df</span><span class="p">,</span>
+    <span class="s1">&#39;Honda&#39;</span><span class="p">:</span> <span class="n">honda_df</span><span class="p">,</span>
+    <span class="s1">&#39;Toyota&#39;</span><span class="p">:</span> <span class="n">toyota_df</span><span class="p">,</span>
+    <span class="s1">&#39;Mercedes&#39;</span><span class="p">:</span> <span class="n">mercedes_df</span>
+<span class="p">}</span>
+
+<span class="n">vol_data</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">companies_vol</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Volatility_T0_T5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;T0_Close&#39;</span><span class="p">,</span> <span class="s1">&#39;T1_Close&#39;</span><span class="p">,</span> <span class="s1">&#39;T2_Close&#39;</span><span class="p">,</span> <span class="s1">&#39;T3_Close&#39;</span><span class="p">,</span> <span class="s1">&#39;T4_Close&#39;</span><span class="p">,</span> <span class="s1">&#39;T5_Close&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Company&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="n">vol_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Company&#39;</span><span class="p">,</span> <span class="s1">&#39;T0_Date&#39;</span><span class="p">,</span> <span class="s1">&#39;Volatility_T0_T5&#39;</span><span class="p">]])</span>
+
+<span class="n">vol_result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">vol_data</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">vol_result</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;Car_Companies_Volatility.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Volatility (T₀–T₅)</strong>: Standard deviation of the six closing prices (T₀ through T₅)</p>
+<p><strong>Output</strong>: <code>Car_Companies_Volatility.csv</code>, containing company, date, and volatility value</p>
+<p>This workflow systematically quantifies the market's price response and uncertainty in the five trading days following earnings calls, enabling further analysis of how earnings‑call sentiment influences short‑term stock behavior.</p>
+<h3>Result：</h3>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-SemanticFragmentsSynthesizer_02_image-description3.png"></p>
+<h3>2. Sentiment Analysis Methodology</h3>
+<h3>2.1 Objective and Output</h3>
+<p><strong>Objective</strong> : The objective of this step is to compute a call-level baseline sentiment score for each earnings call transcript.</p>
+<p><strong>Output (Call-level Table)</strong> :</p>
+<p>The output is a structured dataset where:</p>
+<ul>
+<li>
+<p>Each row corresponds to one earnings call</p>
+</li>
+<li>
+<p>Each observation represents call-level sentiment, rather than sentence- or word-level sentiment</p>
+</li>
+</ul>
+<h5>Key Columns</h5>
+<div class="codehilite"><pre><span></span><code><span class="p">[</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="s1">&#39;filename&#39;</span><span class="p">,</span> 
+ <span class="s1">&#39;vader_pos&#39;</span><span class="p">,</span> <span class="s1">&#39;vader_neg&#39;</span><span class="p">,</span> <span class="s1">&#39;vader_neu&#39;</span><span class="p">,</span> <span class="s1">&#39;vader_compound&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;n_words_full&#39;</span><span class="p">]</span>  <span class="c1"># optional: word count</span>
+</code></pre></div>
+
+<p>This table provides the foundation for subsequent sentiment comparison and regression analysis.</p>
+<h3>2.2 Preprocessing Strategy (Key Fix)</h3>
+<p>Text preprocessing plays a critical role in VADER's performance. We found that over-aggressive cleaning—such as removing punctuation or splitting contractions—can distort VADER's rule-based scoring mechanism.</p>
+<p><strong>Example</strong>: Transforming "don't" into "don t" weakens negation handling and may bias sentiment scores upward.</p>
+<p>To address this issue, we adopt a dual preprocessing strategy:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Strategy 1: Light preprocessing for VADER</span>
+<span class="c1"># Preserves negations and punctuation cues essential for rule-based scoring</span>
+
+<span class="c1"># Strategy 2: Heavier preprocessing for dictionary-based methods (e.g., LM)</span>
+<span class="c1"># Removes punctuation and contractions not required for these methods</span>
+</code></pre></div>
+
+<p>This separation ensures that each sentiment method operates on text that is appropriate for its underlying assumptions.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="c1"># Light cleaning for VADER: preserve negations and punctuation cues</span>
+<span class="k">def</span> <span class="nf">clean_for_vader</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\u00a0</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+<span class="c1"># Heavier cleaning (optional): useful for dictionary counting (e.g., LM)</span>
+<span class="k">def</span> <span class="nf">clean_for_lm</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-z\s]&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">text</span>
+</code></pre></div>
+
+<h3>2.3 Call-level Scoring with VADER</h3>
+<p>Using the lightly preprocessed transcripts, we compute VADER sentiment at the call level, treating each earnings call as a single observation. Sentiment scores are obtained via the <code>polarity_scores()</code> function, with the compound score serving as the primary baseline sentiment measure.</p>
+<p>The implementation iterates through company folders and transcript files, applies VADER scoring, and stores the results in a call-level dataset.</p>
+<p><em>Code: iterate through folders and compute VADER scores</em></p>
+<div class="codehilite"><pre><span></span><code><span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">company</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">FOLDER</span><span class="p">):</span>
+    <span class="n">company_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FOLDER</span><span class="p">,</span> <span class="n">company</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">company_path</span><span class="p">):</span>
+        <span class="k">continue</span>
+
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">company_path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.txt&quot;</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">company_path</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="n">vader_input</span> <span class="o">=</span> <span class="n">clean_for_vader</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="n">sid</span><span class="o">.</span><span class="n">polarity_scores</span><span class="p">(</span><span class="n">vader_input</span><span class="p">)</span>
+
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;company&quot;</span><span class="p">:</span> <span class="n">company</span><span class="p">,</span>
+            <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="n">file</span><span class="p">,</span>
+            <span class="s2">&quot;vader_pos&quot;</span><span class="p">:</span> <span class="n">scores</span><span class="p">[</span><span class="s2">&quot;pos&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;vader_neg&quot;</span><span class="p">:</span> <span class="n">scores</span><span class="p">[</span><span class="s2">&quot;neg&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;vader_neu&quot;</span><span class="p">:</span> <span class="n">scores</span><span class="p">[</span><span class="s2">&quot;neu&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;vader_compound&quot;</span><span class="p">:</span> <span class="n">scores</span><span class="p">[</span><span class="s2">&quot;compound&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;n_words_full&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">clean_for_lm</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>  <span class="c1"># optional</span>
+        <span class="p">})</span>
+</code></pre></div>
+
+<h3>Key Features:</h3>
+<ol>
+<li><strong>Call-level analysis</strong>: Each earnings call treated as a single observation</li>
+<li><strong>Dual preprocessing</strong>: Uses <code>clean_for_vader()</code> for sentiment scoring, <code>clean_for_lm()</code> for word counting</li>
+<li><strong>Comprehensive output</strong>: Captures all four VADER sentiment dimensions (positive, negative, neutral, compound)</li>
+<li><strong>Flexible storage</strong>: Results can be easily converted to DataFrame for further analysis</li>
+</ol>
+<h3>Output Structure:</h3>
+<p>The resulting dataset contains sentiment scores for each earnings call, ready for correlation with stock price reactions calculated in Section 1.</p>
+<h3>2.4 Role in the Overall Pipeline</h3>
+<p>VADER sentiment provides a general-purpose baseline measure of managerial tone. In later steps, this baseline is compared with finance-specific sentiment measures derived from the Loughran–McDonald dictionary and related to market reactions (CAR) through regression analysis. This design allows us to distinguish broad emotional tone from economically meaningful sentiment.</p>
+<h3>2.5 Distribution of VADER Sentiment Scores</h3>
+<p>To assess the overall behavior of VADER sentiment across earnings calls, we examine the distribution of VADER compound scores. This visualization provides a descriptive overview of sentiment dispersion and helps identify potential clustering or extreme values.</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-SemanticFragmentsSynthesizer_02_image-description4.png"></p>
+<p>The distribution shows that most VADER compound scores are concentrated in a narrow, mildly positive range, with few extreme observations. This pattern is consistent with the professional and institutional nature of earnings call communication and supports the interpretation of VADER as a baseline tone indicator rather than a measure of strong emotional expression.</p>
+<h3>Key Takeaways from the Distribution</h3>
+<ul>
+<li>Concentration around low positive values</li>
+<li>Absence of extreme sentiment scores</li>
+<li>Consistency with neutral, institutional disclosure language</li>
+<li>Support for VADER as a baseline sentiment benchmark</li>
+</ul>
+<h3>How This Fits into the Analysis</h3>
+<p>This distributional evidence motivates the use of finance-specific sentiment measures in subsequent analysis. While VADER captures overall tone, it may not fully reflect economically meaningful sentiment embedded in financial terminology. This limitation is addressed in the next section using the Loughran–McDonald dictionary.</p>
+<h2>3. LM Financial Dictionary Tone for Earnings Calls (Automakers)</h2>
+<h3>3.1 What We Built in This Milestone</h3>
+<p>In this milestone, we built Loughran–McDonald (LM) financial dictionary sentiment features for each earnings call transcript. The goal is to turn raw transcripts into interpretable, finance-aware tone ratios, which can be merged with event dates and stock return data later.</p>
+<p>For each transcript, the output includes:
+- Basic identifiers (firm, filename, call_id, call_date, year/quarter)
+- Transcript length (word_count)
+- LM counts and length-normalized ratios (Positive / Negative / Uncertainty)
+- Additional derived measures (net tone, tone strength)</p>
+<h3>3.2 Load the Official LM Dictionary and Build Word Sets</h3>
+<p>We use the official LM Master Dictionary (1993–2024) CSV file and convert it into three word sets: Positive, Negative, and Uncertainty. This makes counting fast: for each token, we just check membership in a set.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">lm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">LM_CSV</span><span class="p">)</span>
+<span class="n">lm</span><span class="p">[</span><span class="s2">&quot;Word&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lm</span><span class="p">[</span><span class="s2">&quot;Word&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+<span class="n">POS_SET</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">lm</span><span class="p">[</span><span class="s2">&quot;Positive&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Word&quot;</span><span class="p">])</span>
+<span class="n">NEG_SET</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">lm</span><span class="p">[</span><span class="s2">&quot;Negative&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Word&quot;</span><span class="p">])</span>
+<span class="n">UNC_SET</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">lm</span><span class="p">[</span><span class="s2">&quot;Uncertainty&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Word&quot;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[INFO] LM sizes:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">POS_SET</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">NEG_SET</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">UNC_SET</span><span class="p">))</span>
+</code></pre></div>
+
+<h3>3.3 Clean transcripts into consistent tokens</h3>
+<p>To make dictionary matching reliable, we apply a simple cleaning function:</p>
+<ul>
+<li>
+<p>lowercase</p>
+</li>
+<li>
+<p>keep only letters and whitespace</p>
+</li>
+<li>
+<p>collapse multiple spaces</p>
+</li>
+</ul>
+<p>This is a trade-off: it improves robustness and speed, but it ignores context (e.g., negation) because LM is dictionary-based.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-z\s]&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">text</span>
+</code></pre></div>
+
+<h3>3.4 Robust call date parsing (the unicode dash issue)</h3>
+<p>A practical problem: transcript filenames often include dates, but sometimes the dash in filenames is not the normal ASCII -.</p>
+<p>It can be an en-dash (–) or other unicode dash characters. Visually they look the same, but regex matching fails.</p>
+<p>We solved this by normalizing unicode in filenames first, converting different dash characters to -, then extracting the YYYY-MM-DD pattern.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">normalize_filename</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFKC&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;</span><span class="se">\u2013</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\u2014</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\u2212</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\uFF0D</span><span class="s2">&quot;</span><span class="p">]:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="k">def</span> <span class="nf">parse_call_date</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="n">normalize_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;!\d)(20\d</span><span class="si">{2}</span><span class="s2">)[-_](\d</span><span class="si">{2}</span><span class="s2">)[-_](\d</span><span class="si">{2}</span><span class="s2">)(?!\d)&quot;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>3.5 Count LM Words and Compute Ratios (Length Normalization)</h3>
+<p>For each transcript:</p>
+<ul>
+<li>
+<p>Tokenize → get word_count</p>
+</li>
+<li>
+<p>Count LM matches: lm_pos_cnt, lm_neg_cnt, lm_unc_cnt</p>
+</li>
+<li>
+<p>Convert counts to ratios by dividing by total words</p>
+</li>
+</ul>
+<p>Ratios are important because earnings calls have very different lengths. Without normalization, longer calls would mechanically have larger counts and bias comparisons.</p>
+<p>We also compute:</p>
+<ul>
+<li>
+<p>lm_net_tone = lm_pos_ratio − lm_neg_ratio</p>
+</li>
+<li>
+<p>lm_tone_strength = lm_pos_ratio + lm_neg_ratio</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="n">pos_cnt</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">POS_SET</span><span class="p">)</span>
+<span class="n">neg_cnt</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">NEG_SET</span><span class="p">)</span>
+<span class="n">unc_cnt</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">UNC_SET</span><span class="p">)</span>
+
+<span class="n">pos_ratio</span> <span class="o">=</span> <span class="n">pos_cnt</span> <span class="o">/</span> <span class="n">word_count</span>
+<span class="n">neg_ratio</span> <span class="o">=</span> <span class="n">neg_cnt</span> <span class="o">/</span> <span class="n">word_count</span>
+<span class="n">unc_ratio</span> <span class="o">=</span> <span class="n">unc_cnt</span> <span class="o">/</span> <span class="n">word_count</span>
+
+<span class="n">lm_net_tone</span> <span class="o">=</span> <span class="n">pos_ratio</span> <span class="o">-</span> <span class="n">neg_ratio</span>
+<span class="n">lm_tone_strength</span> <span class="o">=</span> <span class="n">pos_ratio</span> <span class="o">+</span> <span class="n">neg_ratio</span>
+</code></pre></div>
+
+<h3>4. VADER Regression: Baseline Evidence</h3>
+<p>To move beyond descriptive sentiment analysis, we first examine whether overall earnings call sentiment, as measured by VADER, is associated with short-term market outcomes.</p>
+<p>We estimate a baseline regression linking VADER sentiment to two dimensions of market response: price reactions, measured by cumulative abnormal returns (CAR) over T0–T1 and T0–T5, and market uncertainty, measured by post-call stock price volatility over T0–T5.</p>
+<p>The results show no statistically significant relationship between VADER sentiment and CAR under both linear and nonlinear specifications. This suggests that the general tone of earnings calls does not systematically drive short-term price movements, as earnings-related information is already anticipated and incorporated into prices before the call.</p>
+<p>In contrast, VADER sentiment exhibits a strong, statistically significant negative relationship with post-call volatility. More positive earnings call sentiment is associated with lower subsequent stock price volatility, with an estimated coefficient of −4.22 (p &lt; 0.001). This finding indicates that managerial tone may help reduce market uncertainty, even when it does not trigger immediate price changes.</p>
+<p>Overall, these results suggest that VADER captures a general tone effect in earnings calls. While informative, this broad sentiment measure does not distinguish between economically meaningful types of language. We therefore turn to a finance-specific dictionary approach in the next section to provide a more granular interpretation of how earnings call language relates to market reactions.</p>
+<h3>5. Loughran–McDonald Dictionary: Finance-Specific Evidence on Volatility</h3>
+<p>While the VADER analysis provides useful baseline evidence, it relies on a general-purpose sentiment measure that treats all positive or negative language equally. However, earnings calls are highly specialized financial communications, where words such as “risk,” “uncertain,” “expects,” or “challenging” carry meanings that may not be well captured by general sentiment tools.</p>
+<p>To address this limitation, we turn to the Loughran–McDonald (LM) financial dictionary, which is specifically designed for corporate disclosures. This allows us to distinguish between overall optimism and uncertainty-related language, both of which may affect investors in different ways.</p>
+<p>Using the LM dictionary, we construct three key sentiment variables for each earnings call:</p>
+<p><strong>Net Tone: the difference between positive and negative word ratios</strong></p>
+<p><strong>Net Tone Squared: to capture potential non-linear effects</strong></p>
+<p><strong>Uncertainty Ratio: the share of uncertainty-related words in the transcript
+All measures are normalized by transcript length to ensure comparability across calls of different sizes.</strong></p>
+<p>We then re-estimate the same regression framework used in the VADER analysis, focusing on three market outcomes: immediate returns, short-horizon cumulative returns (CAR), and post-call volatility.</p>
+<p>-OLS regression function:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">run_ols_export</span><span class="p">(</span><span class="n">y_var</span><span class="p">,</span> <span class="n">X_vars</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+    <span class="n">df_reg</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="n">y_var</span><span class="p">]</span> <span class="o">+</span> <span class="n">X_vars</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Running regression for </span><span class="si">{</span><span class="n">y_var</span><span class="si">}</span><span class="s2">, N = </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_reg</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">df_reg</span><span class="p">[</span><span class="n">X_vars</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df_reg</span><span class="p">[</span><span class="n">y_var</span><span class="p">]</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">cov_type</span><span class="o">=</span><span class="s2">&quot;HC3&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+    <span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s2">&quot;coef&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span>
+        <span class="s2">&quot;std_err&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">bse</span><span class="p">,</span>
+        <span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">tvalues</span><span class="p">,</span>
+        <span class="s2">&quot;p_value&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">pvalues</span><span class="p">,</span>
+        <span class="s2">&quot;conf_lower&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">conf_int</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">&quot;conf_upper&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">conf_int</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">})</span>
+
+    <span class="n">extra</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s2">&quot;coef&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">df_reg</span><span class="p">),</span> <span class="n">model</span><span class="o">.</span><span class="n">rsquared</span><span class="p">]</span>
+    <span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;R_squared&quot;</span><span class="p">])</span>
+
+  <span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">summary_df</span><span class="p">,</span> <span class="n">extra</span><span class="p">])</span>
+    <span class="n">summary_df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Results exported to </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+</code></pre></div>
+
+<p>This function runs an OLS regression with HC3 robust standard errors, prints the regression summary, and exports a compact results table including coefficients, t-statistics, p-values, confidence intervals, sample size, and R².</p>
+<p>Running regressions for three market outcomes:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">X_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;lm_net_tone&quot;</span><span class="p">,</span> <span class="s2">&quot;lm_net_tone_sq&quot;</span><span class="p">,</span> <span class="s2">&quot;lm_unc_ratio&quot;</span><span class="p">]</span>
+
+<span class="n">y_vars</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Volatility_T0_T5&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\18443\Desktop\Reg_Volatility.xlsx&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Immediate_Reaction&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\18443\Desktop\Reg_Immediate_Reaction.xlsx&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;T0_T5_Reaction&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\18443\Desktop\Reg_T0_T5_Reaction.xlsx&quot;</span>
+<span class="p">}</span>
+
+<span class="n">models</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">y_var</span><span class="p">,</span> <span class="n">out_file</span> <span class="ow">in</span> <span class="n">y_vars</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">y_var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping </span><span class="si">{</span><span class="n">y_var</span><span class="si">}</span><span class="s2"> (not found)&quot;</span><span class="p">)</span>
+        <span class="k">continue</span>
+    <span class="n">models</span><span class="p">[</span><span class="n">y_var</span><span class="p">]</span> <span class="o">=</span> <span class="n">run_ols_export</span><span class="p">(</span><span class="n">y_var</span><span class="p">,</span> <span class="n">X_vars</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>Result</h3>
+<p>First, earnings call sentiment measured by the LM dictionary does not predict stock returns, either immediately or over the T0–T5 window. Both linear and non-linear sentiment terms are insignificant, and the return regressions exhibit very low explanatory power. This indicates that managerial language does not systematically affect short-term price direction, consistent with rapid incorporation of return-relevant information into prices.</p>
+<p>Second, LM sentiment shows a strong and economically meaningful relationship with post-earnings volatility. Net tone enters positively, while its squared term enters negatively, implying a clear inverted U-shaped relationship. Moderate optimism is associated with higher volatility, whereas extremely positive and confident language is linked to lower volatility.</p>
+<p>In addition, the uncertainty ratio is a robust positive predictor of volatility. Earnings calls containing more uncertainty-related language are followed by significantly higher stock price volatility, even after controlling for overall tone.
+Overall, the LM dictionary reveals that while sentiment does not generate return predictability, finance-specific language—particularly uncertainty—plays a central role in shaping post-announcement risk and investor disagreement.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-21T18:30:00+08:00">Wed 21 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-semantic-fragments-synthesizer-ref">Group Semantic Fragments Synthesizer
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

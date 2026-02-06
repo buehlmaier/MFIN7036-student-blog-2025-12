@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>MFIN7036 Student Blog 2025 - Engineering Report</title><link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/" rel="alternate"></link><link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/engineering-report.atom.xml" rel="self"></link><id>https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/</id><updated>2026-01-16T00:00:00+08:00</updated><entry><title>Gold Futures: Engineering an LLM Momentum Agent with Selective Memory</title><link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/gold-futures-engineering-an-llm-momentum-agent-with-selective-memory.html" rel="alternate"></link><published>2026-01-16T00:00:00+08:00</published><updated>2026-01-16T00:00:00+08:00</updated><author><name>MFIN7036 Students 2025</name></author><id>tag:buehlmaier.github.io,2026-01-16:/MFIN7036-student-blog-2025-12/gold-futures-engineering-an-llm-momentum-agent-with-selective-memory.html</id><summary type="html">&lt;p&gt;By Group "Engravers"&lt;/p&gt;
+&lt;p&gt;In our journey to build a robust AI Macro Strategist, we discovered that simply classifying news headlines as "Bullish" or "Bearish" is insufficient for profitable trading. Markets are noisy, and static sentiment scores often fail to capture the &lt;em&gt;rate of change&lt;/em&gt; in market narratives. A headline appearing …&lt;/p&gt;</summary><content type="html">&lt;p&gt;By Group "Engravers"&lt;/p&gt;
+&lt;p&gt;In our journey to build a robust AI Macro Strategist, we discovered that simply classifying news headlines as "Bullish" or "Bearish" is insufficient for profitable trading. Markets are noisy, and static sentiment scores often fail to capture the &lt;em&gt;rate of change&lt;/em&gt; in market narratives. A headline appearing today might just be an echo of yesterday's news, yet a stateless model treats it as a fresh signal.&lt;/p&gt;
+&lt;p&gt;This report details the engineering and results of &lt;strong&gt;Strategy S21 (Sentiment Momentum with Selective Memory)&lt;/strong&gt;. Implemented in our &lt;code&gt;run_backtest_memory_legacy.py&lt;/code&gt; engine, this strategy achieved a Sharpe Ratio of 5.25 by moving beyond static analysis to a "Stateful" architecture that filters noise and trades strictly on narrative shifts.&lt;/p&gt;
+&lt;h2&gt;1. The Core Problem: Noise vs. Signal&lt;/h2&gt;
+&lt;p&gt;Our initial experiments revealed two critical weaknesses in standard LLM-based trading:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Memorylessness:&lt;/strong&gt; A model analyzing today's news in isolation misses the context. For example, a central bank deciding to "Hold Rates" is a bullish signal if the market feared a hike, but it is bearish if the market had priced in a cut. Without memory of the &lt;em&gt;expectation&lt;/em&gt; set in previous days, the news is semantically ambiguous.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Score Saturation:&lt;/strong&gt; Absolute sentiment scores are notoriously noisy. A shift from "Neutral" to "Slightly Bullish" is often a much stronger trading signal than a persistent "Very Bullish" state.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;2. The Engineering Logic&lt;/h2&gt;
+&lt;p&gt;Instead of relying on abstract descriptions, we present the core logic of &lt;strong&gt;S21_D_Momentum&lt;/strong&gt; directly from our production code (&lt;code&gt;run_backtest_memory_legacy.py&lt;/code&gt;). The architecture relies on two distinct mechanisms: a &lt;strong&gt;Gatekeeper&lt;/strong&gt; (for memory) and a &lt;strong&gt;Momentum Trigger&lt;/strong&gt; (for execution).&lt;/p&gt;
+&lt;h3&gt;2.1 The Gatekeeper (Memory D)&lt;/h3&gt;
+&lt;p&gt;To solve the "Memorylessness" problem without flooding the context window with noise, we engineered a two-step prompting strategy. The model must first identify a key event and then explicitly pass a "Significance Filter" before the memory is stored.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The Filter Prompt:&lt;/strong&gt;
+We force the model to predict the &lt;em&gt;durability&lt;/em&gt; of the impact, acting as a high-pass filter for news.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# From run_backtest_memory_legacy.py&lt;/span&gt;
+&lt;span class="n"&gt;filter_prompt&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&amp;lt;|begin_of_text|&amp;gt;&amp;lt;|start_header_id|&amp;gt;system&amp;lt;|end_header_id|&amp;gt;&lt;/span&gt;
+&lt;span class="s2"&gt;Is there ANY event in today&amp;#39;s news that will significantly impact Gold prices for the next 2 weeks? Reply ONLY &amp;#39;YES&amp;#39; or &amp;#39;NO&amp;#39;.&amp;lt;|eot_id|&amp;gt;&amp;lt;|start_header_id|&amp;gt;user&amp;lt;|end_header_id|&amp;gt;&lt;/span&gt;
+&lt;span class="s2"&gt;News:&lt;/span&gt;
+&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="nb"&gt;chr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;current_headlines&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;lt;|eot_id|&amp;gt;&amp;lt;|start_header_id|&amp;gt;assistant&amp;lt;|end_header_id|&amp;gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;The Update Loop:&lt;/strong&gt;
+If the Gatekeeper returns "YES", the event is stored. We enforce a &lt;strong&gt;14-day rolling window&lt;/strong&gt; (our estimated "Narrative Half-Life") to prevent stale data from polluting the decision process.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# ... generation logic ...&lt;/span&gt;
+&lt;span class="n"&gt;is_imp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;YES&amp;quot;&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;tokenizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;batch_decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f_out&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;skip_special_tokens&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;is_imp&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="c1"&gt;# Summarize and Store&lt;/span&gt;
+    &lt;span class="n"&gt;memory_buffer_D&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+        &lt;span class="s2"&gt;&amp;quot;headline&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;raw_sum&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;replace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;quot;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+        &lt;span class="s2"&gt;&amp;quot;date&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;current_date&lt;/span&gt;
+    &lt;span class="p"&gt;})&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Decay: Clean old memories (Rolling 14-day window)&lt;/span&gt;
+&lt;span class="n"&gt;memory_buffer_D&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;memory_buffer_D&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;date&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;=&lt;/span&gt; &lt;span class="n"&gt;current_date&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;timedelta&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;days&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;14&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;2.2 The Execution (Momentum Delta)&lt;/h3&gt;
+&lt;p&gt;To solve the "Score Saturation" problem, we ignore the absolute sentiment score. Instead, we trade the &lt;strong&gt;Derivative (&lt;span class="math"&gt;\(\Delta\)&lt;/span&gt;)&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;We inject the filtered memory (&lt;code&gt;mem_strs_D&lt;/code&gt;) into the prompt to generate a "Context-Aware Score" (&lt;code&gt;score_D&lt;/code&gt;), and then calculate the delta against the previous day's state.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# 1. Generate Context-Aware Score (Score D)&lt;/span&gt;
+&lt;span class="c1"&gt;# Input injects historical high-impact events into the current prompt&lt;/span&gt;
+&lt;span class="n"&gt;input_D&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Date: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;current_date&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;strftime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;%Y-%m-&lt;/span&gt;&lt;span class="si"&gt;%d&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;News:&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;- &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;h&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;current_headlines&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;mem_strs_D&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;score_D&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;get_llm_score&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+    &lt;span class="n"&gt;tokenizer&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+    &lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;### Instruction:&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;Analyze Gold news. Sentiment Score -5 to +5.&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;### Input:&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;input_D&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;### Response:&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# 2. Calculate Momentum (Delta)&lt;/span&gt;
+&lt;span class="n"&gt;delta_D&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;score_D&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;prev_score_D&lt;/span&gt;
+
+&lt;span class="c1"&gt;# 3. Generate Signal (S21 Logic)&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;delta_D&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;strats&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;S21_D_Momentum&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;  &lt;span class="c1"&gt;# Strong improvement -&amp;gt; Long&lt;/span&gt;
+&lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;delta_D&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;strats&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;S21_D_Momentum&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="c1"&gt;# Strong deterioration -&amp;gt; Short&lt;/span&gt;
+&lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;strats&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;S21_D_Momentum&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;  &lt;span class="c1"&gt;# No significant change -&amp;gt; Neutral&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;3. Comparative Analysis: Static vs. Stateful&lt;/h2&gt;
+&lt;p&gt;Our previous iteration, &lt;strong&gt;Strategy 5.1.4&lt;/strong&gt;, served as the baseline for this experiment. That strategy relied on a &lt;strong&gt;Static Aggregation&lt;/strong&gt; approach: it scraped all headlines for a given day, fed them to the LLM to generate a single daily sentiment score, and traded based on absolute thresholds (e.g., &lt;code&gt;Score &amp;gt; 2.09&lt;/code&gt; to Buy).&lt;/p&gt;
+&lt;p&gt;While Strategy 5.1.4 achieved a respectable 28.7% return, it suffered from what we identified in our Phase 1 report as the "Noise Problem." By treating every day as a blank slate, the model was hypersensitive to daily news flow. A flurry of minor positive headlines could push the score above the threshold, triggering a trade even if the broader macro context was bearish.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;S21_D_Momentum&lt;/strong&gt; fundamentally flips this logic. By introducing the &lt;strong&gt;Memory Gate&lt;/strong&gt;, we filter out the 90% of news that is merely noise. By trading the &lt;strong&gt;Momentum (Delta)&lt;/strong&gt; instead of the absolute score, we only enter the market when the narrative &lt;em&gt;shifts&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;This evolution directly addresses the motivation outlined in our project manifesto: &lt;em&gt;“We needed data that links specific corporate events to specific stock movements.”&lt;/em&gt; S21 achieves this by explicitly linking today’s price action to the &lt;em&gt;memory&lt;/em&gt; of past structural events (like a Fed pivot signal from 3 days ago), creating a cleaner, higher-fidelity trading signal that mimics the "Supply Chain" reasoning we originally targeted.&lt;/p&gt;
+&lt;h2&gt;4. Performance Analysis&lt;/h2&gt;
+&lt;p&gt;We tested this strategy on Gold Futures (GC=F) data for Q4 2025. The results were compelling. &lt;strong&gt;S21_D_Momentum&lt;/strong&gt; achieved a &lt;strong&gt;Sharpe Ratio of 5.25&lt;/strong&gt;, significantly outperforming the Buy &amp;amp; Hold benchmark.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left;"&gt;Strategy&lt;/th&gt;
+&lt;th style="text-align: left;"&gt;Return&lt;/th&gt;
+&lt;th style="text-align: left;"&gt;Sharpe&lt;/th&gt;
+&lt;th style="text-align: left;"&gt;Max Drawdown&lt;/th&gt;
+&lt;th style="text-align: left;"&gt;Alpha&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left;"&gt;&lt;strong&gt;S21_D_Momentum&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;&lt;strong&gt;33.3%&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;&lt;strong&gt;5.25&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;&lt;strong&gt;-2.30%&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;&lt;strong&gt;90.95%&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left;"&gt;Gold Benchmark&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;21.6%&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;2.66&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;-8.96%&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;0.0%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left;"&gt;S23_SuperConsensus&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;10.2%&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;3.12&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;-3.24%&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;22.94%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left;"&gt;S17_D_Trend&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;8.4%&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;2.63&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;-2.73%&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;14.67%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;4.1 The "Consensus Trap"&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Strategy S23 (SuperConsensus)&lt;/strong&gt;, which required Score A, B, D, and Technical Trend to all align, underperformed (10.2% Return). This illustrates the &lt;strong&gt;"Consensus Trap"&lt;/strong&gt;: by the time &lt;em&gt;all&lt;/em&gt; indicators align, the move is often already priced in. S21, by trading the &lt;em&gt;derivative&lt;/em&gt;, entered before the consensus formed.&lt;/p&gt;
+&lt;h3&gt;4.2 Anatomy of a Trade: The "Pivot" Example&lt;/h3&gt;
+&lt;p&gt;To illustrate the power of Memory D, consider the following logic flow observed during the backtest:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Context (Memory D):&lt;/strong&gt; T-3: &lt;em&gt;"Fed signals 'higher for longer' rates."&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;New Event (Day T):&lt;/strong&gt; Headline: &lt;em&gt;"US Unemployment spikes unexpectedly to 4.5%."&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Stateless Model (Score B):&lt;/strong&gt; Sees "Bad economic news" &lt;span class="math"&gt;\(\to\)&lt;/span&gt; &lt;strong&gt;-2 (Bearish)&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Stateful Model (Score D):&lt;/strong&gt; "Fed wants high rates" + "Economy cracking" &lt;span class="math"&gt;\(\to\)&lt;/span&gt; Pivot Imminent &lt;span class="math"&gt;\(\to\)&lt;/span&gt; &lt;strong&gt;+4 (Bullish)&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Signal:&lt;/strong&gt; Momentum shifts Positive &lt;span class="math"&gt;\(\to\)&lt;/span&gt; &lt;strong&gt;Long&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;4.3 Equity Curve Analysis&lt;/h3&gt;
+&lt;p&gt;The chart below highlights the strategy's behavior.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Volatility Profile:&lt;/strong&gt; Comparing the &lt;strong&gt;Green Dotted Line&lt;/strong&gt; (Original 5.1.4) with the &lt;strong&gt;Blue Solid Line&lt;/strong&gt; (S21_D_Momentum) reveals a stark difference in behavior. The Original strategy is jagged and erratic, reflecting its sensitivity to daily noise—it enters and exits trades frequently, often getting whipsawed. In contrast, the S21 line moves in smoother, stepwise increments. It holds positions through minor fluctuations, only reacting when the structural narrative changes.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Drawdown Management:&lt;/strong&gt; This is most visible in &lt;strong&gt;mid-November&lt;/strong&gt;. The Original strategy (Green) suffers a sharp drawdown, dropping significantly as it gets caught on the wrong side of market volatility. During this exact period, S21 (Blue) remains remarkably flat and stable. The memory filter correctly identified the noise and kept the strategy neutral, preserving capital.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The Breakout:&lt;/strong&gt; Finally, notice the &lt;strong&gt;Late December&lt;/strong&gt; surge. While the Original strategy plateaus and begins to dip, S21 identifies a fresh momentum signal and breaks out to a new all-time high (~1.34). This ability to stay flat during chop (Nov) and aggressive during trends (Dec) is the hallmark of a successful momentum agent.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="Strategies Comparison Chart" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Engravers_02_q4_multistrat_chart.png"&gt;&lt;/p&gt;
+&lt;h2&gt;5. Conclusion&lt;/h2&gt;
+&lt;p&gt;The success of &lt;strong&gt;S21_D_Momentum&lt;/strong&gt; validates the "Stateful Agent" hypothesis. By giving the LLM a selective memory and forcing it to trade on &lt;em&gt;changes&lt;/em&gt; in sentiment rather than static levels, we engineered a strategist that mimics human intuition: ignoring the noise, remembering the trend, and acting decisively when the story changes.&lt;/p&gt;
+&lt;p&gt;For future iterations, we are investigating ways to replace the hardcoded momentum threshold (&lt;code&gt;delta &amp;gt; 2&lt;/code&gt;) with an adaptive parameter that responds to market volatility.&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','color.js','mhchem.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Engineering Report"></category><category term="GenAI"></category><category term="Macro Trading"></category><category term="Llama-3"></category><category term="Financial Engineering"></category></entry></feed>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group AstroNLP, Reflective Report, " />
+
+<meta property="og:title" content="Blog Post 3 (by Group &#34;AstroNLP&#34;) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/blog-post-3-by-group-astronlp.html" />
+<meta property="og:description" content="By Group &#34;AstroNLP&#34; The analysis shown in the blog is strictly from a financial and market impact perspective. AstroNLP: Blog-Post-3 In the third blog, which is very likely to be the final one, we will introduce the details about how we derive trading signals from news headlines and then implement …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-20T10:12:00+08:00" />
+<meta name="twitter:title" content="Blog Post 3 (by Group &#34;AstroNLP&#34;) ">
+<meta name="twitter:description" content="By Group &#34;AstroNLP&#34; The analysis shown in the blog is strictly from a financial and market impact perspective. AstroNLP: Blog-Post-3 In the third blog, which is very likely to be the final one, we will introduce the details about how we derive trading signals from news headlines and then implement …">
+
+        <title>Blog Post 3 (by Group &#34;AstroNLP&#34;)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/blog-post-3-by-group-astronlp.html">
+                Blog Post 3 (by Group "AstroNLP")
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>By Group "AstroNLP"</p>
+<blockquote>
+<blockquote>
+<p><em>The analysis shown in the blog is strictly from a financial and market impact perspective.</em></p>
+</blockquote>
+</blockquote>
+<h2>AstroNLP: Blog-Post-3</h2>
+<p>In the third blog, which is very likely to be the final one, we will introduce the details about how we derive trading signals from news headlines and then implement trading strategies according to the signals. Here in the post, we will mainly focus on the procedure, while some specific results are to be mentioned in the report, making sure that two contents do not overlap a lot. Also, this blog is aimed for better understanding our code, which will not be illustrated detailly in the report due to the space limit.</p>
+<p>Our overall idea is to construct a multi-factor gold price prediction model based on NLP. The entire process briefly follows:</p>
+<div class="codehilite"><pre><span></span><code>graph LR
+
+A[LDA Classification Generation] --&gt; B[Use LDA Topics as Factors] --&gt;C[Add in Sentiment Factor] --&gt;D[Add in Event Factor] --&gt; E[Train a Multi-Factor Model] --&gt;F[Use the Model to Predict Gold Price]--&gt; G[Construct Simple Trading Strategies on the Prediction]
+</code></pre></div>
+
+<hr>
+<h3>1. LDA Topic Modeling</h3>
+<p>In this section, we are going to classify the news headlines using the LDA method. After cleaning the text data, we use CountVectorizer for text vectorization as LDA typically uses term frequency matrix:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span>
+    <span class="n">max_features</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>      <span class="c1"># Keep top 1000 most common words</span>
+    <span class="n">min_df</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>               <span class="c1"># Appear in at least 5 documents</span>
+    <span class="n">max_df</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>             <span class="c1"># Appear in at most 70% of documents (filter high-frequency words)</span>
+    <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>      <span class="c1"># Consider unigrams and bigrams</span>
+<span class="p">)</span>
+
+<span class="c1"># Transform to term frequency matrix</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;clean_title&#39;</span><span class="p">])</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()</span>
+</code></pre></div>
+
+<p>As can be seen above, when we instantiate the <code>vectorizer</code> , we only keep the high-frequency words.</p>
+<p>Then we can set out training our LDA model:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">n_topics</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">topic_labels</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;LDA1&#39;</span><span class="p">,</span>      
+    <span class="s1">&#39;LDA2&#39;</span><span class="p">,</span>    
+    <span class="s1">&#39;LDA3&#39;</span><span class="p">,</span>        
+    <span class="s1">&#39;LDA4&#39;</span><span class="p">,</span>        
+    <span class="s1">&#39;LDA5&#39;</span><span class="p">,</span>   
+    <span class="s1">&#39;LDA6&#39;</span>     
+<span class="p">]</span>
+
+<span class="c1"># Train LDA model</span>
+<span class="n">lda_model</span> <span class="o">=</span> <span class="n">LatentDirichletAllocation</span><span class="p">(</span>
+    <span class="n">n_components</span><span class="o">=</span><span class="n">n_topics</span><span class="p">,</span>
+    <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>              <span class="c1"># Number of iterations</span>
+    <span class="n">learning_method</span><span class="o">=</span><span class="s1">&#39;batch&#39;</span><span class="p">,</span>  <span class="c1"># Batch learning (suitable for small datasets)</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span>                 
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training LDA model (topics=</span><span class="si">{</span><span class="n">n_topics</span><span class="si">}</span><span class="s2">)...&quot;</span><span class="p">)</span>
+<span class="n">lda_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training completed!&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>We can try to investigate what the keywords are inside the topics:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">display_topics</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">feature_names</span><span class="p">,</span> <span class="n">n_top_words</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Display top keywords for each topic&quot;&quot;&quot;</span>
+    <span class="n">topics</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">topic_idx</span><span class="p">,</span> <span class="n">topic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="p">):</span>
+        <span class="n">top_indices</span> <span class="o">=</span> <span class="n">topic</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[</span><span class="o">-</span><span class="n">n_top_words</span><span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">top_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">feature_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">top_indices</span><span class="p">]</span>
+        <span class="n">topics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">top_words</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Topic </span><span class="si">{</span><span class="n">topic_idx</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">topic_labels</span><span class="p">[</span><span class="n">topic_idx</span><span class="p">]</span><span class="si">}</span><span class="s2">):&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Keywords: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">top_words</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">topics</span>
+
+<span class="n">topics_keywords</span> <span class="o">=</span> <span class="n">display_topics</span><span class="p">(</span><span class="n">lda_model</span><span class="p">,</span> <span class="n">feature_names</span><span class="p">,</span> <span class="n">n_top_words</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>Topic 0 (LDA1):
+  Keywords: at, oz, at oz, or, to, dec, dec gold, falls, up, down, gold falls, or to, settle, settle at, to settle, to oz, june, up or, gold down, down or
+
+Topic 1 (LDA2):
+  Keywords: for, the, of, futures, gold futures, week, in, for the, fed, since, session, ahead, gain, ahead of, lower, but, at, end, more, the week
+
+Topic 2 (LDA3):
+  Keywords: futures, gold futures, after, to, rs, in, trade, on, at, to rs, global, cues, global cues, trading, rise, per, at rs, rs per, data, up
+
+Topic 3 (LDA4):
+  Keywords: as, prices, gold prices, in, dollar, on, us, gains, to, as dollar, data, asia, higher, demand, in asia, stocks, india, lower, gold gains, investors
+
+Topic 4 (LDA5):
+  Keywords: ounce, an, an ounce, at, ends, up, gold ends, at an, down, on, futures, gold futures, in, up at, to, higher, first, gold up, lower, to an
+
+Topic 5 (LDA6):
+  Keywords: on, silver, to, rs, high, gold silver, global, demand, low, by, mcx, cues, up, month, global cues, weak, near, contract, of, week
+</code></pre></div>
+
+<p>It seems that the first topic LDA1 is related to the downtrend of gold price, and the second topic LDA2 is related to the future of gold price. Can we say so? Obviously no! Because LDA is a kind of unsupervised learning, we do not know what its outcomes actually stand for naturally, and that's why we need to further construct multi-factor model for prediction. </p>
+<p>Now we generate the topic distribution for each news headlines respectively to see which topic it is most likely to belong to and derive the LDA feature for the news headlines:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">topic_distributions</span> <span class="o">=</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Topic distribution matrix shape: </span><span class="si">{</span><span class="n">topic_distributions</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Each row represents a news article with </span><span class="si">{</span><span class="n">n_topics</span><span class="si">}</span><span class="s2"> topic probabilities (sum to 1)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Add topic probabilities to DataFrame</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">topic_labels</span><span class="p">):</span>
+    <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;topic_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">topic_distributions</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+
+<span class="c1"># Add dominant topic (topic with highest probability)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;dominant_topic&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">topic_distributions</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;dominant_topic_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;dominant_topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">topic_labels</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;dominant_topic_prob&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">topic_distributions</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>2. Add in More Factors</h3>
+<p>In this section, we will add in more factors, besides our LDA feature, to construct a multi-factor model.</p>
+<h4>- Category A Factors: Media Sentiment and Attention</h4>
+<p>The sentiment score has been included in the original dataset on Hugging Face, so we can directly compute the statistics of it:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">daily_sentiment</span> <span class="o">=</span> <span class="n">df_text</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;news_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span>
+    <span class="s1">&#39;sentiment&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">]</span>
+<span class="p">})</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+<span class="c1"># Flatten multi-level column names</span>
+<span class="n">daily_sentiment</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;sentiment_mean&#39;</span><span class="p">,</span> <span class="s1">&#39;sentiment_std&#39;</span><span class="p">,</span> 
+                           <span class="s1">&#39;sentiment_min&#39;</span><span class="p">,</span> <span class="s1">&#39;sentiment_max&#39;</span><span class="p">,</span> <span class="s1">&#39;sentiment_count&#39;</span><span class="p">]</span>
+
+<span class="c1"># Calculate moving averages</span>
+<span class="n">daily_sentiment</span> <span class="o">=</span> <span class="n">daily_sentiment</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
+<span class="n">daily_sentiment</span><span class="p">[</span><span class="s1">&#39;sentiment_ma5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_sentiment</span><span class="p">[</span><span class="s1">&#39;sentiment_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">daily_sentiment</span><span class="p">[</span><span class="s1">&#39;sentiment_ma20&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_sentiment</span><span class="p">[</span><span class="s1">&#39;sentiment_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="c1"># Calculate sentiment trend (current sentiment - 20-day average)</span>
+<span class="n">daily_sentiment</span><span class="p">[</span><span class="s1">&#39;sentiment_trend&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_sentiment</span><span class="p">[</span><span class="s1">&#39;sentiment_mean&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">daily_sentiment</span><span class="p">[</span><span class="s1">&#39;sentiment_ma20&#39;</span><span class="p">]</span>
+</code></pre></div>
+
+<p>Then is the attention factor. We define it as the daily news volume and its following statistics:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">daily_news_count</span> <span class="o">=</span> <span class="n">df_news</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;news_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;news_count&#39;</span><span class="p">)</span>
+<span class="n">daily_news_count</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;news_count&#39;</span><span class="p">]</span>
+
+<span class="c1"># Calculate moving average of news count (smooth attention level)</span>
+<span class="n">daily_news_count</span> <span class="o">=</span> <span class="n">daily_news_count</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
+<span class="n">daily_news_count</span><span class="p">[</span><span class="s1">&#39;news_count_ma5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_news_count</span><span class="p">[</span><span class="s1">&#39;news_count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">daily_news_count</span><span class="p">[</span><span class="s1">&#39;news_count_ma20&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_news_count</span><span class="p">[</span><span class="s1">&#39;news_count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="c1"># Calculate attention anomaly indicator (current count / 20-day average)</span>
+<span class="n">daily_news_count</span><span class="p">[</span><span class="s1">&#39;news_attention_ratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_news_count</span><span class="p">[</span><span class="s1">&#39;news_count&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">daily_news_count</span><span class="p">[</span><span class="s1">&#39;news_count_ma20&#39;</span><span class="p">]</span>
+</code></pre></div>
+
+<h4>- Category B Factors: Event-Driven</h4>
+<p>We mainly consider 2 events for this category: the Fed and Geopolitical events. Here we use NLP again:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">fomc_keywords</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(?i)(FOMC|Fed meeting|Federal Reserve meeting|Fed minutes|FOMC statement|Fed policy)&#39;</span>
+
+<span class="c1"># Search keywords in news titles</span>
+<span class="n">df_news</span><span class="p">[</span><span class="s1">&#39;is_fomc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_news</span><span class="p">[</span><span class="s1">&#39;news_title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">fomc_keywords</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Aggregate by date</span>
+<span class="n">daily_fomc</span> <span class="o">=</span> <span class="n">df_news</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;news_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span>
+    <span class="s1">&#39;is_fomc&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">]</span>
+<span class="p">})</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">daily_fomc</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;fomc_news_count&#39;</span><span class="p">,</span> <span class="s1">&#39;has_fomc_event&#39;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;C1. FOMC Event Marker&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Generated factors: fomc_news_count (daily FOMC news count), has_fomc_event (0/1 flag)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ FOMC event days identified: </span><span class="si">{</span><span class="n">daily_fomc</span><span class="p">[</span><span class="s1">&#39;has_fomc_event&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Total FOMC news: </span><span class="si">{</span><span class="n">daily_fomc</span><span class="p">[</span><span class="s1">&#39;fomc_news_count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Display FOMC event date examples</span>
+<span class="n">fomc_dates</span> <span class="o">=</span> <span class="n">daily_fomc</span><span class="p">[</span><span class="n">daily_fomc</span><span class="p">[</span><span class="s1">&#39;has_fomc_event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>We mark the news headlines that contain specific keywords, so as for the geopolitical events:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">geopolitical_keywords</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(?i)(war|conflict|(Geopolitically sensitive place U)|(Geopolitically sensitive place R)|(Geopolitically sensitive place N)|(Geopolitically sensitive place I)|(Geopolitically sensitive place S)|(Geopolitically sensitive place Y)|tariff|trade war|sanction|Brexit|tension|crisis)&#39;</span>
+
+<span class="c1"># Search keywords in news titles</span>
+<span class="n">df_news</span><span class="p">[</span><span class="s1">&#39;is_geopolitical&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_news</span><span class="p">[</span><span class="s1">&#39;news_title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">geopolitical_keywords</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Aggregate by date</span>
+<span class="n">daily_geopolitical</span> <span class="o">=</span> <span class="n">df_news</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;news_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span>
+    <span class="s1">&#39;is_geopolitical&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span>
+<span class="p">})</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">daily_geopolitical</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;geopolitical_risk_count&#39;</span><span class="p">]</span>
+
+<span class="c1"># Calculate moving average (smooth risk index)</span>
+<span class="n">daily_geopolitical</span> <span class="o">=</span> <span class="n">daily_geopolitical</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
+<span class="n">daily_geopolitical</span><span class="p">[</span><span class="s1">&#39;geopolitical_risk_ma5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_geopolitical</span><span class="p">[</span><span class="s1">&#39;geopolitical_risk_count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">daily_geopolitical</span><span class="p">[</span><span class="s1">&#39;geopolitical_risk_ma20&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daily_geopolitical</span><span class="p">[</span><span class="s1">&#39;geopolitical_risk_count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</code></pre></div>
+
+<h4>- Data Merging</h4>
+<p>After creating all the features, or factors, we nearly complete our mission collecting the predictors. The final step is to merge them together:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Use gold price data as base (left join)</span>
+<span class="n">df_final</span> <span class="o">=</span> <span class="n">df_price</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">df_final</span> <span class="o">=</span> <span class="n">df_final</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;date&#39;</span><span class="p">})</span>
+
+<span class="c1"># Merge each category of factors sequentially</span>
+<span class="c1"># 1. Merge sentiment factors</span>
+<span class="n">df_final</span> <span class="o">=</span> <span class="n">df_final</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">daily_sentiment</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Merged sentiment factors: </span><span class="si">{</span><span class="n">df_final</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2. Merge news attention factors</span>
+<span class="n">df_final</span> <span class="o">=</span> <span class="n">df_final</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">daily_news_count</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Merged news attention factors: </span><span class="si">{</span><span class="n">df_final</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3. Merge FOMC event factors</span>
+<span class="n">df_final</span> <span class="o">=</span> <span class="n">df_final</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">daily_fomc</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Merged FOMC event factors: </span><span class="si">{</span><span class="n">df_final</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 4. Merge geopolitical factors</span>
+<span class="n">df_final</span> <span class="o">=</span> <span class="n">df_final</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">daily_geopolitical</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Merged geopolitical factors: </span><span class="si">{</span><span class="n">df_final</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 5. Merge LDA topic factors</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">topic_columns</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">df_final</span> <span class="o">=</span> <span class="n">df_final</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">daily_topics</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Merged LDA topic factors: </span><span class="si">{</span><span class="n">df_final</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>However, in this project, we are not trying to predict the absolute price series or return series of gold. What we want to predict is the direction over a certain trading interval, so we need to further generate our target variables:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. Calculate next day return</span>
+<span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_day_return&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># 2. Calculate next 5-day, 10-day, 20-day return</span>
+<span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_5d_return&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">)</span> <span class="o">/</span> <span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_10d_return&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span> <span class="o">/</span> <span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_20d_return&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">)</span> <span class="o">/</span> <span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># 3. Generate up/down labels (binary classification)</span>
+<span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_day_label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_day_return&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_5d_label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_5d_return&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_10d_label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_10d_return&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_20d_label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_20d_return&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># 4. Generate multi-class labels (strong up, weak up, weak down, strong down)</span>
+<span class="k">def</span> <span class="nf">classify_return</span><span class="p">(</span><span class="n">ret</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">ret</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">elif</span> <span class="n">ret</span> <span class="o">&gt;</span> <span class="mf">0.01</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">3</span>  <span class="c1"># Strong up</span>
+    <span class="k">elif</span> <span class="n">ret</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span>  <span class="c1"># Weak up</span>
+    <span class="k">elif</span> <span class="n">ret</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">0.01</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>  <span class="c1"># Weak down</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>  <span class="c1"># Strong down</span>
+
+<span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_day_class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_day_return&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">classify_return</span><span class="p">)</span>
+</code></pre></div>
+
+<p>We further want to figure out whether there is severe unbalanced problem in the target distribution:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Label distribution:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_day_label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_5d_label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_10d_label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_20d_label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
+</code></pre></div>
+
+<p>Fortunately, it seems that we do not need to worry about this too much. In machine learning, it is quite annoying when facing some super unbalanced datasets, which means that we need to reconsider our modeling method and evaluation method.</p>
+<div class="codehilite"><pre><span></span><code>Label distribution:
+next_day_label
+0    2333
+1    2430
+Name: count, dtype: int64
+next_5d_label
+0    2219
+1    2544
+Name: count, dtype: int64
+next_10d_label
+0    2230
+1    2533
+Name: count, dtype: int64
+next_20d_label
+0    2215
+1    2548
+Name: count, dtype: int64
+</code></pre></div>
+
+<h4>- Factor Correlations with Return and Labels</h4>
+<p>Correlation analysis helps us better understanding the predictors and targets, although it is not difficult to employ it:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">factor_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_final</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+    <span class="n">keyword</span> <span class="ow">in</span> <span class="n">col</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> 
+    <span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">,</span> <span class="s1">&#39;news&#39;</span><span class="p">,</span> <span class="s1">&#39;fomc&#39;</span><span class="p">,</span> <span class="s1">&#39;geopolitical&#39;</span><span class="p">,</span> <span class="s1">&#39;topic_&#39;</span><span class="p">]</span>
+<span class="p">)]</span>
+
+<span class="c1"># Calculate correlation with target variable</span>
+<span class="n">target_col</span> <span class="o">=</span> <span class="s1">&#39;next_day_return&#39;</span>
+<span class="n">correlations</span> <span class="o">=</span> <span class="n">df_final</span><span class="p">[</span><span class="n">factor_cols</span> <span class="o">+</span> <span class="p">[</span><span class="n">target_col</span><span class="p">]]</span><span class="o">.</span><span class="n">corr</span><span class="p">()[</span><span class="n">target_col</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">target_col</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Correlation coefficients between factors and </span><span class="si">{</span><span class="n">target_col</span><span class="si">}</span><span class="s2"> (Top 15):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">correlations</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Correlation coefficients between factors and </span><span class="si">{</span><span class="n">target_col</span><span class="si">}</span><span class="s2"> (Bottom 15):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">correlations</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span>
+
+<span class="n">target_col</span> <span class="o">=</span> <span class="s1">&#39;next_day_label&#39;</span>
+<span class="n">correlations</span> <span class="o">=</span> <span class="n">df_final</span><span class="p">[</span><span class="n">factor_cols</span> <span class="o">+</span> <span class="p">[</span><span class="n">target_col</span><span class="p">]]</span><span class="o">.</span><span class="n">corr</span><span class="p">()[</span><span class="n">target_col</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">target_col</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Correlation coefficients between factors and </span><span class="si">{</span><span class="n">target_col</span><span class="si">}</span><span class="s2"> (Top 15):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">correlations</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Correlation coefficients between factors and </span><span class="si">{</span><span class="n">target_col</span><span class="si">}</span><span class="s2"> (Bottom 15):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">correlations</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span>
+</code></pre></div>
+
+<p>Here we compare between the correlations for the next day return and the next day direction. The output demonstrates that the absolute correlation coefficient is higher for the direction than the return, meaning that the factors may be more powerful in predicting the direction instead of the return:</p>
+<div class="codehilite"><pre><span></span><code>Correlation coefficients between factors and next_day_return (Top 15):
+topic_LDA3_mean            0.019660
+fomc_news_count            0.013660
+has_fomc_event             0.008256
+topic_LDA1_mean            0.005725
+geopolitical_risk_count    0.005073
+topic_LDA2_mean            0.003241
+news_attention_ratio       0.002758
+sentiment_count           -0.003807
+sentiment_min             -0.004477
+news_count                -0.006096
+geopolitical_risk_ma5     -0.006558
+topic_LDA4_mean           -0.007690
+topic_LDA5_mean           -0.009298
+sentiment_trend           -0.011080
+topic_LDA6_mean           -0.012364
+Name: next_day_return, dtype: float64
+
+Correlation coefficients between factors and next_day_return (Bottom 15):
+sentiment_min            -0.004477
+news_count               -0.006096
+...
+sentiment_ma5            -0.018873
+news_count_ma20          -0.022093
+sentiment_max            -0.023293
+
+Correlation coefficients between factors and next_5d_return (Top 15):
+topic_LDA3_mean            0.036147
+topic_LDA1_mean            0.025534
+topic_LDA5_mean            0.014486
+news_attention_ratio       0.006375
+sentiment_min             -0.005230
+geopolitical_risk_count   -0.006227
+fomc_news_count           -0.007213
+topic_LDA2_mean           -0.013275
+has_fomc_event            -0.016117
+sentiment_std             -0.016882
+sentiment_ma5             -0.019594
+news_count                -0.022034
+sentiment_trend           -0.024597
+topic_LDA4_mean           -0.027311
+sentiment_count           -0.028205
+Name: next_5d_return, dtype: float64
+
+Correlation coefficients between factors and next_5d_return (Bottom 15):
+has_fomc_event           -0.016117
+sentiment_std            -0.016882
+sentiment_ma5            -0.019594
+news_count               -0.022034
+sentiment_trend          -0.024597
+...
+sentiment_ma20           -0.038777
+geopolitical_risk_ma20   -0.046619
+sentiment_max            -0.050572
+</code></pre></div>
+
+<h3>3. Tree Model Training</h3>
+<p>In this section, we plan to train the model using Random Forest and XGBoost, but before that, we need to add in more technical indicators for better prediction, including:</p>
+<ul>
+<li>RSI</li>
+<li>Moving Averages</li>
+<li>Moving average ratios</li>
+<li>Momentum indicators</li>
+<li>Volatility</li>
+<li>Bollinger Bands</li>
+<li>Price channel</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_rsi</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">14</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate RSI indicator&quot;&quot;&quot;</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+    <span class="n">gain</span> <span class="o">=</span> <span class="p">(</span><span class="n">delta</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">delta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">period</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">delta</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">delta</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">period</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">rs</span> <span class="o">=</span> <span class="n">gain</span> <span class="o">/</span> <span class="n">loss</span>
+    <span class="n">rsi</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">-</span> <span class="p">(</span><span class="mi">100</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">rs</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">rsi</span>
+
+<span class="c1"># 1. Moving averages</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;ma5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;ma20&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;ma60&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="c1"># 2. Moving average ratios</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;price_ma5_ratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ma5&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;price_ma20_ratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ma20&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;ma5_ma20_ratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ma5&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ma20&#39;</span><span class="p">]</span>
+
+<span class="c1"># 3. Momentum indicators</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;momentum_5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;momentum_10&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;momentum_20&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># 4. Volatility</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;volatility_5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;volatility_20&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+<span class="c1"># 5. RSI (Relative Strength Index)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;rsi_14&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">calculate_rsi</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">],</span> <span class="mi">14</span><span class="p">)</span>
+
+<span class="c1"># 6. Bollinger Bands</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_middle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">bb_std</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_upper&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_middle&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">bb_std</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_lower&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_middle&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">bb_std</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_upper&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_lower&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_middle&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_position&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_lower&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_upper&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;bb_lower&#39;</span><span class="p">])</span>
+
+<span class="c1"># 7. Price channel</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;price_max_20&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;price_min_20&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;price_channel_position&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price_min_20&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price_max_20&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price_min_20&#39;</span><span class="p">])</span>
+</code></pre></div>
+
+<p>Eventually, we are almost ready to train our model. Let's decide how to split the train, validate and test datasets. We select the data from 2000-02-15 to 2014-02-1as the train and validate dataset, while the data from 2014-02-1 to 2019-02-1 as the test dataset. In the train and validate dataset, 70% of the data is randomly selected as training data, the rest of it would be the validating data. We also shuffle the train and validate dataset to break the time series. Hopefully, this can mimic the <code>random_split()</code> function in PyTorch:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">data_process</span><span class="p">(</span><span class="n">trainval_start</span><span class="p">,</span> <span class="n">trainval_end</span><span class="p">,</span> <span class="n">test_end</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">train_ratio</span><span class="o">=</span><span class="mf">0.70</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">print_flag</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data Processing with Multiple Labels&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">80</span><span class="p">)</span>
+
+    <span class="c1"># Remove missing values</span>
+    <span class="n">df_clean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">print_flag</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Removed missing values: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_clean</span><span class="p">)</span><span class="si">}</span><span class="s2"> rows&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Extract data for specified time period</span>
+    <span class="n">df_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">trainval_start</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">test_end</span><span class="p">)]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">print_flag</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ Entire data time period extraction: </span><span class="si">{</span><span class="n">trainval_start</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">test_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Samples after extraction: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_clean</span><span class="p">)</span><span class="si">}</span><span class="s2"> rows&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Split data into training/validation set and test set by time</span>
+    <span class="n">trainval_data</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">trainval_end</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">test_data</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">trainval_end</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">print_flag</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ Train/Validation set period: </span><span class="si">{</span><span class="n">trainval_start</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">trainval_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Test set period: </span><span class="si">{</span><span class="n">trainval_end</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">test_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Train/Validation samples: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trainval_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> rows&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Test samples: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> rows&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Determine feature columns</span>
+    <span class="n">exclude_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;next_day_return&#39;</span><span class="p">,</span> <span class="s1">&#39;next_5d_return&#39;</span><span class="p">,</span> 
+                    <span class="s1">&#39;next_day_label&#39;</span><span class="p">,</span> <span class="s1">&#39;next_5d_label&#39;</span><span class="p">,</span> <span class="s1">&#39;next_day_class&#39;</span><span class="p">,</span> <span class="s1">&#39;next_10d_return&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;next_20d_return&#39;</span><span class="p">,</span> <span class="s1">&#39;next_10d_label&#39;</span><span class="p">,</span> <span class="s1">&#39;next_20d_label&#39;</span><span class="p">]</span>
+    <span class="n">feature_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude_cols</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">print_flag</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ Number of features: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_cols</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Feature list (first 20): </span><span class="si">{</span><span class="n">feature_cols</span><span class="p">[:</span><span class="mi">20</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Prepare features for train/validation set</span>
+    <span class="n">X_trainval</span> <span class="o">=</span> <span class="n">trainval_data</span><span class="p">[</span><span class="n">feature_cols</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="c1"># Prepare multiple labels for train/validation set</span>
+    <span class="n">label_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;next_day_label&#39;</span><span class="p">,</span> <span class="s1">&#39;next_5d_label&#39;</span><span class="p">,</span> <span class="s1">&#39;next_10d_label&#39;</span><span class="p">,</span> <span class="s1">&#39;next_20d_label&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Check if all label columns exist</span>
+    <span class="n">missing_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">label_cols</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trainval_data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">missing_labels</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing label columns: </span><span class="si">{</span><span class="n">missing_labels</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Extract labels</span>
+    <span class="n">y_trainval_labels</span> <span class="o">=</span> <span class="n">trainval_data</span><span class="p">[</span><span class="n">label_cols</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="c1"># Prepare features and labels for test set</span>
+    <span class="n">X_test</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="n">feature_cols</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">y_test_labels</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="n">label_cols</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="c1"># Randomly split train/validation set with shuffling</span>
+    <span class="n">train_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_trainval</span><span class="p">)</span> <span class="o">*</span> <span class="n">train_ratio</span><span class="p">)</span>
+    <span class="n">val_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_trainval</span><span class="p">)</span> <span class="o">-</span> <span class="n">train_size</span>
+
+    <span class="c1"># Create indices and shuffle</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_trainval</span><span class="p">))</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+
+    <span class="c1"># Split indices</span>
+    <span class="n">train_indices</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[:</span><span class="n">train_size</span><span class="p">]</span>
+    <span class="n">val_indices</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">train_size</span><span class="p">:]</span>
+
+    <span class="c1"># Create shuffled datasets for features</span>
+    <span class="n">X_train</span> <span class="o">=</span> <span class="n">X_trainval</span><span class="p">[</span><span class="n">train_indices</span><span class="p">]</span>
+    <span class="n">X_val</span> <span class="o">=</span> <span class="n">X_trainval</span><span class="p">[</span><span class="n">val_indices</span><span class="p">]</span>
+
+    <span class="c1"># Create shuffled datasets for labels</span>
+    <span class="n">y_train_labels</span> <span class="o">=</span> <span class="n">y_trainval_labels</span><span class="p">[</span><span class="n">train_indices</span><span class="p">]</span>
+    <span class="n">y_val_labels</span> <span class="o">=</span> <span class="n">y_trainval_labels</span><span class="p">[</span><span class="n">val_indices</span><span class="p">]</span>
+
+    <span class="c1"># Extract individual label arrays for convenience</span>
+    <span class="n">y_train_1d</span> <span class="o">=</span> <span class="n">y_train_labels</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># next_day_label</span>
+    <span class="n">y_train_5d</span> <span class="o">=</span> <span class="n">y_train_labels</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>   <span class="c1"># next_5d_label</span>
+    <span class="n">y_train_10d</span> <span class="o">=</span> <span class="n">y_train_labels</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># next_10d_label</span>
+    <span class="n">y_train_20d</span> <span class="o">=</span> <span class="n">y_train_labels</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>  <span class="c1"># next_20d_label</span>
+
+    <span class="n">y_val_1d</span> <span class="o">=</span> <span class="n">y_val_labels</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">y_val_5d</span> <span class="o">=</span> <span class="n">y_val_labels</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">y_val_10d</span> <span class="o">=</span> <span class="n">y_val_labels</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">y_val_20d</span> <span class="o">=</span> <span class="n">y_val_labels</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+
+    <span class="n">y_test_1d</span> <span class="o">=</span> <span class="n">y_test_labels</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">y_test_5d</span> <span class="o">=</span> <span class="n">y_test_labels</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">y_test_10d</span> <span class="o">=</span> <span class="n">y_test_labels</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">y_test_20d</span> <span class="o">=</span> <span class="n">y_test_labels</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">df_clean</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> \
+            <span class="n">y_train_1d</span><span class="p">,</span> <span class="n">y_val_1d</span><span class="p">,</span> <span class="n">y_test_1d</span><span class="p">,</span>\
+            <span class="n">y_train_5d</span><span class="p">,</span> <span class="n">y_val_5d</span><span class="p">,</span> <span class="n">y_test_5d</span><span class="p">,</span>\
+            <span class="n">y_train_10d</span><span class="p">,</span> <span class="n">y_val_10d</span><span class="p">,</span> <span class="n">y_test_10d</span><span class="p">,</span>\
+            <span class="n">y_train_20d</span><span class="p">,</span> <span class="n">y_val_20d</span><span class="p">,</span> <span class="n">y_test_20d</span>
+</code></pre></div>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-20T10:12:00+08:00">Tue 20 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-astronlp-ref">Group AstroNLP
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

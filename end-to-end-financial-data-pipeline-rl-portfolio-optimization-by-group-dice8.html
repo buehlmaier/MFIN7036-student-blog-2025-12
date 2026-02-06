@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group Dice8, Reflective Report, " />
+
+<meta property="og:title" content="End-to-End Financial Data Pipeline &amp; RL Portfolio Optimization (by Group &#34;Dice8&#34;） "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/end-to-end-financial-data-pipeline-rl-portfolio-optimization-by-group-dice8.html" />
+<meta property="og:description" content="Building a robust portfolio optimization framework requires high-quality, multi-dimensional data and a well-structured training environment. This blog walks through our team’s end-to-end workflow, covering data collection from dual sources, preprocessing, and the construction of a reinforcement learning (RL) environment to power portfolio decisions. Part 1: Data Collection from Stocktwits …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-21T19:15:00+08:00" />
+<meta name="twitter:title" content="End-to-End Financial Data Pipeline &amp; RL Portfolio Optimization (by Group &#34;Dice8&#34;） ">
+<meta name="twitter:description" content="Building a robust portfolio optimization framework requires high-quality, multi-dimensional data and a well-structured training environment. This blog walks through our team’s end-to-end workflow, covering data collection from dual sources, preprocessing, and the construction of a reinforcement learning (RL) environment to power portfolio decisions. Part 1: Data Collection from Stocktwits …">
+
+        <title>End-to-End Financial Data Pipeline &amp; RL Portfolio Optimization (by Group &#34;Dice8&#34;）  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/end-to-end-financial-data-pipeline-rl-portfolio-optimization-by-group-dice8.html">
+                End-to-End Financial Data Pipeline & RL Portfolio Optimization (by Group "Dice8"）
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <hr>
+<p>Building a robust portfolio optimization framework requires high-quality, multi-dimensional data and a well-structured training environment. This blog walks through our team’s end-to-end workflow, covering data collection from dual sources, preprocessing, and the construction of a reinforcement learning (RL) environment to power portfolio decisions.</p>
+<h1>Part 1: Data Collection from Stocktwits – Advanced Scraping &amp; Sentiment Analysis</h1>
+<p>To capture market sentiment and discussions spanning over a decade, we targeted Stocktwits data for 6 core assets from 2012 to 2024. This process required overcoming sophisticated anti-bot measures and navigating unique pagination challenges, followed by sentiment visualization.</p>
+<h2>1 Advanced Web Scraping &amp; TLS Impersonation</h2>
+<p>The primary goal was to harvest data for 6 core assets spanning from 2012 to 2024. However, the first hurdle was bypassing the platform's sophisticated bot detection.</p>
+<h3>Challenge: Defeating TLS Fingerprinting</h3>
+<p>Standard Python libraries like requests were immediately flagged by Cloudflare (403 Forbidden).</p>
+<h3>The Solution: curl_cffi for TLS Impersonation</h3>
+<p>I used the curl_cffi library. Unlike standard requests, curl_cffi allows for impersonation of a real browser's TLS handshake, which is essential for passing modern anti-bot checks.</p>
+<h3>The Cookie "Clean" Trick</h3>
+<p>I also implemented a clean_val function to strip non-ASCII characters from raw browser cookies, ensuring the headers remained valid for the HTTP request.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">curl_cffi</span> <span class="kn">import</span> <span class="n">requests</span>
+
+<span class="k">def</span> <span class="nf">clean_val</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">)</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;user-agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)...&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cookie&quot;</span><span class="p">:</span> <span class="n">clean_val</span><span class="p">(</span><span class="n">raw_cookie</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="n">current_max_id</span><span class="p">},</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">impersonate</span><span class="o">=</span><span class="s2">&quot;chrome110&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>2 Solving the "Temporal Navigation" Problem</h2>
+<p>Stocktwits uses an ID-based pagination (max_id). Since the platform doesn't allow direct date-based searching, locating data from 2012 among billions of posts required an intelligent search algorithm.</p>
+<h3>Challenge: The Pagination Abyss</h3>
+<p>If you jump back too far, you skip data. If you jump too little, the script takes weeks to finish. Furthermore, the API often gets "stuck" returning the same page (Oscillation).</p>
+<h3>The Solution: Dynamic Jumping &amp; Stuck Detection</h3>
+<p><strong>Dynamic Leap:</strong> My script calculates the distance between the current data's timestamp and the target date. For years after 2020 (high-volume era), it jumps by 3.4 million IDs per month. For earlier, quieter years, it scales down to 1 million IDs.</p>
+<p><strong>Oscillation Detection:</strong> I added a stuck_count tracker. If the script detects it is receiving the same top_id multiple times, it forces a larger "emergency jump" to break the loop.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">ts</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="n">year</span><span class="p">:</span>
+    <span class="n">m_diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="n">year</span><span class="p">)</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">month</span> <span class="o">-</span> <span class="n">month</span><span class="p">)</span>
+    <span class="c1"># Post-2020 data is much denser</span>
+    <span class="n">jump</span> <span class="o">=</span> <span class="mi">3400000</span> <span class="o">*</span> <span class="n">m_diff</span> <span class="k">if</span> <span class="n">ts</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="mi">2020</span> <span class="k">else</span> <span class="mi">1000000</span> <span class="o">*</span> <span class="n">m_diff</span>
+    <span class="n">current_max_id</span> <span class="o">-=</span> <span class="nb">max</span><span class="p">(</span><span class="n">jump</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">stuck_count</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="n">current_max_id</span> <span class="o">-=</span> <span class="mi">2500000</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Detected oscillation, forcing jump to </span><span class="si">{</span><span class="n">current_max_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>3 Data Cleaning: Handling Tags</h2>
+<p>StockTwits text data contains numerous financial asset tags. Some data entries consist almost entirely of tags without substantial content. Initially, we considered removing all tag labels. However, since tags may contribute to the meaning of a sentence, directly deleting them could alter the original semantics. Therefore, we used regular expressions to identify tags and calculated their ratio to the total word count in the text. Data entries with excessively high tag ratios were filtered out.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_tag_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">text_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">text_str</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">tag_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;tag_pattern&#39;</span><span class="p">],</span> <span class="n">word</span><span class="p">):</span>
+            <span class="n">tag_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">tag_ratio</span> <span class="o">=</span> <span class="n">tag_count</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tag_ratio</span>
+</code></pre></div>
+
+<h2>4 Visualization &amp; Sentiment Portraits</h2>
+<p>I merged the historical datasets for all six assets to generate a visual sentiment profile for the 2012–2024 period. I applied a consistent set of STOPWORDS and cleaning rules across all assets to ensure a fair comparison. This included removing common web noise (http, https, amp, rt) and generic platform terms.</p>
+<h3>Observation: Asset-Specific Noise Levels</h3>
+<p>A key finding during the visualization phase was the difference in data quality between assets:</p>
+<ul>
+<li>
+<p><strong>Specialized Assets ($GLD, $USO):</strong> Sentiment was relatively focused on asset-specific trends.</p>
+</li>
+<li>
+<p><strong>Market Indices ($SPX):</strong> The $SPX data displayed significantly higher noise levels, containing a larger volume of retail "hype" and generic market tags compared to the commodity-linked assets.</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="n">my_stopwords</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">STOPWORDS</span><span class="p">)</span>
+<span class="n">my_stopwords</span><span class="o">.</span><span class="n">update</span><span class="p">([</span><span class="s1">&#39;http&#39;</span><span class="p">,</span> <span class="s1">&#39;https&#39;</span><span class="p">,</span> <span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">,</span> <span class="s1">&#39;now&#39;</span><span class="p">,</span> <span class="s1">&#39;today&#39;</span><span class="p">,</span> <span class="s1">&#39;stock&#39;</span><span class="p">,</span> <span class="s1">&#39;market&#39;</span><span class="p">,</span> <span class="s1">&#39;will&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;week&#39;</span><span class="p">])</span>
+
+<span class="n">wc</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> 
+    <span class="n">background_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+    <span class="n">stopwords</span><span class="o">=</span><span class="n">my_stopwords</span><span class="p">,</span>
+    <span class="n">max_words</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+    <span class="n">colormap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span>
+<span class="p">)</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">full_text</span><span class="p">)</span>
+</code></pre></div>
+
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/DICE8_02_wordcloud.png"></p>
+<h1>Part 2: Supplemental News Data Collection with GDELT</h1>
+<p>To complement Stocktwits sentiment data, we leveraged GDELT (Global Database of Events, Language, and Tone) to automate the download of structured historical news data. This dual-source approach enriched our dataset with broader market narratives.</p>
+<h2>1 Asset Configuration</h2>
+<p>We collected news data for six core categories of financial assets:</p>
+<ul>
+<li>
+<p><strong>Stock Indices:</strong> S&amp;P 500 (GSPC), NASDAQ Composite (IXIC), Dow Jones Industrial Average (DJI)</p>
+</li>
+<li>
+<p><strong>Commodities:</strong> Gold (GOLD), Silver (SILVER), Crude Oil (OIL)</p>
+</li>
+</ul>
+<p>Each asset configuration includes:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;S&amp;P 500 Index&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;keywords&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;SP500&quot;</span><span class="p">,</span> <span class="s2">&quot;SPX&quot;</span><span class="p">,</span> <span class="s2">&quot;Standard Poors 500&quot;</span><span class="p">,</span> <span class="s2">&quot;S and P 500&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ticker&quot;</span><span class="p">:</span> <span class="s2">&quot;$SPX&quot;</span><span class="p">,</span>  <span class="c1"># StockTwits format code</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;E&quot;</span>  <span class="c1"># Asset type identifier</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2>2 System Architecture Design</h2>
+<ul>
+<li>
+<p><strong>Time Range:</strong> January 2017 to December 2024</p>
+</li>
+<li>
+<p><strong>Granularity Control:</strong> Monthly downloads with a maximum of 20 records per month</p>
+</li>
+<li>
+<p><strong>Intelligent Date Processing:</strong> Automatic calculation of start and end dates for each month</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">FinancialAssetsDownloader</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assets_config</span> <span class="o">=</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_year</span> <span class="o">=</span> <span class="mi">2017</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_year</span> <span class="o">=</span> <span class="mi">2024</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_records_per_month</span> <span class="o">=</span> <span class="mi">20</span>
+</code></pre></div>
+
+<h3>Monthly Data Download Process</h3>
+<p>The workflow follows a structured cycle: Iterate through each month from 2017 to 2024 → Call GDELT API to retrieve news data → Add asset metadata (asset ID, name, type, etc.) → Save monthly CSV files → Consolidate all monthly data</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">download_asset_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_id</span><span class="p">,</span> <span class="n">asset_config</span><span class="p">):</span>
+    <span class="n">asset_name</span> <span class="o">=</span> <span class="n">asset_config</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+    <span class="n">keywords</span> <span class="o">=</span> <span class="n">asset_config</span><span class="p">[</span><span class="s2">&quot;keywords&quot;</span><span class="p">]</span>
+
+    <span class="n">all_data</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_year</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_year</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span>            
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_month_date_range</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+
+                <span class="n">f</span> <span class="o">=</span> <span class="n">Filters</span><span class="p">(</span>
+                    <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
+                    <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
+                    <span class="n">num_records</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records_per_month</span><span class="p">,</span>
+                    <span class="n">keyword</span><span class="o">=</span><span class="n">keywords</span><span class="p">,</span>
+                    <span class="n">language</span><span class="o">=</span><span class="s2">&quot;English&quot;</span>
+                <span class="p">)</span>
+
+                <span class="n">articles_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gd</span><span class="o">.</span><span class="n">article_search</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="o">...</span>
+                <span class="n">all_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">articles_df</span><span class="p">)</span>
+
+                <span class="n">month_csv</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">asset_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">asset_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">month</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">)</span>
+                <span class="n">articles_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">month_csv</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8-sig&quot;</span><span class="p">)</span>
+                <span class="o">...</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_delay</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_delay</span><span class="p">))</span>
+    <span class="o">...</span>
+</code></pre></div>
+
+<h2>3 Key Technical Implementations</h2>
+<h3>3.1 Anti-Scraping Strategy</h3>
+<p>To ensure stable and sustainable access to the GDELT API while respecting server resources, we implemented a comprehensive anti-scraping strategy featuring intelligent delay mechanisms.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Random delay settings</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">min_delay</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">max_delay</span> <span class="o">=</span> <span class="mf">4.0</span>
+
+<span class="c1"># Longer delay between assets</span>
+<span class="n">delay_time</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Technical Rationale:</p>
+<h4>a. Rate Limiting Compliance:</h4>
+<p>The random delay between monthly requests (2-4 seconds) prevents rapid-fire queries that could trigger GDELT's rate limiting mechanisms or be mistaken for denial-of-service attacks.</p>
+<h4>b. Behavioral Mimicry:</h4>
+<p>By varying the delay times randomly, our system mimics human browsing patterns rather than exhibiting the predictable, machine-like timing of simple automated scripts.</p>
+<h4>c. Resource Protection:</h4>
+<p>The longer delays between assets (8-15 seconds) provide breathing room for both our system and GDELT's servers, particularly important when downloading multiple years of data across multiple assets.</p>
+<h3>3.2 GDELT API Integration</h3>
+<p>The core of our data collection system leverages the official gdeltdoc Python library, which provides a streamlined interface to GDELT's Article Search API.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">gdeltdoc</span> <span class="kn">import</span> <span class="n">GdeltDoc</span><span class="p">,</span> <span class="n">Filters</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">Filters</span><span class="p">(</span>
+    <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
+    <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
+    <span class="n">num_records</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records_per_month</span><span class="p">,</span>
+    <span class="n">keyword</span><span class="o">=</span><span class="n">keywords</span><span class="p">,</span>
+    <span class="n">language</span><span class="o">=</span><span class="s2">&quot;English&quot;</span>
+<span class="p">)</span>
+
+<span class="n">articles_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gd</span><span class="o">.</span><span class="n">article_search</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</code></pre></div>
+
+<h1>Part 3: Data Preparation &amp; RL Portfolio Optimization Environment</h1>
+<p>With dual-source data collected, we prepared the dataset for portfolio optimization and built a custom RL environment using Gymnasium to train agents on asset allocation.</p>
+<h2>1 Data Preparation Workflow</h2>
+<p>Our portfolio optimization framework uses a three-layer hierarchical structure. In addition to the sentiment data generated, a standard price metric dataset is fetched with the yfinance package. The price data is first cleaned with simple backward fill and interpolation provided by pandas. Then it goes through a general function calculating selected input features: opening price of the month, closing price of the month, volatility, sharpe ratio, sortino ratio, maximum drawdown and calmar ratio.</p>
+<p>These features are very different from time series prediction features used in price prediction as they lean towards the performance of the asset more than price information. However, it is definitely worth trying to feed regular price related factors like volume factors, price change factors, technical factors etc. But as the objective of the project is to focus on NLP these potential improvements are not implemented. A correlation matrix is also calculated and appended to the input feature vector. A code example is given as below to demonstrate the general workflow of price data, note that basic operations like loops, replace invalid entries and error handling are omitted:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">metrics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;Month_First_Close&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+<span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;Month_Last_Close&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+<span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;Volatility&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">log_returns</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">252</span><span class="p">)</span>
+
+<span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;Sharpe_Ratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">log_returns</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="mi">252</span><span class="p">)</span> <span class="o">/</span> <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;Volatility&#39;</span><span class="p">]</span>
+
+<span class="n">downside_returns</span> <span class="o">=</span> <span class="n">log_returns</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">log_returns</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">downside_vol</span> <span class="o">=</span> <span class="n">downside_returns</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">252</span><span class="p">)</span>
+<span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;Sortino_Ratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">log_returns</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="mi">252</span><span class="p">)</span> <span class="o">/</span> <span class="n">downside_vol</span>
+
+<span class="k">def</span> <span class="nf">calculate_mdd</span><span class="p">(</span><span class="n">series</span><span class="p">):</span>
+    <span class="n">cumulative</span> <span class="o">=</span> <span class="n">series</span> <span class="o">/</span> <span class="n">series</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">peak</span> <span class="o">=</span> <span class="n">cumulative</span><span class="o">.</span><span class="n">cummax</span><span class="p">()</span>
+    <span class="n">drawdown</span> <span class="o">=</span> <span class="p">(</span><span class="n">peak</span> <span class="o">-</span> <span class="n">cumulative</span><span class="p">)</span> <span class="o">/</span> <span class="n">peak</span>
+    <span class="k">return</span> <span class="n">drawdown</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="k">if</span> <span class="n">drawdown</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+<span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;MDD&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">calculate_mdd</span><span class="p">)</span>
+
+<span class="n">monthly_return</span> <span class="o">=</span> <span class="p">(</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;Month_Last_Close&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;Month_First_Close&#39;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">annualized_return</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">monthly_return</span><span class="p">)</span> <span class="o">**</span> <span class="mi">12</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;Calmar_Ratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annualized_return</span> <span class="o">/</span> <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;MDD&#39;</span><span class="p">]</span>
+</code></pre></div>
+
+<h2>2 Custom RL Environment with Gymnasium</h2>
+<p>With the complete preparation of data, the main training logic is implemented with the gymnasium package, which allows custom environment creation through inheriting the base gym.Env. The base class requires implementation of <strong>init</strong>, reset and step methods to work properly as a training environment for agents.</p>
+<h3>2.1 Environment Initialization (<strong>init</strong> Method)</h3>
+<p>In the base RL model CustomPortfolioEnv class, the init function mainly serves to creation of observation space and action space. For base NLP agents the observation space is constructed with sentiment data and for the base Metrics agents the observation space is constructed with previously calculated price features. The action space is continuous, representing the portfolio weights for each asset. These weights must sum to 1 and be non-negative (no leverage, no short-selling), aligning with standard portfolio constraints. A continuous action space allows for precise adjustments, unlike discrete actions which would limit flexibility in allocation.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CustomPortfolioEnv</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">price_dir</span><span class="o">=</span><span class="s2">&quot;metrics_used_6assets/price&quot;</span><span class="p">,</span> <span class="n">metrics_dir</span><span class="o">=</span><span class="s2">&quot;organized_6assets/observation/metrics&quot;</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">EXPECTED_OBS_SIZE</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">TICKERS</span><span class="p">),),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="o">...</span>
+</code></pre></div>
+
+<h3>2.2 Core Training Logic (reset &amp; step Methods)</h3>
+<p>The reset method is trivial, used to reset the environment to original state. While the step method is the key to reinforcement giving the logic of each training step for the agent. It takes in action as a input and normalize it to a total of 1 to align with portfolio constraint, then calculate equivalent portfolio value from it.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CustomPortfolioEnv</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="n">action_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">action_sum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">action</span> <span class="o">/</span> <span class="n">action_sum</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">TICKERS</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">TICKERS</span><span class="p">)</span>
+
+    <span class="n">daily_prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">daily_prices</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span><span class="p">:</span><span class="n">end_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tickers</span><span class="p">]</span>
+    <span class="n">daily_prices</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tickers</span><span class="p">)</span>
+
+    <span class="n">daily_portfolio_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">daily_prices</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span> <span class="n">weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="o">...</span>
+</code></pre></div>
+
+<p>Then, the key values: daily returns, volatility and maximum drawdown are calculated then converted into reward to feed back to the agent.</p>
+<p>Now that we have the training environment design the training loop is also trivial that uses multiple seeds and algorithms to train.</p>
+<h1>Conclusion</h1>
+<p>This end-to-end workflow demonstrates how to integrate scraped sentiment data, structured news data, and financial metrics to power RL-based portfolio optimization. By overcoming anti-bot challenges, designing scalable data pipelines, and building tailored RL environments, we created a robust framework for data-driven asset allocation. Future iterations could expand on price-related features or refine NLP models to enhance agent performance further.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-21T19:15:00+08:00">Wed 21 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-dice8-ref">Group Dice8
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

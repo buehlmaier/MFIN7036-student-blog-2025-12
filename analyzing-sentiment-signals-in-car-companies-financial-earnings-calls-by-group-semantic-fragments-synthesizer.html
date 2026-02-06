@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="MFIN7036 Students 2025" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Group Semantic Fragments Synthesizer, Reflective Report, " />
+
+<meta property="og:title" content="Analyzing Sentiment Signals in Car Companies&#39; Financial Earnings Calls (by Group “Semantic Fragments Synthesizer”) "/>
+<meta property="og:url" content="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/analyzing-sentiment-signals-in-car-companies-financial-earnings-calls-by-group-semantic-fragments-synthesizer.html" />
+<meta property="og:description" content="By Group “Semantic Fragments Synthesizer” Motivation: Why Words Matter in Earnings Calls In financial markets, numbers matter—but the way those numbers are explained often matters just as much. Earnings calls are a primary channel through which firm management communicates not only financial performance, but also confidence, uncertainty, and strategic …" />
+<meta property="og:site_name" content="MFIN7036 Student Blog 2025" />
+<meta property="og:article:author" content="MFIN7036 Students 2025" />
+<meta property="og:article:published_time" content="2026-01-09T20:50:00+08:00" />
+<meta name="twitter:title" content="Analyzing Sentiment Signals in Car Companies&#39; Financial Earnings Calls (by Group “Semantic Fragments Synthesizer”) ">
+<meta name="twitter:description" content="By Group “Semantic Fragments Synthesizer” Motivation: Why Words Matter in Earnings Calls In financial markets, numbers matter—but the way those numbers are explained often matters just as much. Earnings calls are a primary channel through which firm management communicates not only financial performance, but also confidence, uncertainty, and strategic …">
+
+        <title>Analyzing Sentiment Signals in Car Companies&#39; Financial Earnings Calls (by Group “Semantic Fragments Synthesizer”)  · MFIN7036 Student Blog 2025
+</title>
+        <link href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="MFIN7036 Student Blog 2025 - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/"><span class=site-name>MFIN7036 Student Blog 2025</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://buehlmaier.github.io/MFIN7036-student-blog-2025-12
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html">Categories</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html">Tags</a></li>
+                                <li ><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/analyzing-sentiment-signals-in-car-companies-financial-earnings-calls-by-group-semantic-fragments-synthesizer.html">
+                Analyzing Sentiment Signals in Car Companies' Financial Earnings Calls (by Group “Semantic Fragments Synthesizer”)
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>By Group “Semantic Fragments Synthesizer”</p>
+<h2>Motivation: Why Words Matter in Earnings Calls</h2>
+<p>In financial markets, numbers matter—but the way those numbers are explained often matters just as much. Earnings calls are a primary channel through which firm management communicates not only financial performance, but also confidence, uncertainty, and strategic intent. These qualitative elements are particularly important in the automobile industry, where demand cycles, pricing pressure, and the transition toward electric vehicles can rapidly alter market expectations.</p>
+<p>Our group project starts from a simple question: <strong>does the tone of management’s language during earnings calls contain information that is reflected in short-term stock price reactions?</strong> To address this question, we plan to translate earnings call narratives into interpretable textual signals—such as sentiment polarity and uncertainty—and examine how these signals align with market responses around call dates.</p>
+<p>Before conducting any sentiment analysis, however, a fundamental challenge must be addressed: <strong>how to collect clean, reliable, and reproducible earnings call text data.</strong> This first blog post documents our group’s experience in building the text collection pipeline and reflects on the technical and methodological lessons learned at this early stage of the project.</p>
+<h2>Firms and Project Scope</h2>
+<p>Our analysis focuses on three major automobile manufacturers: Ford, General Motors (GM), and Tesla. These firms represent different business models and strategic positions within the same industry, making them an ideal setting for comparative textual analysis. Their earnings calls are frequent, information-rich, and closely followed by the market.</p>
+<p>This blog concentrates on the data collection and preprocessing stage of the project, which forms the foundation for all subsequent NLP and financial analysis.</p>
+<h2>Data Sources and Design Considerations</h2>
+<p>To obtain earnings call transcripts, our group relies on two complementary sources:</p>
+<ul>
+<li><strong>The Motley Fool (fool.com)</strong>, which provides publicly accessible earnings call transcript pages with relatively consistent HTML structures.</li>
+<li><strong>S&amp;P Capital IQ</strong>, which offers broader historical coverage through the university’s subscription but delivers content dynamically via JavaScript.</li>
+</ul>
+<p>Because these platforms differ fundamentally in how content is loaded and displayed, we adopted a <strong>“two sources, two methods” strategy</strong> from the outset. This design choice allows us to balance accessibility, coverage, and data quality, while selecting the most appropriate technical tool for each source.</p>
+<h2>First Technical Challenge: Naive Scraping and Text Noise</h2>
+<p>Our initial coding attempt focused on collecting Tesla’s 2024 Q1 earnings call transcript from <em>The Motley Fool</em>. Using Python’s <span style="color:green">requests</span> and <span style="color:green">BeautifulSoup</span>, we successfully retrieved the full HTML content of the webpage. However, during the first parsing attempt, we identified a critical issue: the extracted text was not limited to the earnings call transcript itself.</p>
+<p>The code we use is as follows:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/04/23/tesla-tsla-q1-2024-earnings-call-transcript/&#39;</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/04/23/tesla-tsla-q1-2024-earnings-call-transcript/&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">all_text</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">all_text</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Instead, the output included a large amount of irrelevant content, such as navigation menus, advertisements, page headers, and recommended articles. For sentiment analysis, such noise is problematic, as it can distort textual signals and undermine interpretability.</p>
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-SemanticFragmentsSynthesizer_01_image-description1.png"></p>
+<p>This experience revealed an important methodological insight for financial text analysis: successfully downloading a webpage does not imply that the extracted text is analytically meaningful.</p>
+<h2>Solving the Problem: DOM-Based Precision Extraction</h2>
+<p>To resolve this issue, we examined the page’s Document Object Model (DOM) structure in detail. We found that the earnings call transcript was consistently enclosed within a <span style="color:green">&lt;div&gt;</span> element identified by the unique ID <span style="color:green">article-body-transcript</span> .</p>
+<p>By explicitly targeting this element, we were able to isolate the core transcript content while excluding non-essential webpage components. The refined extraction logic is illustrated below:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">url2</span> <span class="o">=</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/07/24/tesla-tsla-q2-2024-earnings-call-transcript/&#39;</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/07/24/tesla-tsla-q2-2024-earnings-call-transcript/&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+<span class="n">transcript_div</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;article-body-transcript&#39;</span><span class="p">)</span>
+
+
+<span class="n">transcript_div</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;article-body-transcript&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">transcript_div</span><span class="p">:</span>
+    <span class="n">transcript_text</span> <span class="o">=</span> <span class="n">transcript_div</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">transcript_text</span>
+</code></pre></div>
+
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-SemanticFragmentsSynthesizer_01_image-description2.png"></p>
+<p>This targeted approach significantly improved data quality. The extracted text now consisted solely of the earnings call dialogue, including management remarks and analyst Q&amp;A, providing clean and uniform raw material for NLP analysis. Applying this method consistently, we successfully retrieved accurate transcripts for all four quarters of Tesla’s 2024 earnings calls.</p>
+<h2>Second Technical Challenge: Scaling to a Ten-Year Dataset</h2>
+<p>While the refined extraction method worked well for individual quarters, it quickly became clear that manually processing one earnings call at a time would not scale to our intended ten-year dataset. Hard-coding URLs and variables for each new quarter made the workflow cumbersome, error-prone, and difficult to maintain.
+The underlying issue was not computational complexity, but <strong>lack of scalability and abstraction</strong> in the data collection design.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="c1"># Q1 2024</span>
+<span class="n">url_q1</span> <span class="o">=</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/04/23/tesla-tsla-q1-2024-earnings-call-transcript/&#39;</span>
+<span class="n">r1</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url_q1</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">s1</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r1</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+<span class="n">transcript_div_q1</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;article-body-transcript&#39;</span><span class="p">)</span>
+
+<span class="c1"># Q2 2024</span>
+<span class="n">url_q2</span> <span class="o">=</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/07/24/tesla-tsla-q2-2024-earnings-call-transcript/&#39;</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url_q2</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">s2</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r2</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+<span class="n">transcript_div_q2</span> <span class="o">=</span> <span class="n">s2</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;article-body-transcript&#39;</span><span class="p">)</span>
+
+<span class="c1"># Q3 2024 </span>
+<span class="n">url_q3</span> <span class="o">=</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/10/23/tesla-tsla-q3-2024-earnings-call-transcript/&#39;</span>
+<span class="n">r3</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url_q2</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">s3</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r3</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+<span class="n">transcript_div_q3</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;article-body-transcript&#39;</span><span class="p">)</span>
+
+<span class="c1">#Q4 2024 </span>
+<span class="n">url_q4</span> <span class="o">=</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/10/23/tesla-tsla-q3-2024-earnings-call-transcript/&#39;</span>
+<span class="n">r4</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url_q4</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">s4</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r4</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+<span class="n">transcript_div_q4</span> <span class="o">=</span> <span class="n">s4</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;article-body-transcript&#39;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">transcript_div_q1</span><span class="p">:</span>
+    <span class="n">transcript_text_q1</span> <span class="o">=</span> <span class="n">transcript_div_q1</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Q1 2024 Transcript长度: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transcript_text_q1</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">transcript_div_q2</span><span class="p">:</span>
+    <span class="n">transcript_text_q2</span> <span class="o">=</span> <span class="n">transcript_div_q2</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Q2 2024 Transcript长度: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transcript_text_q2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">transcript_div_q3</span><span class="p">:</span>
+    <span class="n">transcript_text_q3</span> <span class="o">=</span> <span class="n">transcript_div_q3</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Q3 2024 Transcript长度: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transcript_text_q3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">transcript_div_q4</span><span class="p">:</span>
+    <span class="n">transcript_text_q4</span> <span class="o">=</span> <span class="n">transcript_div_q4</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Q4 2024 Transcript长度: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transcript_text_q4</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>Solving the Problem: Refactoring for Scalability and Reproducibility</h2>
+<p>To address this limitation, we refactored the code by storing quarterly metadata—such as year, quarter, and URL—in a structured data object and iterating over it using a loop. With this design, adding new transcripts no longer requires modifying the core extraction logic; instead, new entries are simply appended to the data structure.</p>
+<p>This refactoring improved efficiency, reduced redundancy, and enhanced reproducibility. Each transcript is automatically retrieved and saved in a standardized format, making the dataset easy to extend and audit. More importantly, this modular pipeline aligns with best practices in empirical finance and NLP research.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="n">url_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;Q1_2024&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/04/23/tesla-tsla-q1-2024-earnings-call-transcript/&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Q2_2024&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/07/24/tesla-tsla-q2-2024-earnings-call-transcript/&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Q3_2024&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/10/23/tesla-tsla-q3-2024-earnings-call-transcript/&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Q4_2024&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2025/01/29/tesla-tsla-q4-2024-earnings-call-transcript/&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+
+
+<span class="n">transcripts</span> <span class="o">=</span> <span class="p">{}</span>  
+
+<span class="k">for</span> <span class="n">quarter</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">url_list</span><span class="p">:</span>
+
+
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+    <span class="n">div</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;article-body-transcript&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">div</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">div</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">transcripts</span><span class="p">[</span><span class="n">quarter</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span>  
+</code></pre></div>
+
+<p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-SemanticFragmentsSynthesizer_01_image-description3.png"></p>
+<h2>Handling Dynamic Content: Selenium for Capital IQ</h2>
+<p>Capital IQ loads content dynamically with JavaScript, so Requests wouldn't work. We used Selenium to automate a real browser. The script acts like a virtual assistant: it opens the page, clicks buttons, waits for content to load, and saves everything for us.</p>
+<p><strong>Step 1: Launch &amp; Wait for Login</strong><br>
+It navigates to the target page and then politely pauses, allowing us to log in manually because Capital is a secure, paid platform. The code will only run until we enter ‘Continue’ in Terminal. </p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># The script waits after opening the login page</span>
+<span class="n">service</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">executable_path</span><span class="o">=</span><span class="s1">&#39;/usr/local/bin/chromedriver&#39;</span><span class="p">)</span>
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">service</span><span class="o">=</span><span class="n">service</span><span class="p">)</span>
+<span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://www.capitaliq.com/CIQDotNet/Transcripts/Summary.aspx?CompanyId=27444752&quot;</span><span class="p">)</span>
+<span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter &#39;Continue&#39; after login:&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Step 2: Click ‘View All’ to load every transcript</strong><br>
+The site only shows a few transcripts by default. Our code aims to find and click the ‘View All’ button to load every transcript. We use the CSS Selector to tell a precise location for the element ‘View All’ button on the page.  </p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># This CSS Selector uniquely identifies the “View All” button on the page</span>
+<span class="n">view_all_button</span> <span class="o">=</span> <span class="n">WebDriverWait</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
+        <span class="n">EC</span><span class="o">.</span><span class="n">element_to_be_clickable</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">,</span> <span class="s2">&quot;#_transcriptsGrid__dataGrid &gt; tbody &gt; tr:nth-child(27) &gt; td &gt; div &gt; a:nth-child(4)&quot;</span><span class="p">))</span>
+    <span class="p">)</span>
+<span class="n">view_all_button</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+</code></pre></div>
+
+<p><strong>Step 3: Save every transcript with one loop</strong><br>
+The following script collects all links, opens each link in a new tab, saves the HTML, and then proceeds to the next link.</p>
+<p>1.Find all transcript links</p>
+<div class="codehilite"><pre><span></span><code><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> 
+<span class="n">link_elements</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">,</span> <span class="s2">&quot;#_transcriptsGrid__dataGrid &gt; tbody &gt; tr &gt; td:nth-child(3) &gt; span &gt; a&quot;</span><span class="p">)</span>
+
+<span class="n">transcript_links</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">link_elements</span><span class="p">:</span>
+    <span class="n">href</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">href</span><span class="p">:</span>
+        <span class="n">transcript_links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">href</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found link：</span><span class="si">{</span><span class="n">href</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total links found: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transcript_links</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>2.Create a folder to save files</p>
+<div class="codehilite"><pre><span></span><code><span class="n">desktop_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/Desktop&quot;</span><span class="p">)</span>
+<span class="n">folder_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Transcripts_</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">_%H%M%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">folder_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">desktop_path</span><span class="p">,</span> <span class="n">folder_name</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+
+<p>3.Core loop: process and save each transcript in HTML version</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">link</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">transcript_links</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Processing link </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1">#open in new tab    </span>
+<span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;window.open(arguments[0]);&quot;</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
+<span class="n">driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">window_handles</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> 
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> 
+
+<span class="c1">#save html</span>
+<span class="n">page_html</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">page_source</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;transcript_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">.html&quot;</span>
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">page_html</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved HTML: </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>Why the ‘Two Sources, Two Methods’ Approach?</h2>
+<p>The reason is straightforward: different websites have different mechanisms.<br>
+- The Motley Fool presents all the content upfront. So we can simply fetch it using requests.<br>
+- Capital IQ reveals content only after the page is loaded; hence, we require Selenium to operate a real browser.</p>
+<p>This two-method strategy empowers us to:<br>
+- Harvest more complete data: public info from The Motley Fool, plus detailed records from Capital IQ.
+- Make the right choice of tool for the task at hand: instead of forcing one tool to do everything.
+- Lay a strong foundation: better data from the start means more trustworthy outcomes.  </p>
+<p>After going the extra mile to gather all the data, we are now in a position to uncover the true stories behind the words. </p>
+<h2>Reflection and Next Steps: Why the Pipeline Matters</h2>
+<p>This stage of the project highlights that data collection is not a trivial preprocessing step, but a <strong>central component of financial text analysis</strong>. Seemingly minor implementation choices—such as how transcript text is isolated within a webpage or how URLs are structured and iterated over—can have significant downstream effects on sentiment measurement and empirical results.</p>
+<p>By investing time in building a robust, scalable, and source-aware pipeline, our group reduces the risk of introducing systematic noise into the dataset and improves the credibility and interpretability of later analyses. A carefully designed pipeline also enhances reproducibility, which is particularly important in empirical finance and NLP research.</p>
+<p>With a reliable text collection framework now in place, the next phase of the project will focus on cleaning the transcripts, separating speaker roles, and constructing interpretable sentiment and uncertainty measures. These steps will allow us to examine how managerial tone varies across firms and time, and whether such variation is reflected in short-window market reactions around earnings call dates. Having gone the extra mile to gather high-quality textual data, we are now well positioned to uncover the true stories behind the words.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-01-09T20:50:00+08:00">Fri 09 January 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/categories.html#reflective-report-ref">Reflective Report</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/tags.html#group-semantic-fragments-synthesizer-ref">Group Semantic Fragments Synthesizer
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+    <a href="https://github.com/buehlmaier/MFIN7036-student-blog-2025-12" title="" target="_blank" rel="nofollow noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#1B1817"/><path fill="#fff" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/></svg>
+    </a>
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

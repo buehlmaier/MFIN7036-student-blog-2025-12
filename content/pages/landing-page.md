@@ -24,7 +24,22 @@ blog posts below only shows the most recent posts.
 
 Names of student groups:
 
-  * TBD
+  * AstroNLP
+  * DataPulse
+  * Deepsick
+  * DICE8
+  * Engravers
+  * LexiCore
+  * Lighthouse Securities
+  * Market Decoders
+  * NLPlus+++
+  * GPT Chatters
+  * PolicyPulse
+  * PoliVoli
+  * Sarcastic Arbitrage
+  * Semantic Fragments Synthesizer
+  * Text Trader
+  * TextWizards
 
 The source code of this blog is available on
 [GitHub](https://github.com/buehlmaier/MFIN7036-student-blog-2025-12).

@@ -516,80 +516,22 @@ During this process of examining the data retrieval limits of the API, we had a 
 
 ## 2.2 Source 2: Google News
 
-Building a web scraper to collect financial data from Google News presented a unique set of challenges, transforming a seemingly straightforward task into a complex exercise in stealth and system design. The goal was clear: programmatically gather news articles related to specific financial indices like the S&P 500 to analyze market sentiment. The reality, however, involved a constant battle against sophisticated anti-bot mechanisms. Text below post chronicles the key technical hurdles encountered and the iterative process of developing solutions.
+Building a web scraper to collect financial data from Google News presented a unique set of challenges. The goal was clear: programmatically gather news articles related to specific financial indices like the S&P 500 to analyze market sentiment. The reality, however, involved navigating significant access restrictions. This section chronicles the key technical hurdles encountered and what we learned about responsible data collection.
 
-### 2.2.1 Strategies for dealing with Google's anti-scraping mechanisms
-####  a. Disable automation features
+### 2.2.1 Dealing with Google's access restrictions
+####  Reflection: Why automated access is difficult
 
-The fundamental principle of evading detection is to make the automated script indistinguishable from a human user. Google's systems are exceptionally adept at spotting the tell-tale signs of automation. My initial, naive attempt—using a standard Selenium-controlled browser—was immediately flagged. The journey to refinement began with masking these automated fingerprints.
+Google News employs sophisticated measures to detect and block automated access. Our initial attempts using Selenium-controlled browsers were quickly flagged. Through this process, we learned that Google's systems check for multiple signals including browser configuration, request patterns, and behavioral consistency.
 
-The first and most crucial step was to configure the Chrome browser to hide its automated nature. This involved a multi-pronged approach within the browser options.
+Rather than providing a detailed guide to circumventing these protections, the key lessons were:
 
-```python
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-
-chrome_options = Options()
-
-# 1. Disable automation control features
-chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-
-# 2. Remove specific switches that indicate automation
-chrome_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
-
-# 3. Disable the use of automation extensions
-chrome_options.add_experimental_option('useAutomationExtension', False)
-
-driver = webdriver.Chrome(options=chrome_options)
-```
-
-This code snippet effectively tells the browser not to advertise its true nature. Hiding these internal features is the equivalent of removing a "self-driving" placard from a car; from the outside, it looks like any other vehicle on the road.
-
-#### b. User Agent (UA) Pool Rotation
-
-Disabling automation flags is a good start, but it's not enough. The next layer of defense involves mimicking human behavior patterns. Two key tactics were employed: dynamic user agent rotation and strategic request timing.
-
-A User Agent (UA) string identifies the browser and operating system to the web server. Using a single, static UA is a red flag for a bot. The solution was to implement a pool of common UAs and rotate them randomly for each session or task.
-
-```python
-import random
-
-user_agents = [
-	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
-	"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0",
-	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15"
-]
-
-selected_ua = random.choice(user_agents)
-chrome_options.add_argument(f"--user-agent={selected_ua}")
-```
-
-#### c. Random delay
-Furthermore, a bot typically makes requests at machine-gun speed. Humans, on the other hand, browse with unpredictable pauses. Introducing random delays between requests was critical.
-
-```python
-import time
-
-DELAY_BETWEEN_REQUESTS = (2, 5)  # seconds
-
-def paced_request(url):
-	# ... code to navigate to a URL ...
-	delay = random.uniform(*DELAY_BETWEEN_REQUESTS)
-	time.sleep(delay)
-```
-
-This simple yet effective method of adding a random wait time between 2 and 5 seconds significantly reduced the risk of triggering rate limits.
-
-#### d.Adjust the browser window
-Adjust the browser window size to a commonly used human dimension.
-```python
-chrome_options.add_argument("--window-size=1920,1080")
-```
+- **Automated scraping of Google services is against their Terms of Service.** We ultimately recognized this and shifted toward alternative data sources (see Section 2.3 below).
+- **Rate limiting matters.** Even when accessing sites that permit scraping, adding reasonable delays between requests (e.g., 2–5 seconds) is essential to avoid overloading servers.
+- **Official APIs and data exports should always be the first choice.** The time spent working around access restrictions would have been better invested in finding legitimate data sources from the start.
 
 ### 2.2.2 Other issues
 
-Even with a well-disguised browser, technical problems specific to the target website can halt progress. Two significant issues were related to search query formatting and result pagination.
+Beyond access restrictions, we also encountered technical problems specific to the target website. Two significant issues were related to search query formatting and result pagination.
 
 #### a.Issues encountered with search keywords
 When searching for "S&P 500", the ampersand (&) character is interpreted by the URL as a parameter separator. My initial script would only send "S" as the search term, completely breaking the functionality. The solution was to properly encode the search term before inserting it into the URL.

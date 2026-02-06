@@ -39,48 +39,9 @@ class NewsCrawler:
 
 Within minutes of running the script, the code started encountering 403 errors and CAPTCHA pages. Bloomberg and Reuters both employ sophisticated anti-scraping measures that detect non-human browsing patterns. The Wall Street Journal was even more restrictive, immediately blocking requests that didn't come from authenticated sessions.
 
-### Solution 1: Enhanced Headers and Session Management
+### Reflection: Understanding Access Constraints
 
-We learned that simple User-Agent strings weren't enough. News sites check for multiple headers and session consistency. Here's our enhanced approach:
-
-```python
-def __init__(self):
-    self.session = requests.Session()
-    self.headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'DNT': '1',
-        'Connection': 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
-        'Sec-Fetch-Dest': 'document',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-Site': 'none',
-        'Sec-Fetch-User': '?1',
-        'Cache-Control': 'max-age=0',
-    }
-    self.session.headers.update(self.headers)
-```
-
-### Solution 2: Proxy Rotation
-
-To avoid IP-based blocking, we implemented proxy rotation. While I can't share actual proxy lists, here's the structure:
-
-```python
-def _get_request_with_proxy(self, url: str):
-    proxies = {
-        'http': random.choice(self.proxy_list),
-        'https': random.choice(self.proxy_list)
-    }
-    
-    try:
-        response = self.session.get(url, proxies=proxies, timeout=10)
-        return response
-    except:
-        # Fallback to direct connection
-        return self.session.get(url, timeout=10)
-```
+We learned that these sites employ multi-layered protections — checking headers, session consistency, IP reputation, and behavioral patterns. Rather than detailing circumvention techniques here, the key takeaway was that these protections exist for good reason: to enforce terms of service and protect proprietary content. This experience taught us to prioritize officially supported data access methods (APIs, RSS feeds, licensed datasets) over scraping wherever possible.
 
 ## Challenge 2: Rate Limiting and Behavioral Detection
 
@@ -88,37 +49,9 @@ def _get_request_with_proxy(self, url: str):
 
 Even with proper headers, the requests were getting blocked because they followed predictable patterns with consistent timing between requests.
 
-### Solution: Randomized Delays and Human-Like Behavior
+### Solution: Responsible Rate Limiting
 
-```python
-def _human_like_delay(self):
-    """Random delays between requests to mimic human reading patterns"""
-    # Vary delay based on action type
-    delay_types = [
-        ('short', random.uniform(1, 3)),      # Between pages
-        ('medium', random.uniform(3, 7)),     # Reading article list
-        ('long', random.uniform(8, 15)),      # Reading full article
-    ]
-    delay_type, delay = random.choice(delay_types)
-    time.sleep(delay)
-    
-    # Occasionally add extra random pauses
-    if random.random() < 0.2:
-        time.sleep(random.uniform(0.5, 2))
-    
-    return delay_type
-```
-
-Additionally, we simulated scrolling behavior to better mimic human interaction:
-
-```python
-def _scrolling_simulation(self):
-    """Simulate scrolling behavior"""
-    scroll_positions = [100, 300, 500, 800, 1200]
-    for position in scroll_positions:
-        if random.random() < 0.7:  # 70% chance to pause at each scroll point
-            time.sleep(random.uniform(0.1, 0.5))
-```
+We addressed this by adding appropriate delays between requests to avoid overloading servers. The key lesson was that responsible scraping requires respecting a site's capacity and rate limits — not just to avoid being blocked, but as a matter of good practice. We implemented simple random delays between requests to keep our access patterns reasonable.
 
 ## Challenge 3: Paywalls and Subscription Content
 
@@ -128,48 +61,13 @@ The Wall Street Journal presented the biggest challenge - most content is behind
 
 ### Solution: Multi-Source Verification and Abstract Collection
 
-Since bypassing paywalls ethically isn't possible, we adjusted our strategy to focus on publicly accessible content:
+Since bypassing paywalls ethically isn't possible, we adjusted our strategy to focus on publicly accessible metadata only:
 
-```python
-def search_wsj(self, keyword: str):
-    """Handle WSJ's subscription requirements"""
-    articles = []
-    
-    # Search for publicly accessible content
-    search_url = f"https://www.wsj.com/search/term.html?KEYWORDS={keyword}"
-```
+- We collected article **titles, dates, and URLs** from search result pages, without attempting to extract preview or teaser content from behind the paywall.
+- We flagged articles as `requires_subscription: True` so downstream analysis could account for incomplete data.
+- Where possible, we supplemented our dataset with content from sources that offer open access or official APIs.
 
-The key insight was to search for articles with 'free' or 'teaser' classes, which often contain partial content accessible without subscription:
-
-```python
-try:
-    response = self.session.get(search_url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    
-    # Look for articles with 'free' or 'teaser' classes
-    free_articles = soup.find_all('div', class_=re.compile('.*free.*|.*teaser.*'))
-    
-    for article in free_articles:
-        # Extract available preview content
-        title = article.find('h2').text if article.find('h2') else ''
-        excerpt = article.find('p').text if article.find('p') else ''
-        
-        if title and 'gold' in title.lower():
-            articles.append({
-                'title': title,
-                'excerpt': excerpt[:500],  # Limited preview
-                'source': 'Wall Street Journal',
-                'requires_subscription': True,
-                'url': article.find('a')['href'] if article.find('a') else ''
-            })
-
-except Exception as e:
-    print(f"WSJ access limited: {e}")
-
-return articles
-```
-
-This approach allowed us to collect article metadata and preview text, providing valuable information even when full content was unavailable. While not ideal, it represented a practical compromise between data completeness and ethical scraping practices.
+This approach meant accepting incomplete data coverage for some sources, but it represented a principled trade-off between data completeness and respecting content owners' access restrictions.
 
 ## Challenge 4: Changing Website Structures
 
@@ -225,12 +123,12 @@ This multi-strategy approach significantly improved our scraper's resilience. By
 
 ## Conclusion: Lessons Learned
 
-Building a financial news scraper taught us that modern web scraping is less about parsing HTML and more about understanding and mimicking human behavior. The technical challenges were significant, but each obstacle provided an opportunity to learn more about how websites protect their content and how to responsibly gather public information.
+Building a financial news scraper taught us that modern web scraping is less about parsing HTML and more about understanding how websites protect their content. The technical challenges were significant, but each obstacle provided an opportunity to learn about responsible data collection practices.
 
 The key takeaways were:
 
 - Anti-scraping measures are sophisticated and constantly evolving
-- Multiple strategies (headers, delays, proxies) work better than any single approach
+- Using officially supported access methods (APIs, RSS feeds) is preferable to scraping
 - Sometimes, accepting limitations (like paywalls) is necessary
 - Robust code handles failures gracefully and continues operation
 

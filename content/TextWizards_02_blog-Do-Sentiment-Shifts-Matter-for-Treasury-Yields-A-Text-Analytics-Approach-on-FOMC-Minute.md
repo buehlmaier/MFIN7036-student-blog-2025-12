@@ -24,23 +24,23 @@ The main steps and core functions are as follows:
 
 # 2. API Call
 
-After extracting the text, we perform sentiment analysis on it. Long-text processing is one of the core advantages of Large Language Models (LLMs). However, each meeting minutes document contains a large volume of text (ranging from 50,000 to 80,000 characters), and the free quota provided by APIs of mainstream AI platforms is usually less than 2,000,000 characters, which can be exhausted quickly. In addition, the API call cost for services like ChatGPT is relatively high. Eventually, we selected the **Spark Lite Model API** of the Spark Large Model, which offers free and unlimited access, so we adopted it for text analysis.
+After extracting the text, we perform sentiment analysis on it. Long-text processing is one of the core advantages of Large Language Models (LLMs). However, each meeting minutes document contains a large volume of text (ranging from 50,000 to 80,000 characters), and the free quota provided by APIs of mainstream AI platforms is usually less than 2,000,000 characters, which can be exhausted quickly. In addition, the API call cost for services like ChatGPT is relatively high. Eventually, we selected a **free-tier LLM API** that offered sufficient quota for our analysis needs, and we adopted it for text analysis.
 
-Before using this API, users must first obtain access credentials: register a real-name authenticated account on the [iFlytek Spark Large Model API platform](https://xinghuo.xfyun.cn/sparkapi), create a dedicated application, then select the Spark Lite model, where the token margin will show "Unlimited". Afterwards, obtain your own API key, which must be predefined before running the code, as indicated in the commented code below. For specific call configurations, refer to the Spark Lite documentation available on this platform, which includes Python call configuration examples.
-![Picture showing Powell]({static}/images/TextWizards_02_sparkLite.png)
+Before using such an API, users must first obtain access credentials by registering on the chosen LLM provider's platform, creating a dedicated application, and obtaining an API key. The API key must be predefined before running the code, as indicated in the commented code below.
+
 The specific calling code is as follows:
 ```python
 # encoding:UTF-8
 import json
 import requests
-# Replace XXXXXXXXXXXX with your API key. 
+# Replace with your API key. 
 api_key = ""
-url = "https://spark-api-open.xf-yun.com/v1/chat/completions"
+url = "YOUR_LLM_API_ENDPOINT"
 # Call the model and output the result
 def get_answer(message):
     # Initialize request body
     headers = {'Authorization':api_key,'content-type': "application/json"}
-    body = {"model": "Lite","user": "user_id","messages": message,"stream": True,"tools": [{"type": "web_search","web_search": {"enable": True,"search_mode":"deep"}}]}
+    body = {"model": "MODEL_NAME","user": "user_id","messages": message,"stream": True}
     full_response = ""  # Store the returned result
     isFirstContent = True  # First frame flag
     response = requests.post(url=url,json= body,headers= headers,stream= True)
@@ -82,7 +82,7 @@ if __name__ =='__main__':
     while (1):  # Loop for conversation turns
         Input = input("\n" + "Me:")
         question = checklen(getText(chatHistory,"user", Input))
-        print("Spark:", end="")
+        print("LLM:", end="")
         getText(chatHistory,"assistant", get_answer(question))
 ```
 This API has a limitation where the maximum input character count is only 8,000. To deal with this, we will subsequently split the FOMC meeting minutes into several sections and analyze each section separately.
@@ -129,7 +129,7 @@ def extract_section_from_text(full_text, target_sections_map):
 A complete **batch sentiment analysis** workflow targets different sections of the FOMC meeting minutes by calling an API to score each paragraph for dovish and hawkish sentiment intensity and returns the results in a structured format. The **scores range from 0 to 1**, where hawkish indicates hawkish strength (0 = no hawkishness, 1 = very hawkish) and dovish indicates dovish strength (0 = no dovishness, 1 = very dovish).
 
 ```python
-def call_spark_api(text):
+def call_llm_api(text):
     # Construct a constrained prompt to force JSON-only output
     prompt = f"""
     Analyze the monetary policy stance of the following FOMC minutes paragraph.
@@ -165,7 +165,7 @@ def analyze_paragraphs_with_api(df):
     sentiments = []
     for idx, row in long_df.iterrows():
         # Call API for each paragraph
-        sentiments.append(call_spark_api(row["content"]))
+        sentiments.append(call_llm_api(row["content"]))
         time.sleep(API_DELAY)
     # Merge API results back into the DataFrame
     sentiment_df = pd.DataFrame(sentiments)

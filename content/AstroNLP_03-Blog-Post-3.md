@@ -197,7 +197,7 @@ fomc_dates = daily_fomc[daily_fomc['has_fomc_event'] == 1].sort_values('date')
 We mark the news headlines that contain specific keywords, so as for the geopolitical events:
 
 ```python
-geopolitical_keywords = r'(?i)(war|conflict|(Geopolitically sensitive place U)|(Geopolitically sensitive place R)|(Geopolitically sensitive place N)|(Geopolitically sensitive place I)|(Geopolitically sensitive place S)|(Geopolitically sensitive place Y)|tariff|trade war|sanction|Brexit|tension|crisis)'
+geopolitical_keywords = r'(?i)(war|conflict|geopolitical|military|tariff|trade war|sanction|Brexit|tension|crisis|invasion|nuclear)'
 
 # Search keywords in news titles
 df_news['is_geopolitical'] = df_news['news_title'].str.contains(geopolitical_keywords, regex=True, na=False).astype(int)

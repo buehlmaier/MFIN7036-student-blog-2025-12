@@ -350,7 +350,7 @@ Though the process works, we noticed **several things that can be improved**:
 Thus, we may need to upgrade our code to further cleaning the text data and screen out the unnecessary.
 # Text sentiment analysis
 
-After extracting the text from web links via BeautifulSoup, we perform sentiment analysis on the text. Long-text processing is a key strength of large language models (LLMs). However, since each meeting minutes document contains a large volume of text—ranging from 50,000 to 80,000 characters—the free quota provided by major AI platforms' APIs is generally less than 2,000,000 characters, which can be exhausted quickly. Additionally, API calls for services like ChatGPT come with relatively high costs. Eventually, we identified the **Spark Lite model API** of the Spark Large Model, which offers free and unlimited access, and we adopted it for text analysis.
+After extracting the text from web links via BeautifulSoup, we perform sentiment analysis on the text. Long-text processing is a key strength of large language models (LLMs). However, since each meeting minutes document contains a large volume of text—ranging from 50,000 to 80,000 characters—the free quota provided by major AI platforms' APIs is generally less than 2,000,000 characters, which can be exhausted quickly. Additionally, API calls for services like ChatGPT come with relatively high costs. Eventually, we identified a **free-tier LLM API** that offered sufficient quota for our analysis needs, and we adopted it for text analysis.
 
  
 The invocation method and text prompts for it are provided in the following code:
@@ -363,17 +363,17 @@ import json
 
 import re
 
-# Please define SPARK_API_KEY and SPARK_URL before using
+# Please define API_KEY and API_URL before using
 
-# SPARK_API_KEY = "Your Spark API Key"
+# API_KEY = "Your LLM API Key"
 
-# SPARK_URL = "Spark API Endpoint URL" 
+# API_URL = "LLM API Endpoint URL" 
 
-def analyze_fomc_with_spark(text_content):
+def analyze_fomc_with_llm(text_content):
 
 """
 
-Call Spark API to analyze Federal Reserve FOMC meeting minutes text
+Call LLM API to analyze Federal Reserve FOMC meeting minutes text
 
 :param text_content: FOMC meeting minutes text content
 
@@ -411,7 +411,7 @@ Text to be analyzed:
 
 headers = {
 
-'Authorization': SPARK_API_KEY,
+'Authorization': API_KEY,
 
 'Content-Type': "application/json"
 
@@ -439,7 +439,7 @@ try:
 
 response = requests.post(
 
-url=SPARK_URL,
+url=API_URL,
 
 json=body,
 

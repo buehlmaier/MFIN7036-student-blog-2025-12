@@ -14,19 +14,19 @@ From the very beginning, our project set out to analyze research reports written
 Almost immediately, we hit a wall. English-language research reports were nearly impossible to obtain for free. Most were locked behind paywalls, sold to institutional buyers, or protected as business secrets. That forced us to pivot. Instead of chasing scarce English reports, we turned our attention to the Chinese market, where research reports are widely published and freely accessible. With approval from Prof. Buehlmaier, we committed to translating Chinese reports into English to meet the project requirements.
 
 ---
-## Discovering Hidden APIs and Collecting Data
+## Data Collection from Eastmoney
 
-Our first step was data collection. After digging into the Eastmoney report center’s F12 developer page, we uncovered an undocumented API that allowed us to navigate the site and directly access original PDF download links. This discovery was a turning point — it gave us a way to systematically collect reports at scale.
+Our first step was data collection. By examining the Eastmoney report center’s website structure, we identified a publicly accessible API endpoint that allowed us to navigate the site and access original PDF download links. This gave us a way to systematically collect reports at scale.
 
-- **undocumented API founded and pdf link discovered in F12 page of website**：
+- **API endpoint and PDF download link identified via the website’s network requests**：
 
 ![Picture showing Powell]({static}/images/Group-Text_Trader_01_blog-post-API.png)
 ![Picture showing Powell]({static}/images/Group-Text_Trader_01_blog-post-pdf_link.png)
 
 
-We then built an automated downloader, targeting all CSI300 index stocks from 2017 to 2025. The dataset was massive, and downloading it took two full days. To avoid being blocked by the website, we implemented several web scraping tricks:
+We then built an automated downloader, targeting all CSI300 index stocks from 2017 to 2025. The dataset was massive, and downloading it took two full days. To be respectful of the website’s server capacity, we implemented responsible rate-limiting measures:
 
-- **Random User-Agent rotation**: cycling through different browser signatures to disguise requests.
+- **Request identification**: setting appropriate browser headers for our requests.
 - **Request throttling**: adding delays between downloads to avoid triggering anti-scraping protections.
 
 

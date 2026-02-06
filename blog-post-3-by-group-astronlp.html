@@ -243,7 +243,7 @@
 </code></pre></div>
 
 <p>We mark the news headlines that contain specific keywords, so as for the geopolitical events:</p>
-<div class="highlight"><pre><span></span><code><span class="n">geopolitical_keywords</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(?i)(war|conflict|(Geopolitically sensitive place U)|(Geopolitically sensitive place R)|(Geopolitically sensitive place N)|(Geopolitically sensitive place I)|(Geopolitically sensitive place S)|(Geopolitically sensitive place Y)|tariff|trade war|sanction|Brexit|tension|crisis)&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="n">geopolitical_keywords</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(?i)(war|conflict|geopolitical|military|tariff|trade war|sanction|Brexit|tension|crisis|invasion|nuclear)&#39;</span>
 
 <span class="c1"># Search keywords in news titles</span>
 <span class="n">df_news</span><span class="p">[</span><span class="s1">&#39;is_geopolitical&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_news</span><span class="p">[</span><span class="s1">&#39;news_title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">geopolitical_keywords</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>

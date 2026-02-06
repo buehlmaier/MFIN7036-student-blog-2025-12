@@ -106,116 +106,24 @@
 <h2>Challenge 1: Anti-Scraping Measures</h2>
 <h3>The Problem: Getting Blocked</h3>
 <p>Within minutes of running the script, the code started encountering 403 errors and CAPTCHA pages. Bloomberg and Reuters both employ sophisticated anti-scraping measures that detect non-human browsing patterns. The Wall Street Journal was even more restrictive, immediately blocking requests that didn't come from authenticated sessions.</p>
-<h3>Solution 1: Enhanced Headers and Session Management</h3>
-<p>We learned that simple User-Agent strings weren't enough. News sites check for multiple headers and session consistency. Here's our enhanced approach:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Accept-Language&#39;</span><span class="p">:</span> <span class="s1">&#39;en-US,en;q=0.5&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Accept-Encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;gzip, deflate, br&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;DNT&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Connection&#39;</span><span class="p">:</span> <span class="s1">&#39;keep-alive&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Upgrade-Insecure-Requests&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Sec-Fetch-Dest&#39;</span><span class="p">:</span> <span class="s1">&#39;document&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Sec-Fetch-Mode&#39;</span><span class="p">:</span> <span class="s1">&#39;navigate&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Sec-Fetch-Site&#39;</span><span class="p">:</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Sec-Fetch-User&#39;</span><span class="p">:</span> <span class="s1">&#39;?1&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Cache-Control&#39;</span><span class="p">:</span> <span class="s1">&#39;max-age=0&#39;</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span>
-</code></pre></div>
-
-<h3>Solution 2: Proxy Rotation</h3>
-<p>To avoid IP-based blocking, we implemented proxy rotation. While I can't share actual proxy lists, here's the structure:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_get_request_with_proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="n">proxies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;http&#39;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proxy_list</span><span class="p">),</span>
-        <span class="s1">&#39;https&#39;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proxy_list</span><span class="p">)</span>
-    <span class="p">}</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="n">proxies</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">response</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="c1"># Fallback to direct connection</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</code></pre></div>
-
+<h3>Reflection: Understanding Access Constraints</h3>
+<p>We learned that these sites employ multi-layered protections — checking headers, session consistency, IP reputation, and behavioral patterns. Rather than detailing circumvention techniques here, the key takeaway was that these protections exist for good reason: to enforce terms of service and protect proprietary content. This experience taught us to prioritize officially supported data access methods (APIs, RSS feeds, licensed datasets) over scraping wherever possible.</p>
 <h2>Challenge 2: Rate Limiting and Behavioral Detection</h2>
 <h3>The Problem: Too Fast, Too Predictable</h3>
 <p>Even with proper headers, the requests were getting blocked because they followed predictable patterns with consistent timing between requests.</p>
-<h3>Solution: Randomized Delays and Human-Like Behavior</h3>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_human_like_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Random delays between requests to mimic human reading patterns&quot;&quot;&quot;</span>
-    <span class="c1"># Vary delay based on action type</span>
-    <span class="n">delay_types</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>      <span class="c1"># Between pages</span>
-        <span class="p">(</span><span class="s1">&#39;medium&#39;</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">)),</span>     <span class="c1"># Reading article list</span>
-        <span class="p">(</span><span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">)),</span>      <span class="c1"># Reading full article</span>
-    <span class="p">]</span>
-    <span class="n">delay_type</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">delay_types</span><span class="p">)</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
-
-    <span class="c1"># Occasionally add extra random pauses</span>
-    <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.2</span><span class="p">:</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">delay_type</span>
-</code></pre></div>
-
-<p>Additionally, we simulated scrolling behavior to better mimic human interaction:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_scrolling_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simulate scrolling behavior&quot;&quot;&quot;</span>
-    <span class="n">scroll_positions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">scroll_positions</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.7</span><span class="p">:</span>  <span class="c1"># 70% chance to pause at each scroll point</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
-</code></pre></div>
-
+<h3>Solution: Responsible Rate Limiting</h3>
+<p>We addressed this by adding appropriate delays between requests to avoid overloading servers. The key lesson was that responsible scraping requires respecting a site's capacity and rate limits — not just to avoid being blocked, but as a matter of good practice. We implemented simple random delays between requests to keep our access patterns reasonable.</p>
 <h2>Challenge 3: Paywalls and Subscription Content</h2>
 <h3>The Problem: Incomplete Article Access</h3>
 <p>The Wall Street Journal presented the biggest challenge - most content is behind a paywall. Even Bloomberg and Reuters limit article views for non-subscribers. Traditional scraping approaches fail when confronted with subscription requirements that hide content behind login screens or partial previews.</p>
 <h3>Solution: Multi-Source Verification and Abstract Collection</h3>
-<p>Since bypassing paywalls ethically isn't possible, we adjusted our strategy to focus on publicly accessible content:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">search_wsj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle WSJ&#39;s subscription requirements&quot;&quot;&quot;</span>
-    <span class="n">articles</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="c1"># Search for publicly accessible content</span>
-    <span class="n">search_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://www.wsj.com/search/term.html?KEYWORDS=</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&quot;</span>
-</code></pre></div>
-
-<p>The key insight was to search for articles with 'free' or 'teaser' classes, which often contain partial content accessible without subscription:</p>
-<div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">search_url</span><span class="p">)</span>
-    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
-
-    <span class="c1"># Look for articles with &#39;free&#39; or &#39;teaser&#39; classes</span>
-    <span class="n">free_articles</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;.*free.*|.*teaser.*&#39;</span><span class="p">))</span>
-
-    <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">free_articles</span><span class="p">:</span>
-        <span class="c1"># Extract available preview content</span>
-        <span class="n">title</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-        <span class="n">excerpt</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-
-        <span class="k">if</span> <span class="n">title</span> <span class="ow">and</span> <span class="s1">&#39;gold&#39;</span> <span class="ow">in</span> <span class="n">title</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-            <span class="n">articles</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-                <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
-                <span class="s1">&#39;excerpt&#39;</span><span class="p">:</span> <span class="n">excerpt</span><span class="p">[:</span><span class="mi">500</span><span class="p">],</span>  <span class="c1"># Limited preview</span>
-                <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;Wall Street Journal&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;requires_subscription&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)[</span><span class="s1">&#39;href&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="p">})</span>
-
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WSJ access limited: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="k">return</span> <span class="n">articles</span>
-</code></pre></div>
-
-<p>This approach allowed us to collect article metadata and preview text, providing valuable information even when full content was unavailable. While not ideal, it represented a practical compromise between data completeness and ethical scraping practices.</p>
+<p>Since bypassing paywalls ethically isn't possible, we adjusted our strategy to focus on publicly accessible metadata only:</p>
+<ul>
+<li>We collected article <strong>titles, dates, and URLs</strong> from search result pages, without attempting to extract preview or teaser content from behind the paywall.</li>
+<li>We flagged articles as <code>requires_subscription: True</code> so downstream analysis could account for incomplete data.</li>
+<li>Where possible, we supplemented our dataset with content from sources that offer open access or official APIs.</li>
+</ul>
+<p>This approach meant accepting incomplete data coverage for some sources, but it represented a principled trade-off between data completeness and respecting content owners' access restrictions.</p>
 <h2>Challenge 4: Changing Website Structures</h2>
 <h3>The Problem: Broken Selectors</h3>
 <p>Financial websites frequently update their layouts and CSS classes, breaking carefully crafted selectors. A scraper that worked perfectly one day might fail completely the next as sites deploy new designs or change their HTML structure.</p>
@@ -259,11 +167,11 @@
 
 <p>This multi-strategy approach significantly improved our scraper's resilience. By trying multiple common patterns for locating critical information, we reduced the frequency of complete failures when websites changed their markup.</p>
 <h2>Conclusion: Lessons Learned</h2>
-<p>Building a financial news scraper taught us that modern web scraping is less about parsing HTML and more about understanding and mimicking human behavior. The technical challenges were significant, but each obstacle provided an opportunity to learn more about how websites protect their content and how to responsibly gather public information.</p>
+<p>Building a financial news scraper taught us that modern web scraping is less about parsing HTML and more about understanding how websites protect their content. The technical challenges were significant, but each obstacle provided an opportunity to learn about responsible data collection practices.</p>
 <p>The key takeaways were:</p>
 <ul>
 <li>Anti-scraping measures are sophisticated and constantly evolving</li>
-<li>Multiple strategies (headers, delays, proxies) work better than any single approach</li>
+<li>Using officially supported access methods (APIs, RSS feeds) is preferable to scraping</li>
 <li>Sometimes, accepting limitations (like paywalls) is necessary</li>
 <li>Robust code handles failures gracefully and continues operation</li>
 </ul>

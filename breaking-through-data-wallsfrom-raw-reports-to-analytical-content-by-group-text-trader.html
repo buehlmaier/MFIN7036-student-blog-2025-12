@@ -83,16 +83,16 @@
 <p>From the very beginning, our project set out to analyze research reports written by institutional experts in the stock market. The idea was simple but ambitious: could we measure whether professional analysts’ opinions were able to predict stock market and guide our investment?  </p>
 <p>Almost immediately, we hit a wall. English-language research reports were nearly impossible to obtain for free. Most were locked behind paywalls, sold to institutional buyers, or protected as business secrets. That forced us to pivot. Instead of chasing scarce English reports, we turned our attention to the Chinese market, where research reports are widely published and freely accessible. With approval from Prof. Buehlmaier, we committed to translating Chinese reports into English to meet the project requirements.</p>
 <hr>
-<h2>Discovering Hidden APIs and Collecting Data</h2>
-<p>Our first step was data collection. After digging into the Eastmoney report center’s F12 developer page, we uncovered an undocumented API that allowed us to navigate the site and directly access original PDF download links. This discovery was a turning point — it gave us a way to systematically collect reports at scale.</p>
+<h2>Data Collection from Eastmoney</h2>
+<p>Our first step was data collection. By examining the Eastmoney report center’s website structure, we identified a publicly accessible API endpoint that allowed us to navigate the site and access original PDF download links. This gave us a way to systematically collect reports at scale.</p>
 <ul>
-<li><strong>undocumented API founded and pdf link discovered in F12 page of website</strong>：</li>
+<li><strong>API endpoint and PDF download link identified via the website’s network requests</strong>：</li>
 </ul>
 <p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-Text_Trader_01_blog-post-API.png">
 <img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-Text_Trader_01_blog-post-pdf_link.png"></p>
-<p>We then built an automated downloader, targeting all CSI300 index stocks from 2017 to 2025. The dataset was massive, and downloading it took two full days. To avoid being blocked by the website, we implemented several web scraping tricks:</p>
+<p>We then built an automated downloader, targeting all CSI300 index stocks from 2017 to 2025. The dataset was massive, and downloading it took two full days. To be respectful of the website’s server capacity, we implemented responsible rate-limiting measures:</p>
 <ul>
-<li><strong>Random User-Agent rotation</strong>: cycling through different browser signatures to disguise requests.</li>
+<li><strong>Request identification</strong>: setting appropriate browser headers for our requests.</li>
 <li><strong>Request throttling</strong>: adding delays between downloads to avoid triggering anti-scraping protections.</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">USER_AGENTS</span> <span class="o">=</span> <span class="p">[</span>

@@ -3710,7 +3710,7 @@ more effectively than SVM's implicit kernel mapping.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;We mark the news headlines that contain specific keywords, so as for the geopolitical events:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;geopolitical_keywords&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sa"&gt;r&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;(?i)(war|conflict|(Geopolitically sensitive place U)|(Geopolitically sensitive place R)|(Geopolitically sensitive place N)|(Geopolitically sensitive place I)|(Geopolitically sensitive place S)|(Geopolitically sensitive place Y)|tariff|trade war|sanction|Brexit|tension|crisis)&amp;#39;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;geopolitical_keywords&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sa"&gt;r&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;(?i)(war|conflict|geopolitical|military|tariff|trade war|sanction|Brexit|tension|crisis|invasion|nuclear)&amp;#39;&lt;/span&gt;
 
 &lt;span class="c1"&gt;# Search keywords in news titles&lt;/span&gt;
 &lt;span class="n"&gt;df_news&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;is_geopolitical&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;df_news&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;news_title&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;str&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;contains&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;geopolitical_keywords&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;regex&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;na&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;astype&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -4379,21 +4379,20 @@ Calling LLM APIs for thousands of comments is slow and expensive. To mitigate th
 &lt;li&gt;Download the 10-year U.S. Treasury bond yield from Yahoo Finance (yhfinance).&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;2. API Call&lt;/h1&gt;
-&lt;p&gt;After extracting the text, we perform sentiment analysis on it. Long-text processing is one of the core advantages of Large Language Models (LLMs). However, each meeting minutes document contains a large volume of text (ranging from 50,000 to 80,000 characters), and the free quota provided by APIs of mainstream AI platforms is usually less than 2,000,000 characters, which can be exhausted quickly. In addition, the API call cost for services like ChatGPT is relatively high. Eventually, we selected the &lt;strong&gt;Spark Lite Model API&lt;/strong&gt; of the Spark Large Model, which offers free and unlimited access, so we adopted it for text analysis.&lt;/p&gt;
-&lt;p&gt;Before using this API, users must first obtain access credentials: register a real-name authenticated account on the &lt;a href="https://xinghuo.xfyun.cn/sparkapi"&gt;iFlytek Spark Large Model API platform&lt;/a&gt;, create a dedicated application, then select the Spark Lite model, where the token margin will show "Unlimited". Afterwards, obtain your own API key, which must be predefined before running the code, as indicated in the commented code below. For specific call configurations, refer to the Spark Lite documentation available on this platform, which includes Python call configuration examples.
-&lt;img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/TextWizards_02_sparkLite.png"&gt;
-The specific calling code is as follows:&lt;/p&gt;
+&lt;p&gt;After extracting the text, we perform sentiment analysis on it. Long-text processing is one of the core advantages of Large Language Models (LLMs). However, each meeting minutes document contains a large volume of text (ranging from 50,000 to 80,000 characters), and the free quota provided by APIs of mainstream AI platforms is usually less than 2,000,000 characters, which can be exhausted quickly. In addition, the API call cost for services like ChatGPT is relatively high. Eventually, we selected a &lt;strong&gt;free-tier LLM API&lt;/strong&gt; that offered sufficient quota for our analysis needs, and we adopted it for text analysis.&lt;/p&gt;
+&lt;p&gt;Before using such an API, users must first obtain access credentials by registering on the chosen LLM provider's platform, creating a dedicated application, and obtaining an API key. The API key must be predefined before running the code, as indicated in the commented code below.&lt;/p&gt;
+&lt;p&gt;The specific calling code is as follows:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# encoding:UTF-8&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;json&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;requests&lt;/span&gt;
-&lt;span class="c1"&gt;# Replace XXXXXXXXXXXX with your API key. &lt;/span&gt;
+&lt;span class="c1"&gt;# Replace with your API key. &lt;/span&gt;
 &lt;span class="n"&gt;api_key&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
-&lt;span class="n"&gt;url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;https://spark-api-open.xf-yun.com/v1/chat/completions&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;YOUR_LLM_API_ENDPOINT&amp;quot;&lt;/span&gt;
 &lt;span class="c1"&gt;# Call the model and output the result&lt;/span&gt;
 &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_answer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;message&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="c1"&gt;# Initialize request body&lt;/span&gt;
     &lt;span class="n"&gt;headers&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Authorization&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;api_key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;content-type&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;application/json&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
-    &lt;span class="n"&gt;body&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;model&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Lite&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;user&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;user_id&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;messages&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;message&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;stream&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;tools&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;type&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;web_search&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;web_search&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;enable&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;search_mode&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;deep&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}}]}&lt;/span&gt;
+    &lt;span class="n"&gt;body&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;model&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;MODEL_NAME&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;user&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;user_id&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;messages&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;message&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;stream&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
     &lt;span class="n"&gt;full_response&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;  &lt;span class="c1"&gt;# Store the returned result&lt;/span&gt;
     &lt;span class="n"&gt;isFirstContent&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;  &lt;span class="c1"&gt;# First frame flag&lt;/span&gt;
     &lt;span class="n"&gt;response&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;post&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;body&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;headers&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;headers&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;stream&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -4435,7 +4434,7 @@ The specific calling code is as follows:&lt;/p&gt;
     &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;  &lt;span class="c1"&gt;# Loop for conversation turns&lt;/span&gt;
         &lt;span class="n"&gt;Input&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;input&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Me:&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
         &lt;span class="n"&gt;question&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;checklen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;getText&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;chatHistory&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;user&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Input&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
-        &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Spark:&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;LLM:&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
         &lt;span class="n"&gt;getText&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;chatHistory&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;assistant&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;get_answer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;question&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -4475,7 +4474,7 @@ The specific calling code is as follows:&lt;/p&gt;
 
 &lt;h2&gt;3.2 Sentiment Scoring (Dovish/Hawkish)&lt;/h2&gt;
 &lt;p&gt;A complete &lt;strong&gt;batch sentiment analysis&lt;/strong&gt; workflow targets different sections of the FOMC meeting minutes by calling an API to score each paragraph for dovish and hawkish sentiment intensity and returns the results in a structured format. The &lt;strong&gt;scores range from 0 to 1&lt;/strong&gt;, where hawkish indicates hawkish strength (0 = no hawkishness, 1 = very hawkish) and dovish indicates dovish strength (0 = no dovishness, 1 = very dovish).&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;call_spark_api&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;call_llm_api&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="c1"&gt;# Construct a constrained prompt to force JSON-only output&lt;/span&gt;
     &lt;span class="n"&gt;prompt&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
 &lt;span class="s2"&gt;    Analyze the monetary policy stance of the following FOMC minutes paragraph.&lt;/span&gt;
@@ -4511,7 +4510,7 @@ The specific calling code is as follows:&lt;/p&gt;
     &lt;span class="n"&gt;sentiments&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
     &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;row&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;long_df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;iterrows&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
         &lt;span class="c1"&gt;# Call API for each paragraph&lt;/span&gt;
-        &lt;span class="n"&gt;sentiments&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;call_spark_api&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;row&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+        &lt;span class="n"&gt;sentiments&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;call_llm_api&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;row&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
         &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;API_DELAY&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     &lt;span class="c1"&gt;# Merge API results back into the DataFrame&lt;/span&gt;
     &lt;span class="n"&gt;sentiment_df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DataFrame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentiments&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -6006,65 +6005,18 @@ result which also returned 100 articles, we finally confirmed: &lt;strong&gt;Th
 &lt;h3&gt;2.1.3 Conclusions and Insights&lt;/h3&gt;
 &lt;p&gt;During this process of examining the data retrieval limits of the API, we had a vague sense that the path to obtaining complete data through this interface was not smooth. In fact, some team members had already begun turning to Google News scraping as an alternative solution. However, we still persisted in systematically verifying the reasons for the retrieval failure with code—this persistence itself is an important lesson we learned in the process: &lt;strong&gt;Sometimes the value of a problem lies not in being solved, but in being clearly identified and understood.&lt;/strong&gt; The significance of technical exploration lies not only in finding a feasible path but also in understanding why a certain path is not feasible.&lt;/p&gt;
 &lt;h2&gt;2.2 Source 2: Google News&lt;/h2&gt;
-&lt;p&gt;Building a web scraper to collect financial data from Google News presented a unique set of challenges, transforming a seemingly straightforward task into a complex exercise in stealth and system design. The goal was clear: programmatically gather news articles related to specific financial indices like the S&amp;amp;P 500 to analyze market sentiment. The reality, however, involved a constant battle against sophisticated anti-bot mechanisms. Text below post chronicles the key technical hurdles encountered and the iterative process of developing solutions.&lt;/p&gt;
-&lt;h3&gt;2.2.1 Strategies for dealing with Google's anti-scraping mechanisms&lt;/h3&gt;
-&lt;h4&gt;a. Disable automation features&lt;/h4&gt;
-&lt;p&gt;The fundamental principle of evading detection is to make the automated script indistinguishable from a human user. Google's systems are exceptionally adept at spotting the tell-tale signs of automation. My initial, naive attempt—using a standard Selenium-controlled browser—was immediately flagged. The journey to refinement began with masking these automated fingerprints.&lt;/p&gt;
-&lt;p&gt;The first and most crucial step was to configure the Chrome browser to hide its automated nature. This involved a multi-pronged approach within the browser options.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
-&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.chrome.options&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Options&lt;/span&gt;
-
-&lt;span class="n"&gt;chrome_options&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Options&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-
-&lt;span class="c1"&gt;# 1. Disable automation control features&lt;/span&gt;
-&lt;span class="n"&gt;chrome_options&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;--disable-blink-features=AutomationControlled&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="c1"&gt;# 2. Remove specific switches that indicate automation&lt;/span&gt;
-&lt;span class="n"&gt;chrome_options&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_experimental_option&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;excludeSwitches&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;enable-automation&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;enable-logging&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
-
-&lt;span class="c1"&gt;# 3. Disable the use of automation extensions&lt;/span&gt;
-&lt;span class="n"&gt;chrome_options&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_experimental_option&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;useAutomationExtension&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kc"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;driver&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Chrome&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;chrome_options&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;This code snippet effectively tells the browser not to advertise its true nature. Hiding these internal features is the equivalent of removing a "self-driving" placard from a car; from the outside, it looks like any other vehicle on the road.&lt;/p&gt;
-&lt;h4&gt;b. User Agent (UA) Pool Rotation&lt;/h4&gt;
-&lt;p&gt;Disabling automation flags is a good start, but it's not enough. The next layer of defense involves mimicking human behavior patterns. Two key tactics were employed: dynamic user agent rotation and strategic request timing.&lt;/p&gt;
-&lt;p&gt;A User Agent (UA) string identifies the browser and operating system to the web server. Using a single, static UA is a red flag for a bot. The solution was to implement a pool of common UAs and rotate them randomly for each session or task.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;random&lt;/span&gt;
-
-&lt;span class="n"&gt;user_agents&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-    &lt;span class="s2"&gt;&amp;quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="s2"&gt;&amp;quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="s2"&gt;&amp;quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="s2"&gt;&amp;quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15&amp;quot;&lt;/span&gt;
-&lt;span class="p"&gt;]&lt;/span&gt;
-
-&lt;span class="n"&gt;selected_ua&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;choice&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;user_agents&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;chrome_options&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;--user-agent=&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;selected_ua&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;h4&gt;c. Random delay&lt;/h4&gt;
-&lt;p&gt;Furthermore, a bot typically makes requests at machine-gun speed. Humans, on the other hand, browse with unpredictable pauses. Introducing random delays between requests was critical.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;time&lt;/span&gt;
-
-&lt;span class="n"&gt;DELAY_BETWEEN_REQUESTS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  &lt;span class="c1"&gt;# seconds&lt;/span&gt;
-
-&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;paced_request&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="c1"&gt;# ... code to navigate to a URL ...&lt;/span&gt;
-    &lt;span class="n"&gt;delay&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;uniform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;DELAY_BETWEEN_REQUESTS&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;delay&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;This simple yet effective method of adding a random wait time between 2 and 5 seconds significantly reduced the risk of triggering rate limits.&lt;/p&gt;
-&lt;h4&gt;d.Adjust the browser window&lt;/h4&gt;
-&lt;p&gt;Adjust the browser window size to a commonly used human dimension.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;chrome_options&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;--window-size=1920,1080&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;p&gt;Building a web scraper to collect financial data from Google News presented a unique set of challenges. The goal was clear: programmatically gather news articles related to specific financial indices like the S&amp;amp;P 500 to analyze market sentiment. The reality, however, involved navigating significant access restrictions. This section chronicles the key technical hurdles encountered and what we learned about responsible data collection.&lt;/p&gt;
+&lt;h3&gt;2.2.1 Dealing with Google's access restrictions&lt;/h3&gt;
+&lt;h4&gt;Reflection: Why automated access is difficult&lt;/h4&gt;
+&lt;p&gt;Google News employs sophisticated measures to detect and block automated access. Our initial attempts using Selenium-controlled browsers were quickly flagged. Through this process, we learned that Google's systems check for multiple signals including browser configuration, request patterns, and behavioral consistency.&lt;/p&gt;
+&lt;p&gt;Rather than providing a detailed guide to circumventing these protections, the key lessons were:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Automated scraping of Google services is against their Terms of Service.&lt;/strong&gt; We ultimately recognized this and shifted toward alternative data sources (see Section 2.3 below).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rate limiting matters.&lt;/strong&gt; Even when accessing sites that permit scraping, adding reasonable delays between requests (e.g., 2–5 seconds) is essential to avoid overloading servers.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Official APIs and data exports should always be the first choice.&lt;/strong&gt; The time spent working around access restrictions would have been better invested in finding legitimate data sources from the start.&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3&gt;2.2.2 Other issues&lt;/h3&gt;
-&lt;p&gt;Even with a well-disguised browser, technical problems specific to the target website can halt progress. Two significant issues were related to search query formatting and result pagination.&lt;/p&gt;
+&lt;p&gt;Beyond access restrictions, we also encountered technical problems specific to the target website. Two significant issues were related to search query formatting and result pagination.&lt;/p&gt;
 &lt;h4&gt;a.Issues encountered with search keywords&lt;/h4&gt;
 &lt;p&gt;When searching for "S&amp;amp;P 500", the ampersand (&amp;amp;) character is interpreted by the URL as a parameter separator. My initial script would only send "S" as the search term, completely breaking the functionality. The solution was to properly encode the search term before inserting it into the URL.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;urllib.parse&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;quote_plus&lt;/span&gt;
@@ -6603,116 +6555,24 @@ Before the preprocessing, we import the NLTK library, which provides essential t
 &lt;h2&gt;Challenge 1: Anti-Scraping Measures&lt;/h2&gt;
 &lt;h3&gt;The Problem: Getting Blocked&lt;/h3&gt;
 &lt;p&gt;Within minutes of running the script, the code started encountering 403 errors and CAPTCHA pages. Bloomberg and Reuters both employ sophisticated anti-scraping measures that detect non-human browsing patterns. The Wall Street Journal was even more restrictive, immediately blocking requests that didn't come from authenticated sessions.&lt;/p&gt;
-&lt;h3&gt;Solution 1: Enhanced Headers and Session Management&lt;/h3&gt;
-&lt;p&gt;We learned that simple User-Agent strings weren't enough. News sites check for multiple headers and session consistency. Here's our enhanced approach:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="fm"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;session&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Session&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-    &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;headers&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;User-Agent&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;Accept&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;Accept-Language&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;en-US,en;q=0.5&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;Accept-Encoding&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;gzip, deflate, br&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;DNT&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;Connection&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;keep-alive&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;Upgrade-Insecure-Requests&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;Sec-Fetch-Dest&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;document&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;Sec-Fetch-Mode&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;navigate&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;Sec-Fetch-Site&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;none&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;Sec-Fetch-User&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;?1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;Cache-Control&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;max-age=0&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="p"&gt;}&lt;/span&gt;
-    &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;session&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;headers&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;update&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;headers&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;h3&gt;Solution 2: Proxy Rotation&lt;/h3&gt;
-&lt;p&gt;To avoid IP-based blocking, we implemented proxy rotation. While I can't share actual proxy lists, here's the structure:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;_get_request_with_proxy&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="n"&gt;proxies&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;http&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;choice&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;proxy_list&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
-        &lt;span class="s1"&gt;&amp;#39;https&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;choice&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;proxy_list&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="p"&gt;}&lt;/span&gt;
-
-    &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-        &lt;span class="n"&gt;response&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;session&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;proxies&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;proxies&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;timeout&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;response&lt;/span&gt;
-    &lt;span class="k"&gt;except&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-        &lt;span class="c1"&gt;# Fallback to direct connection&lt;/span&gt;
-        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;session&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;timeout&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;h3&gt;Reflection: Understanding Access Constraints&lt;/h3&gt;
+&lt;p&gt;We learned that these sites employ multi-layered protections — checking headers, session consistency, IP reputation, and behavioral patterns. Rather than detailing circumvention techniques here, the key takeaway was that these protections exist for good reason: to enforce terms of service and protect proprietary content. This experience taught us to prioritize officially supported data access methods (APIs, RSS feeds, licensed datasets) over scraping wherever possible.&lt;/p&gt;
 &lt;h2&gt;Challenge 2: Rate Limiting and Behavioral Detection&lt;/h2&gt;
 &lt;h3&gt;The Problem: Too Fast, Too Predictable&lt;/h3&gt;
 &lt;p&gt;Even with proper headers, the requests were getting blocked because they followed predictable patterns with consistent timing between requests.&lt;/p&gt;
-&lt;h3&gt;Solution: Randomized Delays and Human-Like Behavior&lt;/h3&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;_human_like_delay&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Random delays between requests to mimic human reading patterns&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-    &lt;span class="c1"&gt;# Vary delay based on action type&lt;/span&gt;
-    &lt;span class="n"&gt;delay_types&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-        &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;short&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;uniform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;      &lt;span class="c1"&gt;# Between pages&lt;/span&gt;
-        &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;medium&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;uniform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;     &lt;span class="c1"&gt;# Reading article list&lt;/span&gt;
-        &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;long&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;uniform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;      &lt;span class="c1"&gt;# Reading full article&lt;/span&gt;
-    &lt;span class="p"&gt;]&lt;/span&gt;
-    &lt;span class="n"&gt;delay_type&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;delay&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;choice&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;delay_types&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;delay&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-    &lt;span class="c1"&gt;# Occasionally add extra random pauses&lt;/span&gt;
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mf"&gt;0.2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-        &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;uniform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
-
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;delay_type&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Additionally, we simulated scrolling behavior to better mimic human interaction:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;_scrolling_simulation&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Simulate scrolling behavior&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-    &lt;span class="n"&gt;scroll_positions&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;300&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;500&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;800&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1200&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;position&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;scroll_positions&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mf"&gt;0.7&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;  &lt;span class="c1"&gt;# 70% chance to pause at each scroll point&lt;/span&gt;
-            &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;uniform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;0.1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;h3&gt;Solution: Responsible Rate Limiting&lt;/h3&gt;
+&lt;p&gt;We addressed this by adding appropriate delays between requests to avoid overloading servers. The key lesson was that responsible scraping requires respecting a site's capacity and rate limits — not just to avoid being blocked, but as a matter of good practice. We implemented simple random delays between requests to keep our access patterns reasonable.&lt;/p&gt;
 &lt;h2&gt;Challenge 3: Paywalls and Subscription Content&lt;/h2&gt;
 &lt;h3&gt;The Problem: Incomplete Article Access&lt;/h3&gt;
 &lt;p&gt;The Wall Street Journal presented the biggest challenge - most content is behind a paywall. Even Bloomberg and Reuters limit article views for non-subscribers. Traditional scraping approaches fail when confronted with subscription requirements that hide content behind login screens or partial previews.&lt;/p&gt;
 &lt;h3&gt;Solution: Multi-Source Verification and Abstract Collection&lt;/h3&gt;
-&lt;p&gt;Since bypassing paywalls ethically isn't possible, we adjusted our strategy to focus on publicly accessible content:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;search_wsj&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Handle WSJ&amp;#39;s subscription requirements&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-    &lt;span class="n"&gt;articles&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
-
-    &lt;span class="c1"&gt;# Search for publicly accessible content&lt;/span&gt;
-    &lt;span class="n"&gt;search_url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;https://www.wsj.com/search/term.html?KEYWORDS=&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;keyword&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The key insight was to search for articles with 'free' or 'teaser' classes, which often contain partial content accessible without subscription:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="n"&gt;response&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;session&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;search_url&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="n"&gt;soup&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;BeautifulSoup&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;response&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;html.parser&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-    &lt;span class="c1"&gt;# Look for articles with &amp;#39;free&amp;#39; or &amp;#39;teaser&amp;#39; classes&lt;/span&gt;
-    &lt;span class="n"&gt;free_articles&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;soup&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_all&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;div&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;class_&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;re&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;compile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.*free.*|.*teaser.*&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
-
-    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;article&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;free_articles&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-        &lt;span class="c1"&gt;# Extract available preview content&lt;/span&gt;
-        &lt;span class="n"&gt;title&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;article&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;h2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;article&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;h2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;
-        &lt;span class="n"&gt;excerpt&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;article&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;p&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;article&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;p&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;
-
-        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;gold&amp;#39;&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lower&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
-            &lt;span class="n"&gt;articles&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
-                &lt;span class="s1"&gt;&amp;#39;title&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                &lt;span class="s1"&gt;&amp;#39;excerpt&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;excerpt&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="mi"&gt;500&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;  &lt;span class="c1"&gt;# Limited preview&lt;/span&gt;
-                &lt;span class="s1"&gt;&amp;#39;source&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Wall Street Journal&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                &lt;span class="s1"&gt;&amp;#39;requires_subscription&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                &lt;span class="s1"&gt;&amp;#39;url&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;article&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;a&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;href&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;article&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;a&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;
-            &lt;span class="p"&gt;})&lt;/span&gt;
-
-&lt;span class="k"&gt;except&lt;/span&gt; &lt;span class="ne"&gt;Exception&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;WSJ access limited: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;articles&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;This approach allowed us to collect article metadata and preview text, providing valuable information even when full content was unavailable. While not ideal, it represented a practical compromise between data completeness and ethical scraping practices.&lt;/p&gt;
+&lt;p&gt;Since bypassing paywalls ethically isn't possible, we adjusted our strategy to focus on publicly accessible metadata only:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;We collected article &lt;strong&gt;titles, dates, and URLs&lt;/strong&gt; from search result pages, without attempting to extract preview or teaser content from behind the paywall.&lt;/li&gt;
+&lt;li&gt;We flagged articles as &lt;code&gt;requires_subscription: True&lt;/code&gt; so downstream analysis could account for incomplete data.&lt;/li&gt;
+&lt;li&gt;Where possible, we supplemented our dataset with content from sources that offer open access or official APIs.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This approach meant accepting incomplete data coverage for some sources, but it represented a principled trade-off between data completeness and respecting content owners' access restrictions.&lt;/p&gt;
 &lt;h2&gt;Challenge 4: Changing Website Structures&lt;/h2&gt;
 &lt;h3&gt;The Problem: Broken Selectors&lt;/h3&gt;
 &lt;p&gt;Financial websites frequently update their layouts and CSS classes, breaking carefully crafted selectors. A scraper that worked perfectly one day might fail completely the next as sites deploy new designs or change their HTML structure.&lt;/p&gt;
@@ -6756,11 +6616,11 @@ Before the preprocessing, we import the NLTK library, which provides essential t
 
 &lt;p&gt;This multi-strategy approach significantly improved our scraper's resilience. By trying multiple common patterns for locating critical information, we reduced the frequency of complete failures when websites changed their markup.&lt;/p&gt;
 &lt;h2&gt;Conclusion: Lessons Learned&lt;/h2&gt;
-&lt;p&gt;Building a financial news scraper taught us that modern web scraping is less about parsing HTML and more about understanding and mimicking human behavior. The technical challenges were significant, but each obstacle provided an opportunity to learn more about how websites protect their content and how to responsibly gather public information.&lt;/p&gt;
+&lt;p&gt;Building a financial news scraper taught us that modern web scraping is less about parsing HTML and more about understanding how websites protect their content. The technical challenges were significant, but each obstacle provided an opportunity to learn about responsible data collection practices.&lt;/p&gt;
 &lt;p&gt;The key takeaways were:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Anti-scraping measures are sophisticated and constantly evolving&lt;/li&gt;
-&lt;li&gt;Multiple strategies (headers, delays, proxies) work better than any single approach&lt;/li&gt;
+&lt;li&gt;Using officially supported access methods (APIs, RSS feeds) is preferable to scraping&lt;/li&gt;
 &lt;li&gt;Sometimes, accepting limitations (like paywalls) is necessary&lt;/li&gt;
 &lt;li&gt;Robust code handles failures gracefully and continues operation&lt;/li&gt;
 &lt;/ul&gt;
@@ -7827,7 +7687,7 @@ The trusted light for your financial journey&lt;/p&gt;
 &lt;/ol&gt;
 &lt;p&gt;Thus, we may need to upgrade our code to further cleaning the text data and screen out the unnecessary.&lt;/p&gt;
 &lt;h1&gt;Text sentiment analysis&lt;/h1&gt;
-&lt;p&gt;After extracting the text from web links via BeautifulSoup, we perform sentiment analysis on the text. Long-text processing is a key strength of large language models (LLMs). However, since each meeting minutes document contains a large volume of text—ranging from 50,000 to 80,000 characters—the free quota provided by major AI platforms' APIs is generally less than 2,000,000 characters, which can be exhausted quickly. Additionally, API calls for services like ChatGPT come with relatively high costs. Eventually, we identified the &lt;strong&gt;Spark Lite model API&lt;/strong&gt; of the Spark Large Model, which offers free and unlimited access, and we adopted it for text analysis.&lt;/p&gt;
+&lt;p&gt;After extracting the text from web links via BeautifulSoup, we perform sentiment analysis on the text. Long-text processing is a key strength of large language models (LLMs). However, since each meeting minutes document contains a large volume of text—ranging from 50,000 to 80,000 characters—the free quota provided by major AI platforms' APIs is generally less than 2,000,000 characters, which can be exhausted quickly. Additionally, API calls for services like ChatGPT come with relatively high costs. Eventually, we identified a &lt;strong&gt;free-tier LLM API&lt;/strong&gt; that offered sufficient quota for our analysis needs, and we adopted it for text analysis.&lt;/p&gt;
 &lt;p&gt;The invocation method and text prompts for it are provided in the following code:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;requests&lt;/span&gt;
 
@@ -7835,17 +7695,17 @@ The trusted light for your financial journey&lt;/p&gt;
 
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;re&lt;/span&gt;
 
-&lt;span class="c1"&gt;# Please define SPARK_API_KEY and SPARK_URL before using&lt;/span&gt;
+&lt;span class="c1"&gt;# Please define API_KEY and API_URL before using&lt;/span&gt;
 
-&lt;span class="c1"&gt;# SPARK_API_KEY = &amp;quot;Your Spark API Key&amp;quot;&lt;/span&gt;
+&lt;span class="c1"&gt;# API_KEY = &amp;quot;Your LLM API Key&amp;quot;&lt;/span&gt;
 
-&lt;span class="c1"&gt;# SPARK_URL = &amp;quot;Spark API Endpoint URL&amp;quot; &lt;/span&gt;
+&lt;span class="c1"&gt;# API_URL = &amp;quot;LLM API Endpoint URL&amp;quot; &lt;/span&gt;
 
-&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;analyze_fomc_with_spark&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text_content&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;analyze_fomc_with_llm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text_content&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
 
 &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
 
-&lt;span class="sd"&gt;Call Spark API to analyze Federal Reserve FOMC meeting minutes text&lt;/span&gt;
+&lt;span class="sd"&gt;Call LLM API to analyze Federal Reserve FOMC meeting minutes text&lt;/span&gt;
 
 &lt;span class="sd"&gt;:param text_content: FOMC meeting minutes text content&lt;/span&gt;
 
@@ -7883,7 +7743,7 @@ The trusted light for your financial journey&lt;/p&gt;
 
 &lt;span class="n"&gt;headers&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
 
-&lt;span class="s1"&gt;&amp;#39;Authorization&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;SPARK_API_KEY&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;Authorization&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;API_KEY&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
 
 &lt;span class="s1"&gt;&amp;#39;Content-Type&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;application/json&amp;quot;&lt;/span&gt;
 
@@ -7911,7 +7771,7 @@ The trusted light for your financial journey&lt;/p&gt;
 
 &lt;span class="n"&gt;response&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;post&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
 
-&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;SPARK_URL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;API_URL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
 
 &lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;body&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
 

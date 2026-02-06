@@ -90,7 +90,7 @@
 <p>I used the curl_cffi library. Unlike standard requests, curl_cffi allows for impersonation of a real browser's TLS handshake, which is essential for passing modern anti-bot checks.</p>
 <h3>The Cookie "Clean" Trick</h3>
 <p>I also implemented a clean_val function to strip non-ASCII characters from raw browser cookies, ensuring the headers remained valid for the HTTP request.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">curl_cffi</span> <span class="kn">import</span> <span class="n">requests</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">curl_cffi</span> <span class="kn">import</span> <span class="n">requests</span>
 
 <span class="k">def</span> <span class="nf">clean_val</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
     <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">)</span>
@@ -110,7 +110,7 @@
 <h3>The Solution: Dynamic Jumping &amp; Stuck Detection</h3>
 <p><strong>Dynamic Leap:</strong> My script calculates the distance between the current data's timestamp and the target date. For years after 2020 (high-volume era), it jumps by 3.4 million IDs per month. For earlier, quieter years, it scales down to 1 million IDs.</p>
 <p><strong>Oscillation Detection:</strong> I added a stuck_count tracker. If the script detects it is receiving the same top_id multiple times, it forces a larger "emergency jump" to break the loop.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">ts</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="n">year</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="n">ts</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="n">year</span><span class="p">:</span>
     <span class="n">m_diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="n">year</span><span class="p">)</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">month</span> <span class="o">-</span> <span class="n">month</span><span class="p">)</span>
     <span class="c1"># Post-2020 data is much denser</span>
     <span class="n">jump</span> <span class="o">=</span> <span class="mi">3400000</span> <span class="o">*</span> <span class="n">m_diff</span> <span class="k">if</span> <span class="n">ts</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="mi">2020</span> <span class="k">else</span> <span class="mi">1000000</span> <span class="o">*</span> <span class="n">m_diff</span>
@@ -123,7 +123,7 @@
 
 <h2>3 Data Cleaning: Handling Tags</h2>
 <p>StockTwits text data contains numerous financial asset tags. Some data entries consist almost entirely of tags without substantial content. Initially, we considered removing all tag labels. However, since tags may contribute to the meaning of a sentence, directly deleting them could alter the original semantics. Therefore, we used regular expressions to identify tags and calculated their ratio to the total word count in the text. Data entries with excessively high tag ratios were filtered out.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_tag_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_tag_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">0</span>
 
@@ -154,7 +154,7 @@
 <p><strong>Market Indices ($SPX):</strong> The $SPX data displayed significantly higher noise levels, containing a larger volume of retail "hype" and generic market tags compared to the commodity-linked assets.</p>
 </li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="n">my_stopwords</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">STOPWORDS</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">my_stopwords</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">STOPWORDS</span><span class="p">)</span>
 <span class="n">my_stopwords</span><span class="o">.</span><span class="n">update</span><span class="p">([</span><span class="s1">&#39;http&#39;</span><span class="p">,</span> <span class="s1">&#39;https&#39;</span><span class="p">,</span> <span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">,</span> <span class="s1">&#39;now&#39;</span><span class="p">,</span> <span class="s1">&#39;today&#39;</span><span class="p">,</span> <span class="s1">&#39;stock&#39;</span><span class="p">,</span> <span class="s1">&#39;market&#39;</span><span class="p">,</span> <span class="s1">&#39;will&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;week&#39;</span><span class="p">])</span>
 
 <span class="n">wc</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span>
@@ -180,7 +180,7 @@
 </li>
 </ul>
 <p>Each asset configuration includes:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
     <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;S&amp;P 500 Index&quot;</span><span class="p">,</span>
     <span class="s2">&quot;keywords&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;SP500&quot;</span><span class="p">,</span> <span class="s2">&quot;SPX&quot;</span><span class="p">,</span> <span class="s2">&quot;Standard Poors 500&quot;</span><span class="p">,</span> <span class="s2">&quot;S and P 500&quot;</span><span class="p">],</span>
     <span class="s2">&quot;ticker&quot;</span><span class="p">:</span> <span class="s2">&quot;$SPX&quot;</span><span class="p">,</span>  <span class="c1"># StockTwits format code</span>
@@ -200,7 +200,7 @@
 <p><strong>Intelligent Date Processing:</strong> Automatic calculation of start and end dates for each month</p>
 </li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">FinancialAssetsDownloader</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">FinancialAssetsDownloader</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assets_config</span> <span class="o">=</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start_year</span> <span class="o">=</span> <span class="mi">2017</span>
@@ -210,7 +210,7 @@
 
 <h3>Monthly Data Download Process</h3>
 <p>The workflow follows a structured cycle: Iterate through each month from 2017 to 2024 → Call GDELT API to retrieve news data → Add asset metadata (asset ID, name, type, etc.) → Save monthly CSV files → Consolidate all monthly data</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">download_asset_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_id</span><span class="p">,</span> <span class="n">asset_config</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">download_asset_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_id</span><span class="p">,</span> <span class="n">asset_config</span><span class="p">):</span>
     <span class="n">asset_name</span> <span class="o">=</span> <span class="n">asset_config</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
     <span class="n">keywords</span> <span class="o">=</span> <span class="n">asset_config</span><span class="p">[</span><span class="s2">&quot;keywords&quot;</span><span class="p">]</span>
 
@@ -243,7 +243,7 @@
 <h2>3 Key Technical Implementations</h2>
 <h3>3.1 Anti-Scraping Strategy</h3>
 <p>To ensure stable and sustainable access to the GDELT API while respecting server resources, we implemented a comprehensive anti-scraping strategy featuring intelligent delay mechanisms.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Random delay settings</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Random delay settings</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">min_delay</span> <span class="o">=</span> <span class="mf">2.0</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">max_delay</span> <span class="o">=</span> <span class="mf">4.0</span>
 
@@ -260,7 +260,7 @@
 <p>The longer delays between assets (8-15 seconds) provide breathing room for both our system and GDELT's servers, particularly important when downloading multiple years of data across multiple assets.</p>
 <h3>3.2 GDELT API Integration</h3>
 <p>The core of our data collection system leverages the official gdeltdoc Python library, which provides a streamlined interface to GDELT's Article Search API.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">gdeltdoc</span> <span class="kn">import</span> <span class="n">GdeltDoc</span><span class="p">,</span> <span class="n">Filters</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">gdeltdoc</span> <span class="kn">import</span> <span class="n">GdeltDoc</span><span class="p">,</span> <span class="n">Filters</span>
 
 <span class="n">f</span> <span class="o">=</span> <span class="n">Filters</span><span class="p">(</span>
     <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
@@ -278,7 +278,7 @@
 <h2>1 Data Preparation Workflow</h2>
 <p>Our portfolio optimization framework uses a three-layer hierarchical structure. In addition to the sentiment data generated, a standard price metric dataset is fetched with the yfinance package. The price data is first cleaned with simple backward fill and interpolation provided by pandas. Then it goes through a general function calculating selected input features: opening price of the month, closing price of the month, volatility, sharpe ratio, sortino ratio, maximum drawdown and calmar ratio.</p>
 <p>These features are very different from time series prediction features used in price prediction as they lean towards the performance of the asset more than price information. However, it is definitely worth trying to feed regular price related factors like volume factors, price change factors, technical factors etc. But as the objective of the project is to focus on NLP these potential improvements are not implemented. A correlation matrix is also calculated and appended to the input feature vector. A code example is given as below to demonstrate the general workflow of price data, note that basic operations like loops, replace invalid entries and error handling are omitted:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">metrics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">metrics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 
 <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;Month_First_Close&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
@@ -309,7 +309,7 @@
 <p>With the complete preparation of data, the main training logic is implemented with the gymnasium package, which allows custom environment creation through inheriting the base gym.Env. The base class requires implementation of <strong>init</strong>, reset and step methods to work properly as a training environment for agents.</p>
 <h3>2.1 Environment Initialization (<strong>init</strong> Method)</h3>
 <p>In the base RL model CustomPortfolioEnv class, the init function mainly serves to creation of observation space and action space. For base NLP agents the observation space is constructed with sentiment data and for the base Metrics agents the observation space is constructed with previously calculated price features. The action space is continuous, representing the portfolio weights for each asset. These weights must sum to 1 and be non-negative (no leverage, no short-selling), aligning with standard portfolio constraints. A continuous action space allows for precise adjustments, unlike discrete actions which would limit flexibility in allocation.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CustomPortfolioEnv</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">CustomPortfolioEnv</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
 <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">price_dir</span><span class="o">=</span><span class="s2">&quot;metrics_used_6assets/price&quot;</span><span class="p">,</span> <span class="n">metrics_dir</span><span class="o">=</span><span class="s2">&quot;organized_6assets/observation/metrics&quot;</span><span class="p">):</span>
     <span class="o">...</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">EXPECTED_OBS_SIZE</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
@@ -319,7 +319,7 @@
 
 <h3>2.2 Core Training Logic (reset &amp; step Methods)</h3>
 <p>The reset method is trivial, used to reset the environment to original state. While the step method is the key to reinforcement giving the logic of each training step for the agent. It takes in action as a input and normalize it to a total of 1 to align with portfolio constraint, then calculate equivalent portfolio value from it.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CustomPortfolioEnv</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">CustomPortfolioEnv</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
 <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
     <span class="o">...</span>
     <span class="n">action_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>

@@ -161,7 +161,7 @@ The trusted light for your financial journey</p>
 </ol>
 <h4>4.1.1 FED FOMC meeting minutes</h4>
 <p>To scrape FOMC meeting minutes, we first found two useful APIs on <a href="https://www.federalreserve.gov/monetarypolicy/materials/">Fed website</a>, which return all the links we need, and we downloaded them as <a href="https://www.federalreserve.gov/monetarypolicy/materials/assets/final-hist.json"><code>final-hist.json</code></a> and <a href="https://www.federalreserve.gov/monetarypolicy/materials/assets/final-recent.json"><code>final-recent.json</code></a>. Then we extracted all the FOMC minutes related URLs and used Python's <code>requests</code> library to fetch the HTML content of the Federal Reserve's website, and then used <code>BeautifulSoup</code> to parse the HTML and extract the relevant text data. Below is a sample code snippet that demonstrates how to achieve this:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
 
@@ -205,7 +205,7 @@ The trusted light for your financial journey</p>
     <span class="k">return</span> <span class="n">res</span>
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 
 <span class="k">def</span> <span class="nf">get_minutes_text</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
@@ -219,7 +219,7 @@ The trusted light for your financial journey</p>
 
 <h4>4.1.2 ECB monetary policy meeting minutes</h4>
 <p>To collect the ECB meeting minutes, we faced a different challenge: the ECB's meeting accounts page relies on dynamic content that is not easily accessible via static HTTP requests. To solve this, we used <strong>Selenium</strong> with a headless Chrome browser to simulate a real user and wait for the JavaScript to render the meeting list. Once the list was loaded, we filtered for URLs containing the <code>/press/accounts/</code> pattern. For each identified URL, we then utilized <code>BeautifulSoup</code> to parse and extract the meeting text from the relevant HTML elements.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 
 <span class="k">def</span> <span class="nf">get_all_meeting_urls_selenium</span><span class="p">():</span>
@@ -237,7 +237,7 @@ The trusted light for your financial journey</p>
             <span class="o">...</span>
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">download_meeting</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">meeting_title</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">download_meeting</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">meeting_title</span><span class="p">):</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
     <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
 
@@ -250,7 +250,7 @@ The trusted light for your financial journey</p>
 
 <h4>4.1.3 US stock market data</h4>
 <p>To capture the historical performance and volatility of the US market, we utilized the <code>yfinance</code> library to retrieve daily closing prices for several key benchmarks starting from 1993. Our selection includes the S&amp;P 500 (<code>^GSPC</code>) for large-cap stocks, the S&amp;P 400 (<code>^SP400</code>) for mid-cap, and the Russell 2000 (<code>^RUT</code>) for small-cap equities. Additionally, we gathered data for the VIX (<code>^VIX</code>) to serve as our primary measure of US market fear and volatility.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">yfinance</span> <span class="k">as</span> <span class="nn">yf</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">yfinance</span> <span class="k">as</span> <span class="nn">yf</span>
 
 <span class="c1"># Indices: S&amp;P 500, S&amp;P 400 MidCap, Russell 2000, VIX</span>
 <span class="n">tickers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;^GSPC&#39;</span><span class="p">,</span> <span class="s1">&#39;^SP400&#39;</span><span class="p">,</span> <span class="s1">&#39;^RUT&#39;</span><span class="p">,</span> <span class="s1">&#39;^VIX&#39;</span><span class="p">]</span>
@@ -265,7 +265,7 @@ The trusted light for your financial journey</p>
 <p>For the European market, we adopted a similar approach by gathering ETF data that represents different market capitalization segments. We focused on the Vanguard FTSE Europe ETF (<code>VGK</code>) for large-cap, iShares MSCI Europe Small-Cap ETF (<code>IEUS</code>) for mid-cap exposure, and the WisdomTree Europe SmallCap Dividend Fund (<code>DFE</code>) for small-cap stocks.</p>
 <p>Regarding volatility, our measure of choice is the EURO STOXX 50 Volatility Index (VSTOXX). The ETF data was retrieved via <code>yfinance</code>, while the VSTOXX index measures the market's expectation of 30-day volatility of the EURO STOXX 50 index, derived from the prices of EURO STOXX 50 options.</p>
 <p>The VSTOXX data was directly downloaded from the <a href="https://www.stoxx.com/data-index-details?symbol=V2TX">STOXX website</a>. This is one of the observations we made during the process: US data is more readily available through APIs like <code>yfinance</code>, while European data often requires accessing specific financial websites or databases.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Market cap-weighted European ETF portfolio</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Market cap-weighted European ETF portfolio</span>
 <span class="n">etf_portfolio</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;Large_Cap_ETF&#39;</span><span class="p">:</span> <span class="s1">&#39;VGK&#39;</span><span class="p">,</span>
     <span class="s1">&#39;Mid_Cap_ETF&#39;</span><span class="p">:</span> <span class="s1">&#39;IEUS&#39;</span><span class="p">,</span>

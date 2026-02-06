@@ -87,7 +87,7 @@
 <p><strong>Reflection</strong> At the beginning I thought these “official-sounding” parts were necessary for the document’s formality. But after reading and comparing many different Minutes releases side by side, I realized they’re basically just fixed scaffolding for meeting records — kind of like the procedural “minutes of the meeting” formalities you see in any board meeting summary. They don’t really connect to actual policy thinking. If you don’t remove them systematically, models spend all their attention on these repetitive patterns, and the real language that shows hawkish vs dovish differences gets drowned out. That was the moment it really hit me: <strong>cleaning strength has to match what the document is actually for</strong>. Minutes are internal records — procedural stuff takes up most of the space. Without aggressive, targeted removal, the important signals simply can’t get through.</p>
 <p><strong>Solution and Validation</strong> We built a multi-category, wide-coverage boilerplate dictionary (more than 10 major categories, hundreds of carefully tuned regular expressions) to systematically wipe out those procedural parts. The cleaning is quite aggressive — usually keeping only 40–50% of the original length. After this, the focus of analysis shifted sharply to participants’ views, economic divergences, risk assessments, and so on. Themes became much clearer, and downstream classification performance improved noticeably. This step confirmed what I had started to suspect: <strong>targeted heavy removal works far better than just trying to “clean deeply” in a generic way</strong>.</p>
 <p>Code Example: Minutes boilerplate dictionary (partial)</p>
-<div class="codehilite"><pre><span></span><code> MINUTES_BOILERPLATE = {
+<div class="highlight"><pre><span></span><code> MINUTES_BOILERPLATE = {
     &quot;titles&quot;: [
         r&quot;Review of Monetary Policy Strategy, Tools, and Communications&quot;,
         r&quot;Staff Review of the Economic Situation&quot;,
@@ -115,7 +115,7 @@
 </code></pre></div>
 
 <p>Cleaning function call (broad removal)</p>
-<div class="codehilite"><pre><span></span><code> for patterns in MINUTES_BOILERPLATE.values():
+<div class="highlight"><pre><span></span><code> for patterns in MINUTES_BOILERPLATE.values():
     for pattern in patterns:
         text = re.sub(pattern, &#39;&#39;, text, flags=re.I | re.DOTALL)
 </code></pre></div>
@@ -125,7 +125,7 @@
 <p><strong>Reflection</strong> I originally tried to use one single cleaning approach for both, but I quickly saw that the information density and value distribution are completely different between the two types. Minutes are internal records — you can cut procedural content aggressively. Statements are public statements — every sentence has been weighed carefully. <strong>Chasing “maximum cleanliness” can actually destroy the core value</strong>. That made me ask myself: where should the cleaning stop? We have the technical ability to delete much more, but if we remove the most important “how it’s said,” we’re defeating the whole purpose. The real difficulty isn’t “how much can we delete?” — it’s “what absolutely has to stay?”</p>
 <p><strong>Solution and Validation</strong> We created a lean, highly targeted boilerplate library (only 8 small categories), focusing on fixed opening sentences, mandate restatements, risk assessments, forward guidance commitments, etc. Removal is kept conservative — typically keeping 30–60% or more of the original text. As a result, the core tonal shifts and policy intent were fully preserved, and stance classification accuracy came back strong. This experience really drove home the point: <strong>in high-density documents, restraint is more important than aggressive cleaning.</strong></p>
 <p>Code Example: Statement boilerplate dictionary (partial)</p>
-<div class="codehilite"><pre><span></span><code> STATEMENT_BOILERPLATE = {
+<div class="highlight"><pre><span></span><code> STATEMENT_BOILERPLATE = {
     &quot;opening_summary&quot;: [
         r&quot;information received since the federal open market committee met in&quot;,
         r&quot;information received since the committee met&quot;,
@@ -143,7 +143,7 @@
 </code></pre></div>
 
 <p>Cleaning function call (precise, limited removal)</p>
-<div class="codehilite"><pre><span></span><code> for patterns in STATEMENT_BOILERPLATE.values():
+<div class="highlight"><pre><span></span><code> for patterns in STATEMENT_BOILERPLATE.values():
     for pattern in patterns:
         text = re.sub(pattern, &#39;&#39;, text, flags=re.I | re.DOTALL)
 </code></pre></div>
@@ -170,7 +170,7 @@ Looking ahead, we might try using LLMs to help generate boilerplate patterns and
 <p>After data preprocessing, we focused on feature extraction from FOMC statements and meeting minutes. Quantitative text-based features were constructed using dictionary-based measures, TF-IDF representations, and embedding to capture economic stance, as well as lexical and semantic information, for downstream prediction tasks.</p>
 <h2>Dictionary-Based Approach</h2>
 <p>For this part, we constructed several dictionaries to capture economically meaningful signals in FOMC communications, including hawkish–dovish, uncertainty, inflation focus and labor focus. As there has been no standardized framework for constructing such dictionaries, we relied on prior literature, official documents, and economic intuition to guide the dictionary design. Among the dictionaries, we deemed the hawkish–dovish dictionaries as the most central, as they directly reflect the monetary policy stance relevant for interest rate decisions. We first constructed the hawkish–dovish dictionaries based on single words, but then realized that complex multi-word expressions can be of great importance to deciphering hawkish or dovish signals, as texts might contain confusing expressions such as ‘rise of unemployment rate’, in which ‘rise’ is believed by some literature to display a hawkish stance, while the whole expression often leans more to the dovish side. Therefore, in the following program we chose to add a second layer to our dictionary structure: phrase-level matching is applied first, followed by word-level counting, to better capture nuanced policy signals.</p>
-<div class="codehilite"><pre><span></span><code>    def mask_phrases(text, phrases):
+<div class="highlight"><pre><span></span><code>    def mask_phrases(text, phrases):
         masked = text
         for p in phrases:
             pattern = re.escape(p)
@@ -211,7 +211,7 @@ Looking ahead, we might try using LLMs to help generate boilerplate patterns and
 <p>To our surprise, some features from the two documents showed specific diverge in their levels and trends. For example, statements have displayed much larger fluctuations and more extreme stances than minutes over the past fifteen years. We believe this may be due to the fact that statements are intentionally brief and designed to send clear signals to markets, which may encourage stronger language. In contrast, minutes summarize a wide range of internal discussions, leading to more measured and stable textual signals. This difference gave us a better understanding of how the purpose of a document shapes the language used in monetary policy communication, and how it affects our interpretation.</p>
 <h2>TF-IDF</h2>
 <p>In addition to dictionary-based features, we used TF-IDF to capture terms and phrases that are informative but cannot be explicitly encoded in predefined dictionaries. By doing so, we aim to further highlight important language patterns in FOMC communications in a more flexible, data-driven way. Due to the small sample size, we paid high awareness to the parameters in order to control dimensionality and reduce noise, with the parameters showcasing our trade-off between capturing meaningful variation in language and maintaining model stability.</p>
-<div class="codehilite"><pre><span></span><code>    def build_tfidf_features(
+<div class="highlight"><pre><span></span><code>    def build_tfidf_features(
         texts,
         ngram_range=(1, 2),
         min_df=2,
@@ -240,27 +240,27 @@ Looking ahead, we might try using LLMs to help generate boilerplate patterns and
 <p>The results revealed both key policy concepts and actionable measures, providing a strong feature foundation for predicting the next FOMC policy decision. They also strongly validated the effectiveness of our data preprocessing and dictionary-based approach. We were able to acquire insights from these results, so that we could improve our preprocessing methods and dictionary construction.</p>
 <h2>Text similarity: TF–IDF and embedding</h2>
 <p>To further understand how FOMC communication evolves over time, we constructed text similarity measures using both TF-IDF and embedding. TF-IDF results were used to capture lexical overlap, reflecting how much wording and phrasing is reused across documents. In parallel, we also applied a pre-trained MiniLM variant to compute embedding-based similarity, which captures semantic similarity even when exact words differ. The motivation behind using both measures was to distinguish changes in surface language from deeper shifts in meaning.</p>
-<div class="codehilite"><pre><span></span><code>    def similarity_tfidf(texts, tfidf_matrix):
-    similarity_tfidf = [np.nan] 
-    for i in range(1, tfidf_matrix.shape[0]):
-        sim = cosine_similarity(tfidf_matrix[i], tfidf_matrix[i-1])[0, 0]
-        similarity_tfidf.append(sim)
-    return similarity_tfidf
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">similarity_tfidf</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span><span class="w"> </span><span class="n">tfidf_matrix</span><span class="p">)</span><span class="err">:</span>
+<span class="w">    </span><span class="n">similarity_tfidf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">np.nan</span><span class="o">]</span><span class="w"> </span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">tfidf_matrix</span><span class="p">.</span><span class="n">shape</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="p">)</span><span class="err">:</span>
+<span class="w">        </span><span class="n">sim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cosine_similarity</span><span class="p">(</span><span class="n">tfidf_matrix</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">tfidf_matrix</span><span class="o">[</span><span class="n">i-1</span><span class="o">]</span><span class="p">)</span><span class="o">[</span><span class="n">0, 0</span><span class="o">]</span>
+<span class="w">        </span><span class="n">similarity_tfidf</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">similarity_tfidf</span>
 
-    def similarity_embedding(texts):
-    model = SentenceTransformer(&quot;all-MiniLM-L6-v2&quot;)
-    texts = texts.tolist()
-    embeddings = model.encode(
-        texts,
-        show_progress_bar=True,
-        normalize_embeddings=True
-    )
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">similarity_embedding</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span><span class="err">:</span>
+<span class="w">    </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SentenceTransformer</span><span class="p">(</span><span class="ss">&quot;all-MiniLM-L6-v2&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">texts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">texts</span><span class="p">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="w">    </span><span class="n">embeddings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span>
+<span class="w">        </span><span class="n">texts</span><span class="p">,</span>
+<span class="w">        </span><span class="n">show_progress_bar</span><span class="o">=</span><span class="k">True</span><span class="p">,</span>
+<span class="w">        </span><span class="n">normalize_embeddings</span><span class="o">=</span><span class="k">True</span>
+<span class="w">    </span><span class="p">)</span>
 
-    similarity_embedding = [np.nan]
-    for i in range(1, len(embeddings)):
-        sim = np.dot(embeddings[i], embeddings[i-1])
-        similarity_embedding.append(sim)
-    return similarity_embedding
+<span class="w">    </span><span class="n">similarity_embedding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">np.nan</span><span class="o">]</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">embeddings</span><span class="p">))</span><span class="err">:</span>
+<span class="w">        </span><span class="n">sim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">embeddings</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">embeddings</span><span class="o">[</span><span class="n">i-1</span><span class="o">]</span><span class="p">)</span>
+<span class="w">        </span><span class="n">similarity_embedding</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">similarity_embedding</span>
 </code></pre></div>
 
 <p>The results gave us a deeper understanding of how the communications had changed over time. We found that FOMC statements generally exhibited higher similarity over time than minutes under both measures, and that lexical and semantic similarities for statements moved comparatively more closely together. Both aligned with our previous understanding of the two document types: statements are carefully crafted policy signals with relatively stable structure, whereas minutes summarize diverse internal discussions and therefore display greater variation in their meanings. Combined with the dictionary-based results showing more pronounced stance signals in statements, we believe that even relatively small changes in the wording or semantics of statements may convey meaningful information about federal reserve’s decision intentions.</p>
@@ -270,21 +270,21 @@ Looking ahead, we might try using LLMs to help generate boilerplate patterns and
 <p>Core Concept
 The dictionary method uses pre-defined hawkish and dovish dictionaries to quantify policy stance by calculating the frequency of these words in the text.</p>
 <p>We use four different machine learning models, After debugging, the parameter settings are as follows::</p>
-<div class="codehilite"><pre><span></span><code> def train(self, X_train, y_train, model_type=&#39;random_forest&#39;):
-        &quot;&quot;&quot;Train the model&quot;&quot;&quot;
-        X_train_scaled = self.scaler.fit_transform(X_train)
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="nx">def</span><span class="w"> </span><span class="nx">train</span><span class="p">(</span><span class="kp">self</span><span class="p">,</span><span class="w"> </span><span class="nx">X_train</span><span class="p">,</span><span class="w"> </span><span class="nx">y_train</span><span class="p">,</span><span class="w"> </span><span class="nx">model_type</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">random_forest</span><span class="err">&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="s">&quot;&quot;&quot;Train the model&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="nx">X_train_scaled</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kp">self</span><span class="p">.</span><span class="nx">scaler</span><span class="p">.</span><span class="nx">fit_transform</span><span class="p">(</span><span class="nx">X_train</span><span class="p">)</span>
 
-        if model_type == &#39;logistic&#39;:
-            model = LogisticRegression(multi_class=&#39;multinomial&#39;, max_iter=1000)
-        elif model_type == &#39;random_forest&#39;:
-            model = RandomForestClassifier(n_estimators=100, random_state=42)
-        elif model_type == &#39;gradient_boosting&#39;:
-            model = GradientBoostingClassifier(n_estimators=100, random_state=42)
-        elif model_type == &#39;svm&#39;:
-            model = SVC(kernel=&#39;rbf&#39;, probability=True)
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">model_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">logistic</span><span class="err">&#39;</span><span class="p">:</span>
+<span class="w">            </span><span class="nx">model</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">LogisticRegression</span><span class="p">(</span><span class="nx">multi_class</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">multinomial</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">max_iter</span><span class="p">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">elif</span><span class="w"> </span><span class="nx">model_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">random_forest</span><span class="err">&#39;</span><span class="p">:</span>
+<span class="w">            </span><span class="nx">model</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">RandomForestClassifier</span><span class="p">(</span><span class="nx">n_estimators</span><span class="p">=</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nx">random_state</span><span class="p">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">elif</span><span class="w"> </span><span class="nx">model_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">gradient_boosting</span><span class="err">&#39;</span><span class="p">:</span>
+<span class="w">            </span><span class="nx">model</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">GradientBoostingClassifier</span><span class="p">(</span><span class="nx">n_estimators</span><span class="p">=</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nx">random_state</span><span class="p">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">elif</span><span class="w"> </span><span class="nx">model_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">svm</span><span class="err">&#39;</span><span class="p">:</span>
+<span class="w">            </span><span class="nx">model</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">SVC</span><span class="p">(</span><span class="nx">kernel</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">rbf</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">probability</span><span class="p">=</span><span class="nx">True</span><span class="p">)</span>
 
-        model.fit(X_train_scaled, y_train)
- return model
+<span class="w">        </span><span class="nx">model</span><span class="p">.</span><span class="nx">fit</span><span class="p">(</span><span class="nx">X_train_scaled</span><span class="p">,</span><span class="w"> </span><span class="nx">y_train</span><span class="p">)</span>
+<span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">model</span>
 </code></pre></div>
 
 <h2>Method 2: TF-IDF-based Approach</h2>
@@ -292,7 +292,7 @@ The dictionary method uses pre-defined hawkish and dovish dictionaries to quanti
 The TF-IDF (Term Frequency-Inverse Document Frequency) method constructs high-dimensional feature vectors by calculating the importance of words across the entire document collection, capturing deep semantic information of the text.</p>
 <p>Feature Selection
 Since TF-IDF features have high dimensionality (typically thousands of dimensions), we use SelectKBest for feature selection, retaining the most important 50 features:</p>
-<div class="codehilite"><pre><span></span><code> def select_features(self, X, y):
+<div class="highlight"><pre><span></span><code> def select_features(self, X, y):
         &quot;&quot;&quot;Feature selection&quot;&quot;&quot;
         X_selected = self.selector.fit_transform(X, y)
         self.selected_features = self.selector.get_support()
@@ -318,7 +318,7 @@ Since TF-IDF features have high dimensionality (typically thousands of dimension
 
 <h2>Data partitioning</h2>
 <p>We use multiple evaluation metrics to comprehensively assess model performance:</p>
-<div class="codehilite"><pre><span></span><code> def evaluate_model(y_true, y_pred, y_proba=None, model_name=&quot;&quot;):
+<div class="highlight"><pre><span></span><code> def evaluate_model(y_true, y_pred, y_proba=None, model_name=&quot;&quot;):
     &quot;&quot;&quot;Evaluate model performance&quot;&quot;&quot;
         results = {}
         results[&#39;accuracy&#39;] = accuracy_score(y_true, y_pred)
@@ -336,48 +336,48 @@ Since TF-IDF features have high dimensionality (typically thousands of dimension
 <h2>Experimental Results Analysis</h2>
 <h2>Statement Analysis Results</h2>
 <p>For FOMC Statements, the TF-IDF method significantly outperforms the dictionary method across all models:</p>
-<div class="codehilite"><pre><span></span><code>    - Random Forest:
-    Dictionary method accuracy: 0.269,
-    TF-IDF method accuracy: 0.769,
-    Better method: TF-IDF method (difference: 0.500)
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="k">Random</span><span class="w"> </span><span class="nv">Forest</span>:
+<span class="w">    </span><span class="nv">Dictionary</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">269</span>,
+<span class="w">    </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">769</span>,
+<span class="w">    </span><span class="nv">Better</span><span class="w"> </span><span class="nv">method</span>:<span class="w"> </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="ss">(</span><span class="nv">difference</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">500</span><span class="ss">)</span>
 
-    - Logistic Regression:
-    Dictionary method accuracy: 0.462,
-    TF-IDF method accuracy: 0.962,
-    Better method: TF-IDF method (difference: 0.500)
+<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="nv">Logistic</span><span class="w"> </span><span class="nv">Regression</span>:
+<span class="w">    </span><span class="nv">Dictionary</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">462</span>,
+<span class="w">    </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">962</span>,
+<span class="w">    </span><span class="nv">Better</span><span class="w"> </span><span class="nv">method</span>:<span class="w"> </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="ss">(</span><span class="nv">difference</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">500</span><span class="ss">)</span>
 
-    - Gradient Boosting:
-    Dictionary method accuracy: 0.423,
-    TF-IDF method accuracy: 0.769,
-    Better method: TF-IDF method (difference: 0.346)
+<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="nv">Gradient</span><span class="w"> </span><span class="nv">Boosting</span>:
+<span class="w">    </span><span class="nv">Dictionary</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">423</span>,
+<span class="w">    </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">769</span>,
+<span class="w">    </span><span class="nv">Better</span><span class="w"> </span><span class="nv">method</span>:<span class="w"> </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="ss">(</span><span class="nv">difference</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">346</span><span class="ss">)</span>
 
-    - SVM:
-    Dictionary method accuracy: 0.615,
-    TF-IDF method accuracy: 0.923,
-    Better method: TF-IDF method (difference: 0.308)
+<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="nv">SVM</span>:
+<span class="w">    </span><span class="nv">Dictionary</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">615</span>,
+<span class="w">    </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">923</span>,
+<span class="w">    </span><span class="nv">Better</span><span class="w"> </span><span class="nv">method</span>:<span class="w"> </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="ss">(</span><span class="nv">difference</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">308</span><span class="ss">)</span>
 </code></pre></div>
 
 <h2>Minutes Analysis Results</h2>
 <p>For FOMC Minutes, the results are more complex, with different models performing differently:</p>
-<div class="codehilite"><pre><span></span><code>    - Random Forest:
-    Dictionary method accuracy: 0.615,
-    TF-IDF method accuracy: 0.577,
-    Better method: Dictionary method (difference: 0.038)
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="k">Random</span><span class="w"> </span><span class="nv">Forest</span>:
+<span class="w">    </span><span class="nv">Dictionary</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">615</span>,
+<span class="w">    </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">577</span>,
+<span class="w">    </span><span class="nv">Better</span><span class="w"> </span><span class="nv">method</span>:<span class="w"> </span><span class="nv">Dictionary</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="ss">(</span><span class="nv">difference</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">038</span><span class="ss">)</span>
 
-    - Logistic Regression:
-    Dictionary method accuracy: 0.192,
-    TF-IDF method accuracy: 0.654,
-    Better method: TF-IDF method (difference: 0.462)
+<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="nv">Logistic</span><span class="w"> </span><span class="nv">Regression</span>:
+<span class="w">    </span><span class="nv">Dictionary</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">192</span>,
+<span class="w">    </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">654</span>,
+<span class="w">    </span><span class="nv">Better</span><span class="w"> </span><span class="nv">method</span>:<span class="w"> </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="ss">(</span><span class="nv">difference</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">462</span><span class="ss">)</span>
 
-    - Gradient Boosting:
-    Dictionary method accuracy: 0.538,
-    TF-IDF method accuracy: 0.692,
-    Better method: TF-IDF method (difference: 0.154)
+<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="nv">Gradient</span><span class="w"> </span><span class="nv">Boosting</span>:
+<span class="w">    </span><span class="nv">Dictionary</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">538</span>,
+<span class="w">    </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">692</span>,
+<span class="w">    </span><span class="nv">Better</span><span class="w"> </span><span class="nv">method</span>:<span class="w"> </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="ss">(</span><span class="nv">difference</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">154</span><span class="ss">)</span>
 
-    - SVM:
-    Dictionary method accuracy: 0.462,
-    TF-IDF method accuracy: 0.231,
-    Better method: Dictionary method (difference: 0.231)
+<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="nv">SVM</span>:
+<span class="w">    </span><span class="nv">Dictionary</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">462</span>,
+<span class="w">    </span><span class="nv">TF</span><span class="o">-</span><span class="nv">IDF</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="nv">accuracy</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">231</span>,
+<span class="w">    </span><span class="nv">Better</span><span class="w"> </span><span class="nv">method</span>:<span class="w"> </span><span class="nv">Dictionary</span><span class="w"> </span><span class="nv">method</span><span class="w"> </span><span class="ss">(</span><span class="nv">difference</span>:<span class="w"> </span><span class="mi">0</span>.<span class="mi">231</span><span class="ss">)</span>
 </code></pre></div>
 
 <h3>Key Findings</h3>
@@ -405,149 +405,149 @@ Since TF-IDF features have high dimensionality (typically thousands of dimension
 <p>Among the 16 models, surprisingly, the four selected models—fixed under specific document and method categories—performed better than expected. In particular, the logistic regression model based on Statement documents and the TF-IDF method achieved <strong>the best performance with 0.962 accuracy</strong>. We believe this is largely due to the nature of statements themselves: short text length and clear keywords make them highly compatible with logistic regression. However, we cannot rule out the possibility of overfitting given the small sample size.</p>
 <p>We initially planned to compare our results with CME forecasts, but the difference in sample scope made such a comparison less meaningful. We also wrote code for robustness checks, though without additional samples to test against, we only retained the framework without executing it.</p>
 <p>Overall, we were pleased to see that four of our selected models reached promising levels of accuracy and performance. This suggests that <strong>Fed meeting transcripts can indeed be leveraged to predict future interest rate movements</strong>. The analysis of document characteristics, which provided valuable insights for choosing different models in future prediction tasks.</p>
-<div class="codehilite"><pre><span></span><code> def evaluate_model(y_true, y_pred, y_proba=None, model_name=&quot;&quot;):
-    results = {}
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="n">def</span><span class="w"> </span><span class="n">evaluate_model</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="p">,</span><span class="w"> </span><span class="n">y_proba</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">model_name</span><span class="o">=</span><span class="ss">&quot;&quot;</span><span class="p">)</span><span class="err">:</span>
+<span class="w">    </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{}</span>
 
-    unique_classes = np.unique(np.concatenate([y_true, y_pred]))
-    num_classes = len(unique_classes)
+<span class="w">    </span><span class="n">unique_classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="k">unique</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">(</span><span class="o">[</span><span class="n">y_true, y_pred</span><span class="o">]</span><span class="p">))</span>
+<span class="w">    </span><span class="n">num_classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">unique_classes</span><span class="p">)</span>
 
-    class_mapping = {-1: &#39;cut&#39;, 0: &#39;hold&#39;, 1: &#39;hike&#39;}
-    available_classes = [class_mapping[c] for c in sorted(unique_classes) if c in class_mapping]
+<span class="w">    </span><span class="n">class_mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span><span class="o">-</span><span class="mi">1</span><span class="err">:</span><span class="w"> </span><span class="s1">&#39;cut&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="err">:</span><span class="w"> </span><span class="s1">&#39;hold&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span><span class="w"> </span><span class="s1">&#39;hike&#39;</span><span class="err">}</span>
+<span class="w">    </span><span class="n">available_classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">class_mapping[c</span><span class="o">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">sorted</span><span class="p">(</span><span class="n">unique_classes</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">class_mapping</span><span class="err">]</span>
 
-    results[&#39;accuracy&#39;] = accuracy_score(y_true, y_pred)
-    results[&#39;precision_macro&#39;] = precision_score(y_true, y_pred, average=&#39;macro&#39;, zero_division=0)
-    results[&#39;recall_macro&#39;] = recall_score(y_true, y_pred, average=&#39;macro&#39;, zero_division=0)
-    results[&#39;f1_macro&#39;] = f1_score(y_true, y_pred, average=&#39;macro&#39;, zero_division=0)
+<span class="w">    </span><span class="n">results</span><span class="o">[</span><span class="n">&#39;accuracy&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="p">)</span>
+<span class="w">    </span><span class="n">results</span><span class="o">[</span><span class="n">&#39;precision_macro&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="p">,</span><span class="w"> </span><span class="n">average</span><span class="o">=</span><span class="s1">&#39;macro&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="n">results</span><span class="o">[</span><span class="n">&#39;recall_macro&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="p">,</span><span class="w"> </span><span class="n">average</span><span class="o">=</span><span class="s1">&#39;macro&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="n">results</span><span class="o">[</span><span class="n">&#39;f1_macro&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="p">,</span><span class="w"> </span><span class="n">average</span><span class="o">=</span><span class="s1">&#39;macro&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    try:
-        class_report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
-    except:
-        class_report = {}
+<span class="w">    </span><span class="k">try</span><span class="err">:</span>
+<span class="w">        </span><span class="n">class_report</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="p">,</span><span class="w"> </span><span class="n">output_dict</span><span class="o">=</span><span class="k">True</span><span class="p">,</span><span class="w"> </span><span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="ow">except</span><span class="err">:</span>
+<span class="w">        </span><span class="n">class_report</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{}</span>
 
-    # ROC-AUC
-    if y_proba is not None and num_classes &gt; 1:
-        try:
-            if num_classes == 2:
-                results[&#39;roc_auc&#39;] = roc_auc_score(y_true, y_proba[:, 1])
-            else:
-                results[&#39;roc_auc_ovr&#39;] = roc_auc_score(
-                    y_true, y_proba, multi_class=&#39;ovr&#39;, average=&#39;macro&#39;
-                )
-        except:
-            results[&#39;roc_auc&#39;] = np.nan
-            results[&#39;roc_auc_ovr&#39;] = np.nan
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="n">ROC</span><span class="o">-</span><span class="n">AUC</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">y_proba</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="k">None</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">num_classes</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span>
+<span class="w">        </span><span class="k">try</span><span class="err">:</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">num_classes</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="err">:</span>
+<span class="w">                </span><span class="n">results</span><span class="o">[</span><span class="n">&#39;roc_auc&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span><span class="w"> </span><span class="n">y_proba</span><span class="o">[</span><span class="n">:, 1</span><span class="o">]</span><span class="p">)</span>
+<span class="w">            </span><span class="k">else</span><span class="err">:</span>
+<span class="w">                </span><span class="n">results</span><span class="o">[</span><span class="n">&#39;roc_auc_ovr&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">roc_auc_score</span><span class="p">(</span>
+<span class="w">                    </span><span class="n">y_true</span><span class="p">,</span><span class="w"> </span><span class="n">y_proba</span><span class="p">,</span><span class="w"> </span><span class="n">multi_class</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">average</span><span class="o">=</span><span class="s1">&#39;macro&#39;</span>
+<span class="w">                </span><span class="p">)</span>
+<span class="w">        </span><span class="ow">except</span><span class="err">:</span>
+<span class="w">            </span><span class="n">results</span><span class="o">[</span><span class="n">&#39;roc_auc&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">nan</span>
+<span class="w">            </span><span class="n">results</span><span class="o">[</span><span class="n">&#39;roc_auc_ovr&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">nan</span>
 
-    cm = confusion_matrix(y_true, y_pred)
+<span class="w">    </span><span class="n">cm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="p">)</span>
 
-    print(f&quot;\n{&#39;=&#39;*60}&quot;)
-    print(f&quot;model evaluation: {model_name}&quot;)
-    print(f&quot;{&#39;=&#39;*60}&quot;)
-    print(f&quot;class numbers: {num_classes}&quot;)
-    print(f&quot;actual class: {sorted(unique_classes)}&quot;)
-    print(f&quot;accuracy: {results[&#39;accuracy&#39;]:.4f}&quot;)
-    print(f&quot;precision_macro: {results[&#39;precision_macro&#39;]:.4f}&quot;)
-    print(f&quot;recall_macro: {results[&#39;recall_macro&#39;]:.4f}&quot;)
-    print(f&quot;f1_macro: {results[&#39;f1_macro&#39;]:.4f}&quot;)
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;\n{&#39;=&#39;*60}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;model evaluation: {model_name}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;{&#39;=&#39;*60}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;class numbers: {num_classes}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;actual class: {sorted(unique_classes)}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;accuracy: {results[&#39;accuracy&#39;]:.4f}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;precision_macro: {results[&#39;precision_macro&#39;]:.4f}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;recall_macro: {results[&#39;recall_macro&#39;]:.4f}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;f1_macro: {results[&#39;f1_macro&#39;]:.4f}&quot;</span><span class="p">)</span>
 
-    if &#39;roc_auc&#39; in results and not np.isnan(results[&#39;roc_auc&#39;]):
-        print(f&quot;ROC-AUC: {results[&#39;roc_auc&#39;]:.4f}&quot;)
-    elif &#39;roc_auc_ovr&#39; in results and not np.isnan(results[&#39;roc_auc_ovr&#39;]):
-        print(f&quot;ROC-AUC (OVR): {results[&#39;roc_auc_ovr&#39;]:.4f}&quot;)
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="s1">&#39;roc_auc&#39;</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">results</span><span class="o">[</span><span class="n">&#39;roc_auc&#39;</span><span class="o">]</span><span class="p">)</span><span class="err">:</span>
+<span class="w">        </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;ROC-AUC: {results[&#39;roc_auc&#39;]:.4f}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">elif</span><span class="w"> </span><span class="s1">&#39;roc_auc_ovr&#39;</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">results</span><span class="o">[</span><span class="n">&#39;roc_auc_ovr&#39;</span><span class="o">]</span><span class="p">)</span><span class="err">:</span>
+<span class="w">        </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;ROC-AUC (OVR): {results[&#39;roc_auc_ovr&#39;]:.4f}&quot;</span><span class="p">)</span>
 
-    print(&quot;\n Classification Report:&quot;)
-    try:
-        #the available category names
-        print(classification_report(
-            y_true, y_pred, 
-            target_names=available_classes,
-            zero_division=0
-        ))
-    except:
-        #If it still fails, use the numeric labels.
-        print(classification_report(y_true, y_pred, zero_division=0))
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="ss">&quot;\n Classification Report:&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">try</span><span class="err">:</span>
+<span class="w">        </span><span class="n">#the</span><span class="w"> </span><span class="n">available</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="k">names</span>
+<span class="w">        </span><span class="k">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span>
+<span class="w">            </span><span class="n">y_true</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">target_names</span><span class="o">=</span><span class="n">available_classes</span><span class="p">,</span>
+<span class="w">            </span><span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span>
+<span class="w">        </span><span class="p">))</span>
+<span class="w">    </span><span class="ow">except</span><span class="err">:</span>
+<span class="w">        </span><span class="n">#If</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="n">still</span><span class="w"> </span><span class="n">fails</span><span class="p">,</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="nc">numeric</span><span class="w"> </span><span class="n">labels</span><span class="p">.</span>
+<span class="w">        </span><span class="k">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="p">,</span><span class="w"> </span><span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 
-    return results, cm
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="n">cm</span>
 
-def plot_confusion_matrix(cm, model_name, class_names=None):
-    &quot;&quot;&quot;Plot confusion matrix&quot;&quot;&quot;
-    if class_names is None:
-        n_classes = cm.shape[0]
-        if n_classes == 3:
-            class_names = [&#39;Cut&#39;, &#39;Hold&#39;, &#39;Hike&#39;]
-        elif n_classes == 2:
-            if set([-1, 0]).issubset(set(range(-1, 2))):
-                class_names = [&#39;Cut&#39;, &#39;Hold&#39;]
-            elif set([0, 1]).issubset(set(range(-1, 2))):
-                class_names = [&#39;Hold&#39;, &#39;Hike&#39;]
-            elif set([-1, 1]).issubset(set(range(-1, 2))):
-                class_names = [&#39;Cut&#39;, &#39;Hike&#39;]
-            else:
-                class_names = [f&#39;Class{i}&#39; for i in range(n_classes)]
-        else:
-            class_names = [f&#39;Class{i}&#39; for i in range(n_classes)]
+<span class="n">def</span><span class="w"> </span><span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span><span class="w"> </span><span class="n">model_name</span><span class="p">,</span><span class="w"> </span><span class="n">class_names</span><span class="o">=</span><span class="k">None</span><span class="p">)</span><span class="err">:</span>
+<span class="w">    </span><span class="ss">&quot;&quot;&quot;Plot confusion matrix&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">class_names</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span>
+<span class="w">        </span><span class="n">n_classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cm</span><span class="p">.</span><span class="n">shape</span><span class="o">[</span><span class="n">0</span><span class="o">]</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">n_classes</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">3</span><span class="err">:</span>
+<span class="w">            </span><span class="n">class_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">&#39;Cut&#39;, &#39;Hold&#39;, &#39;Hike&#39;</span><span class="o">]</span>
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="n">n_classes</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="err">:</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="k">set</span><span class="p">(</span><span class="o">[</span><span class="n">-1, 0</span><span class="o">]</span><span class="p">).</span><span class="n">issubset</span><span class="p">(</span><span class="k">set</span><span class="p">(</span><span class="k">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)))</span><span class="err">:</span>
+<span class="w">                </span><span class="n">class_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">&#39;Cut&#39;, &#39;Hold&#39;</span><span class="o">]</span>
+<span class="w">            </span><span class="n">elif</span><span class="w"> </span><span class="k">set</span><span class="p">(</span><span class="o">[</span><span class="n">0, 1</span><span class="o">]</span><span class="p">).</span><span class="n">issubset</span><span class="p">(</span><span class="k">set</span><span class="p">(</span><span class="k">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)))</span><span class="err">:</span>
+<span class="w">                </span><span class="n">class_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">&#39;Hold&#39;, &#39;Hike&#39;</span><span class="o">]</span>
+<span class="w">            </span><span class="n">elif</span><span class="w"> </span><span class="k">set</span><span class="p">(</span><span class="o">[</span><span class="n">-1, 1</span><span class="o">]</span><span class="p">).</span><span class="n">issubset</span><span class="p">(</span><span class="k">set</span><span class="p">(</span><span class="k">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)))</span><span class="err">:</span>
+<span class="w">                </span><span class="n">class_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">&#39;Cut&#39;, &#39;Hike&#39;</span><span class="o">]</span>
+<span class="w">            </span><span class="k">else</span><span class="err">:</span>
+<span class="w">                </span><span class="n">class_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">f&#39;Class{i}&#39; for i in range(n_classes)</span><span class="o">]</span>
+<span class="w">        </span><span class="k">else</span><span class="err">:</span>
+<span class="w">            </span><span class="n">class_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">f&#39;Class{i}&#39; for i in range(n_classes)</span><span class="o">]</span>
 
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt=&#39;d&#39;, cmap=&#39;Reds&#39;,
-                xticklabels=class_names,
-                yticklabels=class_names)
-    plt.title(f&#39;Confusion Matrix - {model_name}&#39;)
-    plt.ylabel(&#39;True Label&#39;)
-    plt.xlabel(&#39;Predicted Label&#39;)
-    plt.tight_layout()
-    plt.show()
-
-
-
-def plot_feature_importance(importance_df, model_name, top_n=20):
-    &quot;&quot;&quot;Plot feature importance&quot;&quot;&quot;
-    if importance_df is not None:
-        plt.figure(figsize=(10, 8))
-        top_features = importance_df.head(top_n)
-        plt.barh(range(len(top_features)), top_features[&#39;importance&#39;], color=&#39;gray&#39;)
-        plt.yticks(range(len(top_features)), top_features[&#39;feature&#39;])
-        plt.xlabel(&#39;Importance&#39;)
-        plt.title(f&#39;Top {top_n} Feature Importance - {model_name}&#39;)
-        plt.gca().invert_yaxis()
-        plt.tight_layout()
-        plt.show()
+<span class="w">    </span><span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">))</span>
+<span class="w">    </span><span class="n">sns</span><span class="p">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span><span class="w"> </span><span class="n">annot</span><span class="o">=</span><span class="k">True</span><span class="p">,</span><span class="w"> </span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;d&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">xticklabels</span><span class="o">=</span><span class="n">class_names</span><span class="p">,</span>
+<span class="w">                </span><span class="n">yticklabels</span><span class="o">=</span><span class="n">class_names</span><span class="p">)</span>
+<span class="w">    </span><span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Confusion Matrix - {model_name}&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Label&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">plt</span><span class="p">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Predicted Label&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="w">    </span><span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
 
 
-    #Multi-source robustness test (lack of data)
-    #print(robustness_df)
 
-    #Define the robustness test function
-    #from scipy.stats import ttest_ind, ks_2samp
-    #import pandas as pd
+<span class="n">def</span><span class="w"> </span><span class="n">plot_feature_importance</span><span class="p">(</span><span class="n">importance_df</span><span class="p">,</span><span class="w"> </span><span class="n">model_name</span><span class="p">,</span><span class="w"> </span><span class="n">top_n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="err">:</span>
+<span class="w">    </span><span class="ss">&quot;&quot;&quot;Plot feature importance&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">importance_df</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="k">None</span><span class="err">:</span>
+<span class="w">        </span><span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">))</span>
+<span class="w">        </span><span class="n">top_features</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">importance_df</span><span class="p">.</span><span class="n">head</span><span class="p">(</span><span class="n">top_n</span><span class="p">)</span>
+<span class="w">        </span><span class="n">plt</span><span class="p">.</span><span class="n">barh</span><span class="p">(</span><span class="k">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">top_features</span><span class="p">)),</span><span class="w"> </span><span class="n">top_features</span><span class="o">[</span><span class="n">&#39;importance&#39;</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">plt</span><span class="p">.</span><span class="n">yticks</span><span class="p">(</span><span class="k">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">top_features</span><span class="p">)),</span><span class="w"> </span><span class="n">top_features</span><span class="o">[</span><span class="n">&#39;feature&#39;</span><span class="o">]</span><span class="p">)</span>
+<span class="w">        </span><span class="n">plt</span><span class="p">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Importance&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Top {top_n} Feature Importance - {model_name}&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">plt</span><span class="p">.</span><span class="n">gca</span><span class="p">().</span><span class="n">invert_yaxis</span><span class="p">()</span>
+<span class="w">        </span><span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="w">        </span><span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
 
-    #def generate_robustness_report(df_all, metrics=[&quot;Accuracy&quot;, &quot;Precision (Macro)&quot;, &quot;Recall (Macro)&quot;, &quot;F1 Score (Macro)&quot;, &quot;ROC-AUC (OVR)&quot;]):
-    #    results = []
-    #    for metric in metrics:
-    #        s_vals = df_all[df_all[&quot;Document&quot;]==&quot;Statement&quot;][metric].dropna()
-    #        m_vals = df_all[df_all[&quot;Document&quot;]==&quot;Minutes&quot;][metric].dropna()
 
-    #        if len(s_vals) &gt; 1 and len(m_vals) &gt; 1:
-    #            t_stat, t_p = ttest_ind(s_vals, m_vals, equal_var=False)
-    #            ks_stat, ks_p = ks_2samp(s_vals, m_vals)
-    #        else:
-    #            t_stat, t_p, ks_stat, ks_p = [None]*4
+<span class="w">    </span><span class="n">#Multi</span><span class="o">-</span><span class="n">source</span><span class="w"> </span><span class="n">robustness</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="p">(</span><span class="n">lack</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="k">data</span><span class="p">)</span>
+<span class="w">    </span><span class="n">#print</span><span class="p">(</span><span class="n">robustness_df</span><span class="p">)</span>
 
-    #        results.append({
-    #            &quot;Metric&quot;: metric,
-    #            &quot;Statement Mean&quot;: s_vals.mean() if len(s_vals)&gt;0 else None,
-    #            &quot;Minutes Mean&quot;: m_vals.mean() if len(m_vals)&gt;0 else None,
-    #            &quot;Welch t-stat&quot;: t_stat,
-    #            &quot;t-test p-value&quot;: t_p,
-    #            &quot;KS stat&quot;: ks_stat,
-    #            &quot;KS p-value&quot;: ks_p
-    #        })
-    #    return pd.DataFrame(results)
+<span class="w">    </span><span class="n">#Define</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">robustness</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="k">function</span>
+<span class="w">    </span><span class="n">#from</span><span class="w"> </span><span class="n">scipy</span><span class="p">.</span><span class="n">stats</span><span class="w"> </span><span class="n">import</span><span class="w"> </span><span class="n">ttest_ind</span><span class="p">,</span><span class="w"> </span><span class="n">ks_2samp</span>
+<span class="w">    </span><span class="n">#import</span><span class="w"> </span><span class="n">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">pd</span>
 
-    # Call the function DataFrame
-    #robustness_df = generate_robustness_report(df_all)
-    #print(robustness_df)
+<span class="w">    </span><span class="n">#def</span><span class="w"> </span><span class="n">generate_robustness_report</span><span class="p">(</span><span class="n">df_all</span><span class="p">,</span><span class="w"> </span><span class="n">metrics</span><span class="o">=[</span><span class="n">&quot;Accuracy&quot;, &quot;Precision (Macro)&quot;, &quot;Recall (Macro)&quot;, &quot;F1 Score (Macro)&quot;, &quot;ROC-AUC (OVR)&quot;</span><span class="o">]</span><span class="p">)</span><span class="err">:</span>
+<span class="w">    </span><span class="err">#</span><span class="w">    </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span>
+<span class="w">    </span><span class="err">#</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">metric</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">metrics</span><span class="p">:</span>
+<span class="w">    </span><span class="err">#</span><span class="w">        </span><span class="n">s_vals</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df_all</span><span class="o">[</span><span class="n">df_all[&quot;Document&quot;</span><span class="o">]==</span><span class="ss">&quot;Statement&quot;</span><span class="err">]</span><span class="o">[</span><span class="n">metric</span><span class="o">]</span><span class="p">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="w">    </span><span class="err">#</span><span class="w">        </span><span class="n">m_vals</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df_all</span><span class="o">[</span><span class="n">df_all[&quot;Document&quot;</span><span class="o">]==</span><span class="ss">&quot;Minutes&quot;</span><span class="err">]</span><span class="o">[</span><span class="n">metric</span><span class="o">]</span><span class="p">.</span><span class="n">dropna</span><span class="p">()</span>
 
-    # Write the robustness test results into Excel
-    #robustness_df.to_excel(&quot;comparison result.xlsx&quot;, sheet_name=&quot;Robustness Test&quot;, index=False)
+<span class="w">    </span><span class="err">#</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">s_vals</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">m_vals</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span>
+<span class="w">    </span><span class="err">#</span><span class="w">            </span><span class="n">t_stat</span><span class="p">,</span><span class="w"> </span><span class="n">t_p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">s_vals</span><span class="p">,</span><span class="w"> </span><span class="n">m_vals</span><span class="p">,</span><span class="w"> </span><span class="n">equal_var</span><span class="o">=</span><span class="k">False</span><span class="p">)</span>
+<span class="w">    </span><span class="err">#</span><span class="w">            </span><span class="n">ks_stat</span><span class="p">,</span><span class="w"> </span><span class="n">ks_p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ks_2samp</span><span class="p">(</span><span class="n">s_vals</span><span class="p">,</span><span class="w"> </span><span class="n">m_vals</span><span class="p">)</span>
+<span class="w">    </span><span class="err">#</span><span class="w">        </span><span class="k">else</span><span class="err">:</span>
+<span class="w">    </span><span class="err">#</span><span class="w">            </span><span class="n">t_stat</span><span class="p">,</span><span class="w"> </span><span class="n">t_p</span><span class="p">,</span><span class="w"> </span><span class="n">ks_stat</span><span class="p">,</span><span class="w"> </span><span class="n">ks_p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">None</span><span class="o">]*</span><span class="mi">4</span>
+
+<span class="w">    </span><span class="err">#</span><span class="w">        </span><span class="n">results</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="err">{</span>
+<span class="w">    </span><span class="err">#</span><span class="w">            </span><span class="ss">&quot;Metric&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">metric</span><span class="p">,</span>
+<span class="w">    </span><span class="err">#</span><span class="w">            </span><span class="ss">&quot;Statement Mean&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">s_vals</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">s_vals</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">None</span><span class="p">,</span>
+<span class="w">    </span><span class="err">#</span><span class="w">            </span><span class="ss">&quot;Minutes Mean&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">m_vals</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">m_vals</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">None</span><span class="p">,</span>
+<span class="w">    </span><span class="err">#</span><span class="w">            </span><span class="ss">&quot;Welch t-stat&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">t_stat</span><span class="p">,</span>
+<span class="w">    </span><span class="err">#</span><span class="w">            </span><span class="ss">&quot;t-test p-value&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">t_p</span><span class="p">,</span>
+<span class="w">    </span><span class="err">#</span><span class="w">            </span><span class="ss">&quot;KS stat&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">ks_stat</span><span class="p">,</span>
+<span class="w">    </span><span class="err">#</span><span class="w">            </span><span class="ss">&quot;KS p-value&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">ks_p</span>
+<span class="w">    </span><span class="err">#</span><span class="w">        </span><span class="err">}</span><span class="p">)</span>
+<span class="w">    </span><span class="err">#</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="k">Call</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="n">DataFrame</span>
+<span class="w">    </span><span class="n">#robustness_df</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">generate_robustness_report</span><span class="p">(</span><span class="n">df_all</span><span class="p">)</span>
+<span class="w">    </span><span class="n">#print</span><span class="p">(</span><span class="n">robustness_df</span><span class="p">)</span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="k">Write</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">robustness</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">Excel</span>
+<span class="w">    </span><span class="n">#robustness_df</span><span class="p">.</span><span class="n">to_excel</span><span class="p">(</span><span class="ss">&quot;comparison result.xlsx&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sheet_name</span><span class="o">=</span><span class="ss">&quot;Robustness Test&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">index</span><span class="o">=</span><span class="k">False</span><span class="p">)</span>
 </code></pre></div>
 
 <p>This study demonstrates that semantic and lexical approaches not only enhance model interpretability but also more robustly capture key expressions of policy shifts when processing highly structured, policy-driven texts. While TF-IDF excels in general text classification, in contexts where language directly reflects policy (e.g., central bank language), subtle contextual and lexical variations often outweigh word frequency.

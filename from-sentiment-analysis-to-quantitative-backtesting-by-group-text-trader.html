@@ -119,7 +119,7 @@
 <p>Ultimately, the <strong>Distilbert-sst</strong> model was selected as the primary model due to its optimal balance between speed and accuracy.</p>
 <h3>2.Overcoming the "Token Limit" Wall</h3>
 <p>Even with a robust model selected, we immediately encountered a physical constraint common in NLP: <em>512-token limit</em>. The model’s truncation of texts exceeding 512 tokens led to partial information loss, resulting in certain inaccuracies in sentiment analysis. Ultimately. We adopted a <strong>chunking approach</strong>, dividing the text into segments of 500 characters each, and then aggregating the sentiment outcomes. By segmenting the reports into 500-character blocks, we ensured our sentiment score reflected the entire document's tone.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">sentiment_analysis</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">sentiment_analyzer</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">sentiment_analysis</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">sentiment_analyzer</span><span class="p">):</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">preprocess_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">try</span><span class="p">:</span>
@@ -145,7 +145,7 @@
 <p>To address this, after obtaining the positive and negative sentiment scores for each stock, we employed a refined weight adjustment formula:</p>
 <div class="math">$${weight_change} = ({positive_score} - {negative_score}) × {avg_confidence}$$</div>
 <p>This formula allows for a greater adjustment magnitude when sentiment is strong and the model's confidence is high.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">code_list</span><span class="p">)):</span>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">code_list</span><span class="p">)):</span>
         <span class="n">total</span> <span class="o">=</span> <span class="n">pos_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">neg_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">number_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">total</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">pos_score</span> <span class="o">=</span> <span class="mi">0</span>
@@ -168,7 +168,7 @@
 </code></pre></div>
 
 <p>Subsequently, we applied normalization to these adjustments, resulting in more stable weight changes that better align with investment logic.</p>
-<div class="codehilite"><pre><span></span><code> <span class="c1"># compute the portfolio weights in quarterly order</span>
+<div class="highlight"><pre><span></span><code> <span class="c1"># compute the portfolio weights in quarterly order</span>
     <span class="k">for</span> <span class="n">quarter</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;quarter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()):</span>
         <span class="n">quarter_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;quarter&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">quarter</span><span class="p">]</span>
 
@@ -195,7 +195,7 @@
 <h2>III. Backtesting Framework Design</h2>
 <p>Writing the backtesting engine taught us that data is rarely "ready-to-use." We faced a temporal mismatch: sentiment data arrives quarterly (with the reports), but prices move daily.</p>
 <p>We had to design a resampler that compounded daily returns into quarterly buckets to match our rebalancing frequency. </p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># use resample function to change daily data to quarterly data</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># use resample function to change daily data to quarterly data</span>
 <span class="n">q_data</span> <span class="o">=</span> <span class="n">re_data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;Q&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">x</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">prod</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">q_data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">q_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="s1">&#39;Q&#39;</span><span class="p">)</span>
 <span class="n">q_data</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="s1">&#39;quarter&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -203,7 +203,7 @@
 
 <p>Based on the aforementioned sentiment analysis and weight calculations, the weighted return of the investment portfolio is calculated for each quarter.</p>
 <div class="math">$$quarterly\_returns_{t} = \sum_{i=1}^{300} stock\_weight_{i} \times stock\_return_{i}$$</div>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">backtest</span><span class="p">(</span><span class="n">return_data</span><span class="p">,</span> <span class="n">quarter_weights</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">backtest</span><span class="p">(</span><span class="n">return_data</span><span class="p">,</span> <span class="n">quarter_weights</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">quarter_weights</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;quarter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">compute_weighted_return</span><span class="p">(</span><span class="n">return_data</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
 
 
@@ -325,7 +325,7 @@ As can be seen from the table, the backtesting results of the End-to-End BERT re
     configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','color.js','mhchem.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +

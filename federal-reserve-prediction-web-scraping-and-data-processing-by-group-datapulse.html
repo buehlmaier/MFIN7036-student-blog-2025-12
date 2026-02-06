@@ -93,208 +93,208 @@ I therefore focused heavily on three main aspects:</p>
 <p>The real breakthrough came with the core method get_historical_minute_dates(). It automatically loops through every year from 1993 to 2014, visits the corresponding historical page (fomchistoricalYYYY.htm), and extracts all available minute dates for that year.
 The whole process is wrapped in robust error handling - whether the page doesn't exist, there's a timeout, connection failure, or any other issue, it prints a clear message and gracefully moves on without crashing.
 Dates are deduplicated within each year using set, then globally deduplicated and sorted newest-to-oldest at the end.</p>
-<div class="codehilite"><pre><span></span><code>def get_historical_minute_dates() -&gt; List[str]:
-    &quot;&quot;&quot;Retrieve meeting minute dates from historical yearly pages (1993-2014)&quot;&quot;&quot;
-    historical_dates = []
-    for year in range(1993, 2015):  #  Loop through each year from 1993 to 2014 to automatically access the historical pages
-        hist_url = f&quot;{BASE_URL}/monetarypolicy/fomchistorical{year}.htm&quot;  # Construct the URL: fomchistoricalYYYY.htm
-        try:
-            response = requests.get(hist_url, headers=HEADERS, timeout=20)
-            if response.status_code != 200:
-                print(f&quot; {year} historical page does not exist, skipping&quot;)
-                continue
-            soup = BeautifulSoup(response.text, &#39;html.parser&#39;)
-            year_dates = []
-            for a in soup.find_all(&#39;a&#39;, href=True):  # Find all &lt;a&gt; links on the page
-                href = a[&#39;href&#39;]
-                if &#39;fomcminutes&#39; in href and href.endswith(&#39;.htm&#39;):  # Extract minute links (e.g., fomcminutes20140129.htm)
-                    date_str = href.split(&#39;fomcminutes&#39;)[-1].replace(&#39;.htm&#39;, &#39;&#39;)
-                    if len(date_str) == 8 and date_str.isdigit():
-                        year_dates.append(date_str)
-            year_dates = sorted(set(year_dates), reverse=True)
-            historical_dates.extend(year_dates)  # Add the dates for this year to the overall list
-            print(f&quot; {year} retrieved {len(year_dates)} dates&quot;)
-            time.sleep(1)  # Polite delay between requests
-        except Exception as e:
-            print(f&quot; Failed to retrieve {year}: {e}&quot;)
-    print(f&quot;Total historical dates (1993-2014): {len(historical_dates)}&quot;)
-return sorted(set(historical_dates), reverse=True)
+<div class="highlight"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">get_historical_minute_dates</span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">List</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="err">:</span>
+<span class="w">    </span><span class="ss">&quot;&quot;&quot;Retrieve meeting minute dates from historical yearly pages (1993-2014)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="n">historical_dates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nf">year</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">range</span><span class="p">(</span><span class="mi">1993</span><span class="p">,</span><span class="w"> </span><span class="mi">2015</span><span class="p">)</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w">  </span><span class="n">Loop</span><span class="w"> </span><span class="n">through</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="nf">year</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="mi">1993</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="mi">2014</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">automatically</span><span class="w"> </span><span class="n">access</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">historical</span><span class="w"> </span><span class="n">pages</span>
+<span class="w">        </span><span class="n">hist_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="ss">&quot;{BASE_URL}/monetarypolicy/fomchistorical{year}.htm&quot;</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">Construct</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="nl">URL</span><span class="p">:</span><span class="w"> </span><span class="n">fomchistoricalYYYY</span><span class="p">.</span><span class="n">htm</span>
+<span class="w">        </span><span class="k">try</span><span class="err">:</span>
+<span class="w">            </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">requests</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">hist_url</span><span class="p">,</span><span class="w"> </span><span class="n">headers</span><span class="o">=</span><span class="n">HEADERS</span><span class="p">,</span><span class="w"> </span><span class="n">timeout</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">200</span><span class="err">:</span>
+<span class="w">                </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot; {year} historical page does not exist, skipping&quot;</span><span class="p">)</span>
+<span class="w">                </span><span class="k">continue</span>
+<span class="w">            </span><span class="n">soup</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="nc">text</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+<span class="w">            </span><span class="n">year_dates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">href</span><span class="o">=</span><span class="k">True</span><span class="p">)</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">Find</span><span class="w"> </span><span class="ow">all</span><span class="w"> </span><span class="o">&lt;</span><span class="n">a</span><span class="o">&gt;</span><span class="w"> </span><span class="n">links</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">page</span>
+<span class="w">                </span><span class="n">href</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">&#39;href&#39;</span><span class="o">]</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="s1">&#39;fomcminutes&#39;</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">href</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">href</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.htm&#39;</span><span class="p">)</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="k">Extract</span><span class="w"> </span><span class="k">minute</span><span class="w"> </span><span class="n">links</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">g</span><span class="p">.,</span><span class="w"> </span><span class="n">fomcminutes20140129</span><span class="p">.</span><span class="n">htm</span><span class="p">)</span>
+<span class="w">                    </span><span class="n">date_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">href</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;fomcminutes&#39;</span><span class="p">)</span><span class="o">[</span><span class="n">-1</span><span class="o">]</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="s1">&#39;.htm&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">date_str</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">date_str</span><span class="p">.</span><span class="n">isdigit</span><span class="p">()</span><span class="err">:</span>
+<span class="w">                        </span><span class="n">year_dates</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">date_str</span><span class="p">)</span>
+<span class="w">            </span><span class="n">year_dates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sorted</span><span class="p">(</span><span class="k">set</span><span class="p">(</span><span class="n">year_dates</span><span class="p">),</span><span class="w"> </span><span class="nf">reverse</span><span class="o">=</span><span class="k">True</span><span class="p">)</span>
+<span class="w">            </span><span class="n">historical_dates</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">year_dates</span><span class="p">)</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="k">Add</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">dates</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="nf">year</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">overall</span><span class="w"> </span><span class="n">list</span>
+<span class="w">            </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot; {year} retrieved {len(year_dates)} dates&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="nc">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">Polite</span><span class="w"> </span><span class="n">delay</span><span class="w"> </span><span class="ow">between</span><span class="w"> </span><span class="n">requests</span>
+<span class="w">        </span><span class="ow">except</span><span class="w"> </span><span class="k">Exception</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nl">e</span><span class="p">:</span>
+<span class="w">            </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot; Failed to retrieve {year}: {e}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="ss">&quot;Total historical dates (1993-2014): {len(historical_dates)}&quot;</span><span class="p">)</span>
+<span class="k">return</span><span class="w"> </span><span class="n">sorted</span><span class="p">(</span><span class="k">set</span><span class="p">(</span><span class="n">historical_dates</span><span class="p">),</span><span class="w"> </span><span class="nf">reverse</span><span class="o">=</span><span class="k">True</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Before discovering this automated approach, I used to manually open the website year after year, browse schedules, and painstakingly copy every single date into a FALLBACK_DATES list. Every typo, new release, or small change meant going back online, verifying, updating the code, and re-running everything. That painful experience taught me an important lesson: great tools rarely start perfect - they often begin with the most tedious manual method and evolve through persistent, self-driven iteration.</p>
 <h3>2. Efficient incremental updates - never waste bandwidth or time</h3>
 <p>The script always checks whether a file already exists locally before attempting to download:</p>
-<div class="codehilite"><pre><span></span><code>if os.path.exists(filepath):  # Check if the local file already exists
-            print(f&quot;Skipping (already exists): {filename}&quot;)
-            skipped += 1
-            continue  # Skip the current iteration; do not perform download or write operations
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span><span class="w">  </span><span class="c1"># Check if the local file already exists</span>
+<span class="w">            </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Skipping (already exists): {filename}&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="n">skipped</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">            </span><span class="k">continue</span><span class="w">  </span><span class="c1"># Skip the current iteration; do not perform download or write operations</span>
 
-        try:
-            print(f&quot;Downloading: {date_str} → {filename}&quot;)
-            response = requests.get(url, headers=HEADERS, timeout=20)
-            # ... (status code check, parsing, text extraction, etc.)
-            with open(filepath, &#39;w&#39;, encoding=&#39;utf-8-sig&#39;) as f:  # This block is only executed if the file does not exist
-                f.write(clean_text)
-            # ... (record successful download)
+<span class="w">        </span><span class="n">try</span><span class="p">:</span>
+<span class="w">            </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Downloading: {date_str} → {filename}&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="n">headers</span><span class="o">=</span><span class="n">HEADERS</span><span class="p">,</span><span class="w"> </span><span class="n">timeout</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="w">            </span><span class="c1"># ... (status code check, parsing, text extraction, etc.)</span>
+<span class="w">            </span><span class="n">with</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8-sig&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">f</span><span class="p">:</span><span class="w">  </span><span class="c1"># This block is only executed if the file does not exist</span>
+<span class="w">                </span><span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">clean_text</span><span class="p">)</span>
+<span class="w">            </span><span class="c1"># ... (record successful download)</span>
 </code></pre></div>
 
 <p>Only missing files are downloaded. This saves bandwidth, dramatically speeds up repeated runs, and completely prevents accidental overwrites - ideal for long-term, incremental usage.</p>
 <h3>3. Clear, human-friendly summary at the end</h3>
 <p>Every execution ends with an instantly understandable report:</p>
-<div class="codehilite"><pre><span></span><code>print(f&quot;\n=== Download Completed ===&quot;)
-        print(f&quot;Newly downloaded: {downloaded} files&quot;)
-        print(f&quot;Skipped (already exists): {skipped} files&quot;)
-        print(f&quot;Failed/no minutes available: {failed} files&quot;)
-        print(f&quot;Actual total files: {downloaded + skipped} files&quot;)
-        print(f&quot;Total dates processed: {len(minute_dates)} dates&quot;)
-        print(f&quot;Save path: {save_folder}&quot;)
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Download Completed ===&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Newly downloaded: {downloaded} files&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Skipped (already exists): {skipped} files&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Failed/no minutes available: {failed} files&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Actual total files: {downloaded + skipped} files&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Total dates processed: {len(minute_dates)} dates&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Save path: {save_folder}&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <p>After all this refinement, the script has transformed from merely "it works" into something <strong>elegant, maintainable, and genuinely team-friendly</strong>. I am confident it will serve as a strong, reliable foundation for all our future Federal Reserve text analysis projects.</p>
 <h2>Data preprocessing</h2>
 <p>Through automated data extraction, we obtained the original HTML documents of the Federal Open Market Committee (FOMC) policy statements and minutes from 2015 to 2025. These raw texts contained substantial noise, including navigation menus, footer information, and voting records. We firstly categorizing and purifying the documents: by parsing the HTML structure to precisely locate the main text and stripping away all irrelevant tags. Subsequently, we implemented targeted cleanups based on document types - for instance, removing standardized voting paragraphs from statements and identifying the starting points of core discussions in minutes - to ensure only coherent texts reflecting the essence of policy decisions remained. Specifically, statements and minutes share identical article structures. The same paragraphs can effectively isolate noise content at the beginning and end of the text. The code we use is as follows:</p>
-<div class="codehilite"><pre><span></span><code>def clean_statement_text(text):
-    &quot;&quot;&quot;clean Statement&quot;&quot;&quot;
-    if not text:
-        return text
+<div class="highlight"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">clean_statement_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;clean Statement&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">text</span><span class="p">:</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">text</span>
 
-    # delete content before the first &quot;share&quot;
-    share_pattern = re.compile(r&#39;share&#39;, re.IGNORECASE)
-    share_match = share_pattern.search(text)
+<span class="w">    </span><span class="c1"># delete content before the first &quot;share&quot;</span>
+<span class="w">    </span><span class="n">share_pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;share&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="w">    </span><span class="n">share_match</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">share_pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
-    if share_match:
-        text = text[share_match.end():]
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">share_match</span><span class="p">:</span>
+<span class="w">        </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">text</span><span class="p">[</span><span class="n">share_match</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span>
 
-    # delete the content after &quot;Voting for the FOMC monetary policy action&quot;
-    vote_pattern = re.compile(r&#39;Voting for the FOMC monetary policy action&#39;, re.IGNORECASE)
-    vote_match = vote_pattern.search(text)
+<span class="w">    </span><span class="c1"># delete the content after &quot;Voting for the FOMC monetary policy action&quot;</span>
+<span class="w">    </span><span class="n">vote_pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Voting for the FOMC monetary policy action&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="w">    </span><span class="n">vote_match</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vote_pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
-    if vote_match:
-        text = text[:vote_match.start()]
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">vote_match</span><span class="p">:</span>
+<span class="w">        </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">text</span><span class="p">[:</span><span class="n">vote_match</span><span class="o">.</span><span class="n">start</span><span class="p">()]</span>
 
-    return text.strip()
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
-def clean_minutes_text(text):
-    &quot;&quot;&quot;clean Minutes&quot;&quot;&quot;
-    if not text:
-        return text
+<span class="n">def</span><span class="w"> </span><span class="n">clean_minutes_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;clean Minutes&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">text</span><span class="p">:</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">text</span>
 
-    # delete the content after &quot;Voting for this action&quot;
-    voting_pattern = re.compile(r&#39;voting for this action&#39;, re.IGNORECASE)
-    voting_match = voting_pattern.search(text)
+<span class="w">    </span><span class="c1"># delete the content after &quot;Voting for this action&quot;</span>
+<span class="w">    </span><span class="n">voting_pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;voting for this action&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="w">    </span><span class="n">voting_match</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">voting_pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
-    if voting_match:
-        text = text[:voting_match.start()]
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">voting_match</span><span class="p">:</span>
+<span class="w">        </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">text</span><span class="p">[:</span><span class="n">voting_match</span><span class="o">.</span><span class="n">start</span><span class="p">()]</span>
 
-    # Try to find the start of the meeting minutes
-    start_patterns = [
-        r&#39;review of monetary policy strategy, tools, and communications&#39;,
-        r&#39;developments in financial markets&#39;,
-        r&#39;staff review of the economic situation&#39;,
-    ]
+<span class="w">    </span><span class="c1"># Try to find the start of the meeting minutes</span>
+<span class="w">    </span><span class="n">start_patterns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="sa">r</span><span class="s1">&#39;review of monetary policy strategy, tools, and communications&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="sa">r</span><span class="s1">&#39;developments in financial markets&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="sa">r</span><span class="s1">&#39;staff review of the economic situation&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">]</span>
 
-    for pattern in start_patterns:
-        match = re.search(pattern, text, re.IGNORECASE)
-        if match:
-            text = text[match.start():]
-            break
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">pattern</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">start_patterns</span><span class="p">:</span>
+<span class="w">        </span><span class="k">match</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="k">match</span><span class="p">:</span>
+<span class="w">            </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">text</span><span class="p">[</span><span class="k">match</span><span class="o">.</span><span class="n">start</span><span class="p">():]</span>
+<span class="w">            </span><span class="k">break</span>
 
-return text.strip()
+<span class="k">return</span><span class="w"> </span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 </code></pre></div>
 
 <p>Base on this foundation, we implemented systematic text standardization. Using natural language processing tools, we segmented continuous texts into independent sentences, standardized them to lowercase, and calculated basic metrics like word count and sentence count, laying the groundwork for subsequent quantitative analysis. These steps transformed the disorganized raw data into clean, structured textual corpus, converting it from "web documents" into a "policy research dataset" suitable for in-depth analysis. The code is as follows:</p>
-<div class="codehilite"><pre><span></span><code>def process_text(text, doc_type):
-    &quot;&quot;&quot;Process text, including cleaning and NLTK sentence segmentation&quot;&quot;&quot;
-    if not text:
-        return &quot;&quot;, []
+<div class="highlight"><pre><span></span><code><span class="nx">def</span><span class="w"> </span><span class="nx">process_text</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span><span class="w"> </span><span class="nx">doc_type</span><span class="p">):</span>
+<span class="w">    </span><span class="s">&quot;&quot;&quot;Process text, including cleaning and NLTK sentence segmentation&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="nx">text</span><span class="p">:</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span>
 
-    # Clean text by document type
-    if doc_type == &#39;Statement&#39;:
-        cleaned_text = clean_statement_text(text)
-    elif doc_type == &#39;Minutes&#39;:
-        cleaned_text = clean_minutes_text(text)
-    else:
-        cleaned_text = text
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nx">Clean</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="nx">by</span><span class="w"> </span><span class="nx">document</span><span class="w"> </span><span class="k">type</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">doc_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">Statement</span><span class="err">&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">cleaned_text</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">clean_statement_text</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">elif</span><span class="w"> </span><span class="nx">doc_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">Minutes</span><span class="err">&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">cleaned_text</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">clean_minutes_text</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span>
+<span class="w">    </span><span class="k">else</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">cleaned_text</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">text</span>
 
-    # Use NLTK for sentence segmentation
-    sentences = []
-    if cleaned_text:
-        try:
-            sentences = sent_tokenize(cleaned_text)
-        except:
-            # If NLTK fails to perform word segmentation, use simple segmentation
-            sentences = re.split(r&#39;(?&lt;=[.!?])\s+&#39;, cleaned_text)
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nx">Use</span><span class="w"> </span><span class="nx">NLTK</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">sentence</span><span class="w"> </span><span class="nx">segmentation</span>
+<span class="w">    </span><span class="nx">sentences</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">cleaned_text</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">try</span><span class="p">:</span>
+<span class="w">            </span><span class="nx">sentences</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">sent_tokenize</span><span class="p">(</span><span class="nx">cleaned_text</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">except</span><span class="p">:</span>
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="nx">If</span><span class="w"> </span><span class="nx">NLTK</span><span class="w"> </span><span class="nx">fails</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">perform</span><span class="w"> </span><span class="nx">word</span><span class="w"> </span><span class="nx">segmentation</span><span class="p">,</span><span class="w"> </span><span class="nx">use</span><span class="w"> </span><span class="nx">simple</span><span class="w"> </span><span class="nx">segmentation</span>
+<span class="w">            </span><span class="nx">sentences</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">re</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="nx">r</span><span class="err">&#39;</span><span class="p">(?</span><span class="o">&lt;=</span><span class="p">[.!?])</span><span class="err">\</span><span class="nx">s</span><span class="o">+</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">cleaned_text</span><span class="p">)</span>
 
-return cleaned_text, sentences
+<span class="k">return</span><span class="w"> </span><span class="nx">cleaned_text</span><span class="p">,</span><span class="w"> </span><span class="nx">sentences</span>
 </code></pre></div>
 
 <p>To visually reveal the text's core, we conducted thorough data preparation for the word cloud generation. The process focused on extracting meaningful vocabulary by merging generic and custom stopword lists, filtering out function words like "the" and "of," as well as institutional high-frequency terms such as "committee" and "meeting." We also established a vocabulary length threshold to retain only semantically significant terms. The code is as follows:</p>
-<div class="codehilite"><pre><span></span><code>def generate_wordcloud(text, output_path, doc_type, date, mask_path=None):
-    if not text or len(text.strip()) &lt; 100:
-        return
+<div class="highlight"><pre><span></span><code><span class="nx">def</span><span class="w"> </span><span class="nx">generate_wordcloud</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span><span class="w"> </span><span class="nx">output_path</span><span class="p">,</span><span class="w"> </span><span class="nx">doc_type</span><span class="p">,</span><span class="w"> </span><span class="nx">date</span><span class="p">,</span><span class="w"> </span><span class="nx">mask_path</span><span class="p">=</span><span class="nx">None</span><span class="p">):</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="nx">len</span><span class="p">(</span><span class="nx">text</span><span class="p">.</span><span class="nx">strip</span><span class="p">())</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">100</span><span class="p">:</span>
+<span class="w">        </span><span class="k">return</span>
 
-    # stop words
-    stopwords = set(STOPWORDS)
-    # Add NLTK stop words
-    stopwords.update(set(nltk_stopwords.words(&#39;english&#39;)))
-    # Add custom stop words (FOMC-related)
-    custom_stopwords = {
-        &#39;federal&#39;, &#39;reserve&#39;, &#39;board&#39;, &#39;governors&#39;, &#39;committee&#39;, &#39;meeting&#39;,
-        &#39;january&#39;, &#39;february&#39;, &#39;march&#39;, &#39;april&#39;, &#39;may&#39;, &#39;june&#39;, &#39;july&#39;,
-        &#39;august&#39;, &#39;september&#39;, &#39;october&#39;, &#39;november&#39;, &#39;december&#39;, &#39;s&#39;, &#39;t&#39;,
-        &#39;would&#39;, &#39;could&#39;, &#39;also&#39;, &#39;may&#39;, &#39;us&#39;, &#39;u&#39;, &#39;mr&#39;, &#39;ms&#39;, &#39;mrs&#39;,
-        &#39;dr&#39;, &#39;prof&#39;, &#39;vs&#39;, &#39;inc&#39;, &#39;ltd&#39;, &#39;co&#39;, &#39;corp&#39;, &#39;llc&#39;, &#39;said&#39;
-    }
-    stopwords.update(custom_stopwords)
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nx">stop</span><span class="w"> </span><span class="nx">words</span>
+<span class="w">    </span><span class="nx">stopwords</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">set</span><span class="p">(</span><span class="nx">STOPWORDS</span><span class="p">)</span>
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nx">Add</span><span class="w"> </span><span class="nx">NLTK</span><span class="w"> </span><span class="nx">stop</span><span class="w"> </span><span class="nx">words</span>
+<span class="w">    </span><span class="nx">stopwords</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">set</span><span class="p">(</span><span class="nx">nltk_stopwords</span><span class="p">.</span><span class="nx">words</span><span class="p">(</span><span class="err">&#39;</span><span class="nx">english</span><span class="err">&#39;</span><span class="p">)))</span>
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nx">Add</span><span class="w"> </span><span class="nx">custom</span><span class="w"> </span><span class="nx">stop</span><span class="w"> </span><span class="nx">words</span><span class="w"> </span><span class="p">(</span><span class="nx">FOMC</span><span class="o">-</span><span class="nx">related</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">custom_stopwords</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="err">&#39;</span><span class="nx">federal</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">reserve</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">board</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">governors</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">committee</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">meeting</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="err">&#39;</span><span class="nx">january</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">february</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">march</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">april</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">may</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">june</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">july</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="err">&#39;</span><span class="nx">august</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">september</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">october</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">november</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">december</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;s&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;t&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="err">&#39;</span><span class="nx">would</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">could</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">also</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">may</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">us</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;u&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">mr</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">ms</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">mrs</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="err">&#39;</span><span class="nx">dr</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">prof</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">vs</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">inc</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">ltd</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">co</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">corp</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">llc</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">said</span><span class="err">&#39;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">stopwords</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">custom_stopwords</span><span class="p">)</span>
 
-    try:
-        # Set word cloud parameters
-        wordcloud_params = {
-            &#39;width&#39;: 1600,
-            &#39;height&#39;: 800,
-            &#39;background_color&#39;: &#39;white&#39;,
-            &#39;stopwords&#39;: stopwords,
-            &#39;max_words&#39;: 200,
-            &#39;contour_width&#39;: 3,
-            &#39;contour_color&#39;: &#39;steelblue&#39;
-        }
+<span class="w">    </span><span class="nx">try</span><span class="p">:</span>
+<span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="nx">Set</span><span class="w"> </span><span class="nx">word</span><span class="w"> </span><span class="nx">cloud</span><span class="w"> </span><span class="nx">parameters</span>
+<span class="w">        </span><span class="nx">wordcloud_params</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="err">&#39;</span><span class="nx">width</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">1600</span><span class="p">,</span>
+<span class="w">            </span><span class="err">&#39;</span><span class="nx">height</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">800</span><span class="p">,</span>
+<span class="w">            </span><span class="err">&#39;</span><span class="nx">background_color</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">white</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="err">&#39;</span><span class="nx">stopwords</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="nx">stopwords</span><span class="p">,</span>
+<span class="w">            </span><span class="err">&#39;</span><span class="nx">max_words</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">            </span><span class="err">&#39;</span><span class="nx">contour_width</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">            </span><span class="err">&#39;</span><span class="nx">contour_color</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="nx">steelblue</span><span class="err">&#39;</span>
+<span class="w">        </span><span class="p">}</span>
 
-        # If a mask image is provided
-        if mask_path and os.path.exists(mask_path):
-            mask = np.array(Image.open(mask_path))
-            wordcloud_params[&#39;mask&#39;] = mask
-            wordcloud_params[&#39;contour_width&#39;] = 0 
+<span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="nx">If</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">mask</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="nx">provided</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">mask_path</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">mask_path</span><span class="p">):</span>
+<span class="w">            </span><span class="nx">mask</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">np</span><span class="p">.</span><span class="nx">array</span><span class="p">(</span><span class="nx">Image</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">mask_path</span><span class="p">))</span>
+<span class="w">            </span><span class="nx">wordcloud_params</span><span class="p">[</span><span class="err">&#39;</span><span class="nx">mask</span><span class="err">&#39;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">mask</span>
+<span class="w">            </span><span class="nx">wordcloud_params</span><span class="p">[</span><span class="err">&#39;</span><span class="nx">contour_width</span><span class="err">&#39;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span>
 
-        # Generate word clouds
-        wordcloud = WordCloud(**wordcloud_params).generate(text)
+<span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="nx">Generate</span><span class="w"> </span><span class="nx">word</span><span class="w"> </span><span class="nx">clouds</span>
+<span class="w">        </span><span class="nx">wordcloud</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">WordCloud</span><span class="p">(</span><span class="o">**</span><span class="nx">wordcloud_params</span><span class="p">).</span><span class="nx">generate</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span>
 
-        # Create a shape
-        plt.figure(figsize=(20, 10))
-        plt.imshow(wordcloud, interpolation=&#39;bilinear&#39;)
-        plt.axis(&#39;off&#39;)
-        plt.title(f&#39;FOMC {doc_type} - {date}&#39;, fontsize=24, pad=20)
+<span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="nx">Create</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">shape</span>
+<span class="w">        </span><span class="nx">plt</span><span class="p">.</span><span class="nx">figure</span><span class="p">(</span><span class="nx">figsize</span><span class="p">=(</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">))</span>
+<span class="w">        </span><span class="nx">plt</span><span class="p">.</span><span class="nx">imshow</span><span class="p">(</span><span class="nx">wordcloud</span><span class="p">,</span><span class="w"> </span><span class="nx">interpolation</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">bilinear</span><span class="err">&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">plt</span><span class="p">.</span><span class="nx">axis</span><span class="p">(</span><span class="err">&#39;</span><span class="nx">off</span><span class="err">&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">plt</span><span class="p">.</span><span class="nx">title</span><span class="p">(</span><span class="nx">f</span><span class="err">&#39;</span><span class="nx">FOMC</span><span class="w"> </span><span class="p">{</span><span class="nx">doc_type</span><span class="p">}</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">{</span><span class="nx">date</span><span class="p">}</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">fontsize</span><span class="p">=</span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="nx">pad</span><span class="p">=</span><span class="mi">20</span><span class="p">)</span>
 
-        # Save image
-        plt.savefig(output_path, dpi=300, bbox_inches=&#39;tight&#39;, facecolor=&#39;white&#39;)
-        plt.close()
+<span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="nx">Save</span><span class="w"> </span><span class="nx">image</span>
+<span class="w">        </span><span class="nx">plt</span><span class="p">.</span><span class="nx">savefig</span><span class="p">(</span><span class="nx">output_path</span><span class="p">,</span><span class="w"> </span><span class="nx">dpi</span><span class="p">=</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="nx">bbox_inches</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">tight</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">facecolor</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">white</span><span class="err">&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">plt</span><span class="p">.</span><span class="nx">close</span><span class="p">()</span>
 
-def analyze_word_frequencies(text, top_n=30):
-    &quot;&quot;&quot;Analyze word frequency&quot;&quot;
-    if not text:
-        return []
+<span class="nx">def</span><span class="w"> </span><span class="nx">analyze_word_frequencies</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span><span class="w"> </span><span class="nx">top_n</span><span class="p">=</span><span class="mi">30</span><span class="p">):</span>
+<span class="w">    </span><span class="s">&quot;&quot;&quot;Analyze word frequency&quot;</span><span class="err">&quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="nx">text</span><span class="p">:</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">[]</span>
 
-    # Clean text and segment words
-    words = re.findall(r&#39;\b[a-zA-Z]{3,}\b&#39;, text.lower())
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nx">Clean</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">segment</span><span class="w"> </span><span class="nx">words</span>
+<span class="w">    </span><span class="nx">words</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">re</span><span class="p">.</span><span class="nx">findall</span><span class="p">(</span><span class="nx">r</span><span class="err">&#39;\</span><span class="nx">b</span><span class="p">[</span><span class="nx">a</span><span class="o">-</span><span class="nx">zA</span><span class="o">-</span><span class="nx">Z</span><span class="p">]{</span><span class="mi">3</span><span class="p">,}</span><span class="err">\</span><span class="nx">b</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">text</span><span class="p">.</span><span class="nx">lower</span><span class="p">())</span>
 
-    # Remove disabled words
-    stop_words = set(nltk_stopwords.words(&#39;english&#39;))
-    words = [word for word in words if word not in stop_words]
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nx">Remove</span><span class="w"> </span><span class="nx">disabled</span><span class="w"> </span><span class="nx">words</span>
+<span class="w">    </span><span class="nx">stop_words</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">set</span><span class="p">(</span><span class="nx">nltk_stopwords</span><span class="p">.</span><span class="nx">words</span><span class="p">(</span><span class="err">&#39;</span><span class="nx">english</span><span class="err">&#39;</span><span class="p">))</span>
+<span class="w">    </span><span class="nx">words</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="nx">word</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">word</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">words</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nx">word</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">stop_words</span><span class="p">]</span>
 
-    # Calculate word frequency
-    word_counts = Counter(words)
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nx">Calculate</span><span class="w"> </span><span class="nx">word</span><span class="w"> </span><span class="nx">frequency</span>
+<span class="w">    </span><span class="nx">word_counts</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">Counter</span><span class="p">(</span><span class="nx">words</span><span class="p">)</span>
 
-    # Get the top N most common words
-return word_counts.most_common(top_n)
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nx">Get</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">top</span><span class="w"> </span><span class="nx">N</span><span class="w"> </span><span class="nx">most</span><span class="w"> </span><span class="nx">common</span><span class="w"> </span><span class="nx">words</span>
+<span class="k">return</span><span class="w"> </span><span class="nx">word_counts</span><span class="p">.</span><span class="nx">most_common</span><span class="p">(</span><span class="nx">top_n</span><span class="p">)</span>
 </code></pre></div>
 
 <p>The preliminary word cloud highlights key terms like "inflation",  "employment", and "policy", accurately capturing the dual mission and core concerns of the Federal Reserve's policy communication. This validates the effectiveness of the data processing workflow and paves the way for subsequent refined text analysis. </p>

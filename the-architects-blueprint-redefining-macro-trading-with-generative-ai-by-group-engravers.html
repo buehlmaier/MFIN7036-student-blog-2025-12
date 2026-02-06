@@ -87,7 +87,7 @@
 <p>The foundation of any robust ML model is trustworthy data. We rejected static Kaggle datasets—plagued by survivorship bias, temporal gaps, and irrelevant content—and embarked on an ambitious data engineering initiative to reconstruct Gold’s narrative history from <strong>2020 to 2025</strong> using custom-coded pipelines.  </p>
 <h3>2.1 Targeted Data Collection: Solving Core Pain Points</h3>
 <p>To capture Gold’s core drivers, we built a pipeline using <code>GNews</code> for textual data and <code>yfinance</code> for price data, focusing on keywords like <em>"Federal Reserve rate," "Inflation CPI,"</em> and <em>"Geopolitical tension"</em>. Two critical challenges emerged, and we solved them with concise, targeted code:  </p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">yfinance</span> <span class="k">as</span> <span class="nn">yf</span>
 <span class="kn">from</span> <span class="nn">gnews</span> <span class="kn">import</span> <span class="n">GNews</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
@@ -109,7 +109,7 @@
 
 <h4>Challenge 1: Messy Date Formats</h4>
 <p>GNews returns inconsistent date strings (e.g., "Fri, 27 Dec 2024 GMT" vs. "2024/12/27"). We standardized them with a try-except block:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
     <span class="c1"># Standard date format</span>
     <span class="n">dt</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">pub</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">except</span><span class="p">:</span>
@@ -118,7 +118,7 @@
 
 <h4>Challenge 2: Anti-Scraping Blocks</h4>
 <p>Frequent requests triggered Google’s rate limits. We added strategic delays to stay compliant:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">KEYWORDS</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">KEYWORDS</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">resp</span> <span class="o">=</span> <span class="n">google_news</span><span class="o">.</span><span class="n">get_news</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
 
@@ -132,7 +132,7 @@
 <p>Financial data is noisy, so we implemented a <strong>Next-Day Return (T+1)</strong> labeling strategy to ensure the model only uses information available at prediction time. The core logic lies in our granular scoring function and date alignment:</p>
 <h4>Core Scoring Function</h4>
 <p>We mapped Gold’s returns to a -5 to +5 scale, tied to its historical volatility:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">get_score_from_return</span><span class="p">(</span><span class="n">ret</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_score_from_return</span><span class="p">(</span><span class="n">ret</span><span class="p">):</span>
     <span class="c1"># The threshold here can be adjusted based on the historical volatility of gold</span>
     <span class="c1"># Gold volatility is smaller than that of individual stocks; generally, a daily fluctuation exceeding 1.5% is considered significant</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">ret</span> <span class="o">*</span> <span class="mi">100</span> <span class="c1"># Convert to percentage</span>
@@ -152,7 +152,7 @@
 
 <h4>Date Alignment to Avoid Non-Trading Days</h4>
 <p>We skipped news from weekends/holidays to ensure valid return matching:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">dt</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">date_str</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">dt</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">date_str</span><span class="p">)</span>
 
 <span class="c1"># Find the daily rate of return</span>
 <span class="k">if</span> <span class="n">dt</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>

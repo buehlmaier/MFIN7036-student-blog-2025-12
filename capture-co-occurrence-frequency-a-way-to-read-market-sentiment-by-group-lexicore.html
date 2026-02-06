@@ -96,7 +96,7 @@
 <h2>Automatical Construction: yfinance</h2>
 <p>In the latest API update, yfinance may fail to find the "Adj-Close" column due to automatic price adjustment. 
 Therefore, a dynamic detection logic has been added to the code to ensure that the adjusted closing price, which takes into account stock splits and dividends, is obtained.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">start_date</span> <span class="o">=</span> <span class="s2">&quot;2020-01-01&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="n">start_date</span> <span class="o">=</span> <span class="s2">&quot;2020-01-01&quot;</span>
 <span class="n">end_date</span> <span class="o">=</span> <span class="s2">&quot;2025-12-31&quot;</span>
 <span class="c1"># ban auto_adjust</span>
 <span class="n">raw_data</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span> <span class="n">auto_adjust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -118,7 +118,7 @@ Therefore, a dynamic detection logic has been added to the code to ensure that t
 <p>After failing to get historical data from Reddit and X (Twitter) directly through APIs, we turn to some existing databases. Here, we found a well established dataset posted on Kaggle.</p>
 <p><a href="https://www.kaggle.com/datasets/bwandowando/reddit-rnews-subreddit-2008-to-2024/data?select=news_comments_018.parquet">News&amp;Comments from 2008 to 2024 on Reddit</a></p>
 <p>Part of our code is shown below. </p>
-<div class="codehilite"><pre><span></span><code><span class="n">s</span> <span class="o">=</span> <span class="n">df_2020_en</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">s</span> <span class="o">=</span> <span class="n">df_2020_en</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
 <span class="c1"># regex for keywords</span>
 <span class="n">topic_patterns</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">k</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\b(?:</span><span class="si">%s</span><span class="s2">)\b&quot;</span> <span class="o">%</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">,</span> <span class="n">v</span><span class="p">)),</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
@@ -132,7 +132,7 @@ Therefore, a dynamic detection logic has been added to the code to ensure that t
 </code></pre></div>
 
 <p>It should be noted that some filtering and merging operations should be added to the code to make the database usable. Here is what we have done.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">#Convert the time variables into the same format</span>
+<div class="highlight"><pre><span></span><code><span class="c1">#Convert the time variables into the same format</span>
 <span class="n">df</span><span class="p">[</span><span class="s2">&quot;created_dt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;created&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
 <span class="c1">#Filter out titles that contain keywords (i.e. match the regex patterns defined)</span>
 <span class="n">topic_hits</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">pat</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">pat</span> <span class="ow">in</span> <span class="n">topic_patterns</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
@@ -146,7 +146,7 @@ Therefore, a dynamic detection logic has been added to the code to ensure that t
 <p>As we wrote in our first blog, we downloaded the title of related news from Guardian and New York Times. We believe that the message within the news can be well reflected by performing NLP on their titles.</p>
 <p>By counting the frequency of specific words written in these titles, we can estimate the media attention on technology companies or news every day. Due to <strong>different writing styles</strong> of news media, we need to 
 adjust the approach in our code from time to time. Here, we only post an example, so if you are trying to use them in your own project (which is totally welcomed), make sure to its feasibility based on your data sources.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_daily_frequency</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">topic_patterns</span><span class="o">=</span><span class="n">topic_patterns</span><span class="p">,</span> <span class="n">company_patterns</span><span class="o">=</span><span class="n">company_patterns</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_daily_frequency</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">topic_patterns</span><span class="o">=</span><span class="n">topic_patterns</span><span class="p">,</span> <span class="n">company_patterns</span><span class="o">=</span><span class="n">company_patterns</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>  
     <span class="c1"># Match topic patterns</span>
     <span class="n">topic_hits</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
@@ -197,7 +197,7 @@ adjust the approach in our code from time to time. Here, we only post an example
 <li><strong>TextBlob</strong>: Rule-based sentiment analysis with polarity and subjectivity</li>
 <li><strong>Combined Approach</strong>: Uses both methods for robust classification</li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">analyze_sentiment_vader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>     
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">analyze_sentiment_vader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>     
     <span class="n">scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vader_analyzer</span><span class="o">.</span><span class="n">polarity_scores</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>   
     <span class="c1"># Determine sentiment label based on compound score</span>
     <span class="n">compound</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="s1">&#39;compound&#39;</span><span class="p">]</span>
@@ -253,7 +253,7 @@ adjust the approach in our code from time to time. Here, we only post an example
 <h1>TF-IDF Calculation</h1>
 <p>TF-IDF (Term Frequency-Inverse Document Frequency) is a statistical method used to evaluate the <strong>importance</strong> of a word in a set of documents. It measures the value of a word in distinguishing documents by multiplying the frequency of the word in a document (TF) with the rarity of the word in the entire corpus (IDF).</p>
 <p>We choose this method to better estimate in news, because frequency can only tell part of the story. If a word has a high TF-IDF value, who appears frequently in one article but rarely in other articles, then this word is the "key word" of that particular document. In our project, a higher TF-IDF value indicates that the emotions expressed in this text should be given more weight.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">use_custom_vocab</span> <span class="ow">and</span> <span class="n">topic_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="n">use_custom_vocab</span> <span class="ow">and</span> <span class="n">topic_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
      <span class="c1"># create a set of keywords</span>
      <span class="n">custom_vocab</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
      <span class="k">if</span> <span class="n">topic_dict</span><span class="p">:</span>
@@ -291,7 +291,7 @@ adjust the approach in our code from time to time. Here, we only post an example
 <p>Due to the limited time, we directly downloaded the β value for each stock from Capital IQ, 
 rather than making predictions based on historical data. It might lead to higher 
 estimation error in excess return.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Prepare dependent and indepedent varaible</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Prepare dependent and indepedent varaible</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;freq_g_c&#39;</span><span class="p">,</span> <span class="s1">&#39;sent_g_c&#39;</span><span class="p">,</span> <span class="s1">&#39;freq_g_t&#39;</span><span class="p">,</span> <span class="s1">&#39;sent_g_t&#39;</span><span class="p">,</span> <span class="s1">&#39;freq_n_t&#39;</span><span class="p">,</span> <span class="s1">&#39;sent_n_t&#39;</span><span class="p">,</span><span class="s1">&#39;freq_r&#39;</span><span class="p">]]</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;return&#39;</span><span class="p">]</span>
 <span class="c1"># Add constant</span>
@@ -303,7 +303,7 @@ estimation error in excess return.</p>
 <p>The initial results were not satisfactory. We carefully reviewed the data processing procedure mentioned earlier, corrected some extreme value issues, and attempted to incorporate a time window, which led to more significant regression results.
 According to our attempts, set the time window to be <strong>4 days</strong> after the document is published will 
 obtain a better estimation result.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Add a time window</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Add a time window</span>
 <span class="n">result_timewindow</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">result_timewindow</span><span class="p">[</span><span class="s1">&#39;excess return&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result_timewindow</span><span class="p">[</span><span class="s1">&#39;excess return&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">result_timewindow</span> <span class="o">=</span> <span class="n">result_timewindow</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
@@ -311,7 +311,7 @@ obtain a better estimation result.</p>
 
 <p>A series of machine learning models were adopted too, and we try to enhance their performance by adjusting parameters. 
 Here we use Random forest as an example. The R-square result is not as good as OLS.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Separate features and labels</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Separate features and labels</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">result_timewindow</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;return&#39;</span><span class="p">,</span> <span class="s1">&#39;excess return&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># All TF-IDF features</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">result_timewindow</span><span class="p">[</span><span class="s1">&#39;excess return&#39;</span><span class="p">]</span>
 <span class="c1"># Split data</span>

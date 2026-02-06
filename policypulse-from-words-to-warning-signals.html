@@ -164,7 +164,7 @@
 <p>I wrote a Python script (<code>bis_processor.py</code>) to automate this process. Below, I’ll explain the key components.</p>
 <h4>1.4.1 Setting Up the Environment</h4>
 <p>The script uses several libraries for HTTP requests, JSON handling, and progress tracking.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">csv</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -177,7 +177,7 @@
 
 <h4>1.4.2 Robust HTTP Requests</h4>
 <p>To handle network issues and avoid being blocked, I set up a session with retry logic and custom headers.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Define custom headers for HTTP requests</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Define custom headers for HTTP requests</span>
 <span class="n">HEADERS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
@@ -195,14 +195,14 @@
 
 <h4>1.4.3 Extracting the Speech Code</h4>
 <p>From the PDF URL in the CSV, I extracted the unique speech code.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">extract_unique_code</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">extract_unique_code</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract the unique code from the URL.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </code></pre></div>
 
 <h4>1.4.4 Fetching Document Details</h4>
 <p>This function calls the BIS API and parses the JSON response. It includes error handling and a fallback for a common URL pattern.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_document_details</span><span class="p">(</span><span class="n">api_url</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_document_details</span><span class="p">(</span><span class="n">api_url</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch the JSON data from the API and extract relevant details.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">api_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">HEADERS</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  
@@ -249,7 +249,7 @@
 
 <h4>1.4.5 Mapping Institution Numbers to Names</h4>
 <p>The BIS API returns institution numbers, not names. I used a local <code>institutions.json</code> file, which was also from an undocumented API, to map these numbers to human-readable names.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">load_institutions_map</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">load_institutions_map</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Load the institutions.json file and create a mapping of id to name.&quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -267,7 +267,7 @@
 
 <h4>1.4.6 Main Processing Loop</h4>
 <p>The script reads the CSV, iterates through each row, enriches the data via the API, and writes the output as JSON.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">process_csv</span><span class="p">(</span><span class="n">csv_file_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_csv</span><span class="p">(</span><span class="n">csv_file_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Process the CSV file and generate the final JSON data.&quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">csv_file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
         <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
@@ -330,7 +330,7 @@
 
 <h4>1.4.7 Running the Script</h4>
 <p>The script can be run from the command line:</p>
-<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>bis_processor.py<span class="w"> </span>speeches_2008.csv<span class="w"> </span>--output_dir<span class="w"> </span>Data_BIS/processed/
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>bis_processor.py<span class="w"> </span>speeches_2008.csv<span class="w"> </span>--output_dir<span class="w"> </span>Data_BIS/processed/
 </code></pre></div>
 
 <hr>
@@ -374,7 +374,7 @@
 <p>The preprocessing phase transforms raw central bank speeches into clean, machine-readable text while calculating corresponding market reactions. This involves text cleaning, tokenization, financial data calculation, and merging to create structured datasets for machine learning.</p>
 <h3>2.2 Dependencies and Initialization</h3>
 <p>The code begins by importing necessary libraries and initializing NLTK resources for text processing.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">nltk</span>
@@ -401,7 +401,7 @@
 <h3>2.3 Text Cleaning Functions</h3>
 <h4>2.3.1 Stopwords Configuration</h4>
 <p>The get_stopwords function combines NLTK's default English stopwords with financial domain-specific terms to filter low-information content.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Step 0.5: Define stopwords for text cleaning</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Step 0.5: Define stopwords for text cleaning</span>
 <span class="k">def</span> <span class="nf">get_stopwords</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Combine NLTK default stopwords + financial speech-specific stopwords&quot;&quot;&quot;</span>
     <span class="n">nltk_stopwords</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">))</span>
@@ -411,7 +411,7 @@
 
 <h4>2.3.2 Text Cleaning Function</h4>
 <p>The clean_text function removes structural noise, normalizes text, and filters stopwords to extract meaningful policy language from messy transcripts.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Step 1 : Text cleaning function (only return cleaned text, no original text)</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Step 1 : Text cleaning function (only return cleaned text, no original text)</span>
 <span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Clean BIS speech text: remove noise, stopwords, and non-meaningful terms</span>
@@ -445,7 +445,7 @@
 
 <h3>2.4 Financial Data Calculation</h3>
 <p>The get_financial_future_3m_change function fetches VIX and S&amp;P 500 data and calculates 90-day future percentage changes for market reaction labeling.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">#  Step 2: Calculate 3-Month Future Change for VIX/SP500</span>
+<div class="highlight"><pre><span></span><code><span class="c1">#  Step 2: Calculate 3-Month Future Change for VIX/SP500</span>
 <span class="k">def</span> <span class="nf">get_financial_future_3m_change</span><span class="p">(</span><span class="n">year</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fetch daily VIX (^VIX) and SP500 (^GSPC) data for a given year, calculate 3-month (90-day) future percentage change</span>
@@ -502,7 +502,7 @@
 
 <h3>2.5 Data Merging Pipeline</h3>
 <p>The process_yearly_data function integrates cleaned speech text with financial market data, aligning each speech with corresponding market outcomes.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">#  Step 3: Process Yearly Speech + Financial Data </span>
+<div class="highlight"><pre><span></span><code><span class="c1">#  Step 3: Process Yearly Speech + Financial Data </span>
 <span class="k">def</span> <span class="nf">process_yearly_data</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">speech_data_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Process a single year&#39;s speech data + financial data:</span>
@@ -590,7 +590,7 @@
 
 <h3>2.6 Main Execution Loop</h3>
 <p>The main execution script processes all years from 2008 to 2019 sequentially, creating annual merged datasets.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Step 4: Main Execution (Traverse 2008-2019) </span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Step 4: Main Execution (Traverse 2008-2019) </span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="c1"># Configuration (ADJUST THESE PATHS TO YOUR ENVIRONMENT!)</span>
     <span class="n">SPEECH_DATA_DIR</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;BIS&quot;</span>  <span class="c1"># Directory containing speeches_2008_processed.json, etc.</span>
@@ -658,7 +658,7 @@ Each document is first tokenized into a list of unigrams and then converted into
 <p>Importantly, we use “word × date” as the minimal counting unit, rather than raw word frequency. The implicit assumption is that:</p>
 <p>What matters is whether a word appears on a given day, not how many times it appears.</p>
 <p>This treatment effectively mitigates distortions caused by differences in document length or excessive repetition of high-frequency words, leading to a more stable and interpretable dictionary construction.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -737,7 +737,7 @@ By jointly incorporating equity index and volatility information, we capture a w
 <p>(4) Frequency thresholds
 Statistical results are retained only for words that appear on a sufficient number of distinct dates, reducing the risk of spurious correlations driven by low-frequency words.</p>
 <p>Through these procedures, we ultimately construct a hierarchical and adaptive dictionary system, in which each word is characterized not only by whether it is relevant, but also by under what conditions it is relevant.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -934,7 +934,7 @@ For each document, we compute the average score of all words appearing in the te
 <p>Words that do not exist in a given dictionary are assigned a score of zero</p>
 </li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># 1. Ensure df_clean has the correct columns</span>
@@ -1122,7 +1122,7 @@ For each document, we compute the average score of all words appearing in the te
 <p>stop_words = 'english'</p>
 <p>We treat TF–IDF as a sanity check: if a simple bag-of-words representation adds incremental predictive power beyond our dictionary signals, that suggests our dictionary is capturing only part of the information.</p>
 <p>Importantly, the TF–IDF vectorizer is fit on the training set only, then applied to the test set, to avoid leakage.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">xgboost</span> <span class="kn">import</span> <span class="n">XGBClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="p">(</span>
@@ -1543,7 +1543,7 @@ hyperparameter tuning for all four kernels. The search space included
 regularization parameter C for all kernels, with kernel-specific parameters
 (gamma for RBF/sigmoid, degree for polynomial). For example, the RBF parameter
 grid:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">kernels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="s1">&#39;sigmoid&#39;</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="n">kernels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="s1">&#39;sigmoid&#39;</span><span class="p">]</span>
 
 <span class="c1"># Parameter grid for RBF kernel</span>
 <span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
@@ -1555,7 +1555,7 @@ grid:</p>
 <p>We used <strong>TimeSeriesSplit</strong> for cross-validation (3 folds) to ensure the
 training process respects temporal ordering and prevents data leakage. The
 implementation is as follows: </p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">TimeSeriesSplit</span><span class="p">,</span> <span class="n">GridSearchCV</span>
 
 <span class="n">kernels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="s1">&#39;sigmoid&#39;</span><span class="p">]</span>
@@ -1718,7 +1718,7 @@ more effectively than SVM's implicit kernel mapping.</p>
     configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','color.js','mhchem.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +

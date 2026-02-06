@@ -86,7 +86,7 @@
 In practice, we adopt a Batch LDA approach rather than oLDA, combined with temporal grouping. This design allows us to maintain stable and interpretable topics while constructing news topic attention signals that vary over time.</p>
 <h3>Step 1: Data Preparation</h3>
 <p>We organize the cleaned news data into a time-ordered document collection by standardizing publication timestamps, selecting valid text content, and filtering out noisy or low-information articles, which serves as the input for subsequent topic modeling. </p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1">#Sample code for data preparation</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1">#Sample code for data preparation</span>
    <span class="k">def</span> <span class="nf">prepare_articles</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Article</span><span class="p">]:</span>
     <span class="n">articles</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -118,7 +118,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
 
 <h3>Step 2: Text Representation</h3>
 <p>To convert text content into numerical features that can be directly processed by the topic model, we adopt a classic Bag-of-Words representation. We apply basic text normalization, English stopword removal, unigram and bigram features, and document frequency filtering to reduce noise and improve topic quality.</p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1">#Example code for text representation</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1">#Example code for text representation</span>
    <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span>
        <span class="n">stop_words</span><span class="o">=</span><span class="s2">&quot;english&quot;</span><span class="p">,</span>
        <span class="n">max_df</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
@@ -134,7 +134,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
 
 <h3>Step 3: Batch LDA Topic Modeling</h3>
 <p>After constructing the text features, we train the topic model using Batch LDA on the full news corpus. In our implementation, we set the number of topics to K=100 to balance topic granularity and interpretability. We also apply sparse priors so that each document is associated with only a few topics and each topic is represented by a limited set of keywords, which improves topic focus and supports manual labeling.</p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1">#Example training code</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1">#Example training code</span>
    <span class="n">lda</span> <span class="o">=</span> <span class="n">LatentDirichletAllocation</span><span class="p">(</span>
        <span class="n">n_components</span><span class="o">=</span><span class="n">n_topics</span><span class="p">,</span>
        <span class="n">learning_method</span><span class="o">=</span><span class="s2">&quot;batch&quot;</span><span class="p">,</span>
@@ -149,7 +149,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
 
 <h3>Step 4: Temporal Aggregation</h3>
 <p>We group news articles by date and construct daily topic attention signals. For each day, we infer topic distributions for all published articles using the trained LDA model and then take their average to obtain a daily topic attention vector. In this way, the static topic modeling results are transformed into dynamic signals suitable for time-series analysis.</p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1">#Example code for temporal aggregation</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1">#Example code for temporal aggregation</span>
    <span class="n">daily_attention</span> <span class="o">=</span> <span class="p">{}</span>
 
    <span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">published_at</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">]</span>
@@ -164,7 +164,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
 
 <h3>Step 5: Result Export and Analysis</h3>
 <p>Finally, we extract representative keywords for each topic from the LDA model to support manual topic labeling and economic interpretation. We also export the daily topic attention signals in matrix form so that they can be directly used as input features in subsequent regression or time-series modeling frameworks.</p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1">#Example code for result export</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1">#Example code for result export</span>
    <span class="n">topic_term_counts</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">components_</span>
    <span class="n">topic_term_distr</span> <span class="o">=</span> <span class="n">topic_term_counts</span> <span class="o">/</span> <span class="n">topic_term_counts</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
 
@@ -175,7 +175,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
    <span class="n">topic_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">top_words</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code>   <span class="n">export_topic_terms</span><span class="p">(</span><span class="n">topic_terms</span><span class="p">,</span> <span class="n">topic_terms_path</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code>   <span class="n">export_topic_terms</span><span class="p">(</span><span class="n">topic_terms</span><span class="p">,</span> <span class="n">topic_terms_path</span><span class="p">)</span>
    <span class="n">export_daily_attention</span><span class="p">(</span><span class="n">daily_attention</span><span class="p">,</span> <span class="n">topic_attention_path</span><span class="p">)</span>
 </code></pre></div>
 
@@ -191,7 +191,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
 <p>3.<strong>Multiple Regression (Validation)</strong>: We incorporate selected topics with traditional controls (USD Index, PMI) to test incremental value.</p>
 <p>4.<strong>Output Result</strong>: We quantified coefficients (βₖ) for core topics and verification of ΔR².</p>
 <p>Here’s the code for the core regression part:</p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1"># Lasso Five-Factor Selection Algorithm (corresponds to Section III.A of the paper)</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1"># Lasso Five-Factor Selection Algorithm (corresponds to Section III.A of the paper)</span>
    <span class="k">def</span> <span class="nf">lasso_selection_fixed_5</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">topic_names</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">      Find alpha using bisection method such that Lasso retains exactly 5 non-zero variables.</span>
@@ -285,7 +285,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
 <p>1.<strong>Feature Engineering :</strong> We incorporate <strong>Bigrams</strong> into our text processing pipeline to capture meaningful multi-word expressions that frequently appear in financial discourse. By extending beyond individual words to include two-word combinations, we can better represent compound financial terms that carry specific semantic meaning distinct from their constituent parts.</p>
 <p>For instance, the phrase "interest_rate" functions as a cohesive financial concept that differs significantly from analyzing "interest" and "rate" separately; similarly, "federal_reserve," "central_bank" and "stock_market" represent institutional and market entities whose meanings would be diluted if broken into individual components.</p>
 <p>Here’s the code for this step:</p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1"># Extract the raw text content from all Article objects</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1"># Extract the raw text content from all Article objects</span>
    <span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">article</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">]</span>
 
    <span class="c1"># Initialize CountVectorizer for converting text documents to a matrix of token counts</span>
@@ -309,7 +309,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
 <p>The <strong>topic_word_prior</strong> of 0.01 implements our expectation that meaningful financial topics should be characterized by a focused set of terminology, promoting each topic to be defined by a coherent cluster of semantically related terms rather than a diffuse collection of unrelated vocabulary.</p>
 <p>This dual sparsity constraint produces more interpretable and actionable topic structures where both documents and topics exhibit clear thematic identities, which proves particularly valuable for financial analysis where precise categorization and clear conceptual boundaries enhance downstream applications like sentiment tracking and thematic trend analysis.</p>
 <p>Here’s the code for this step:</p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1"># LDA model configuration for financial text analysis</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1"># LDA model configuration for financial text analysis</span>
    <span class="n">lda</span> <span class="o">=</span> <span class="n">LatentDirichletAllocation</span><span class="p">(</span>
       <span class="n">n_components</span><span class="o">=</span><span class="n">n_topics</span><span class="p">,</span>        <span class="c1"># Topic count</span>
       <span class="n">learning_method</span><span class="o">=</span><span class="s2">&quot;batch&quot;</span><span class="p">,</span>      <span class="c1"># Train once on all data</span>
@@ -323,7 +323,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
 <p>2.2 We fundamentally replace the incremental partial_fit approach (<code>lda.partial_fit(X_slice)</code>) with a comprehensive single-pass fit operation on the entire document collection.</p>
 <p>This paradigm shift prioritizes thematic stability over temporal adaptability, establishing a fixed set of topic definitions that remain semantically constant throughout our analysis timeframe. By training the model once on the complete corpus, we obtain a consistent reference framework where each topic retains its conceptual identity across all time periods, enabling reliable longitudinal comparison of topic prevalence and eliminating the interpretive ambiguity introduced by evolving topic compositions. This methodological choice recognizes that for financial news analysis, the ability to track how attention to well-defined thematic areas fluctuates over time outweighs the theoretical benefit of modeling gradual conceptual evolution.</p>
 <p>Here’s the code for this step:</p>
-<div class="codehilite"><pre><span></span><code>   <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">date_groups</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code>   <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">date_groups</span><span class="p">:</span>
     <span class="n">X_slice</span> <span class="o">=</span> <span class="n">X_all</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>                      <span class="c1"># Get documents for this date</span>
     <span class="n">doc_topic_distr</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_slice</span><span class="p">)</span>      <span class="c1"># Get topic distributions</span>
     <span class="n">avg_attention</span> <span class="o">=</span> <span class="n">doc_topic_distr</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Average across articles</span>
@@ -333,7 +333,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
 <p>3.<strong>Topic Choice :</strong> We select topic keywords based directly on their <strong><span class="math">\(\phi\)</span> probabilities</strong> (the conditional probability P(word|topic)) rather than using lift scores that scale these probabilities by corpus-wide term frequencies. This methodological choice prioritizes term relevance within topics over statistical distinctiveness, ensuring that each topic's most characteristic words are those that appear most frequently when the topic is expressed, regardless of their overall prevalence in the financial discourse.</p>
 <p>By focusing on high-probability terms, we obtain more semantically coherent and interpretable topic descriptors that better align with recognizable financial concepts, which proves essential for downstream analytical tasks where clear topic identification directly supports investment decision-making and market narrative analysis.</p>
 <p>Here’s the code for this step:</p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1"># Topic-term count matrix from trained LDA</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1"># Topic-term count matrix from trained LDA</span>
    <span class="n">topic_term_counts</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">components_</span>
    <span class="c1"># Convert to probability distribution φ</span>
    <span class="n">topic_term_distr</span> <span class="o">=</span> <span class="n">topic_term_counts</span> <span class="o">/</span> <span class="n">topic_term_counts</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
@@ -354,7 +354,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
 <li><strong>Solution:</strong> To address this limitation, we adopt an alternative forecasting approach based on stochastic simulation of the VAR model. Instead of setting future innovations to zero, this method repeatedly draws random shocks from the estimated residual distribution and propagates them through the VAR dynamics. By explicitly incorporating these random shocks, the simulated forecasts capture both the conditional mean dynamics and the inherent uncertainty of the system. Consequently, the resulting forecast paths exhibit realistic fluctuations and volatility, producing predictions that more closely resemble observed market behavior. This approach does not alter the underlying VAR structure; rather, it provides a more informative representation of potential future outcomes by moving from a deterministic forecast to a probabilistic, simulation-based forecast framework.</li>
 </ul>
 <p>Here's the code for the solution:</p>
-<div class="codehilite"><pre><span></span><code>   <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight"><pre><span></span><code>   <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
    <span class="kn">from</span> <span class="nn">statsmodels.tsa.api</span> <span class="kn">import</span> <span class="n">VAR</span>
    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
@@ -418,7 +418,7 @@ In practice, we adopt a Batch LDA approach rather than oLDA, combined with tempo
     configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','color.js','mhchem.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +

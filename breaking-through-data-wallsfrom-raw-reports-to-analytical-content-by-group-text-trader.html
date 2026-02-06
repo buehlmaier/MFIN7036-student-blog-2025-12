@@ -95,7 +95,7 @@
 <li><strong>Random User-Agent rotation</strong>: cycling through different browser signatures to disguise requests.</li>
 <li><strong>Request throttling</strong>: adding delays between downloads to avoid triggering anti-scraping protections.</li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="n">USER_AGENTS</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight"><pre><span></span><code><span class="n">USER_AGENTS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64)...&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)...&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0)...&quot;</span>
@@ -139,7 +139,7 @@
 </li>
 </ul>
 <p><strong>Naive approach we used at the beginning:</strong> </p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">PyPDF2</span> <span class="kn">import</span> <span class="n">PdfReader</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">PyPDF2</span> <span class="kn">import</span> <span class="n">PdfReader</span>
 
 <span class="n">reader</span> <span class="o">=</span> <span class="n">PdfReader</span><span class="p">(</span><span class="s2">&quot;example.pdf&quot;</span><span class="p">)</span>
 <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -156,7 +156,7 @@
 <p><strong>The Logic We Followed</strong>
 - <strong>1.Render PDF pages into images</strong><br>
 Convert each page into a PIL image at 150 DPI.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">pdf_to_images_fast</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">pdf_to_images_fast</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">):</span>
     <span class="kn">import</span> <span class="nn">fitz</span>
     <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 
@@ -177,7 +177,7 @@ Convert each page into a PIL image at 150 DPI.</p>
 <li><strong>2.Run OCR and layout detection</strong><br>
 OCR produced text lines with bounding boxes, while layout models classified regions (Text, Table, SectionHeader, etc.).</li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="n">foundation</span> <span class="o">=</span> <span class="n">FoundationPredictor</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="n">foundation</span> <span class="o">=</span> <span class="n">FoundationPredictor</span><span class="p">()</span>
 <span class="n">detector</span> <span class="o">=</span> <span class="n">DetectionPredictor</span><span class="p">()</span>
 <span class="n">recognizer</span> <span class="o">=</span> <span class="n">RecognitionPredictor</span><span class="p">(</span><span class="n">foundation</span><span class="p">)</span>
 <span class="n">layout_predictor</span> <span class="o">=</span> <span class="n">LayoutPredictor</span><span class="p">(</span>
@@ -199,7 +199,7 @@ OCR produced text lines with bounding boxes, while layout models classified regi
 <li><strong>3.Filter by region labels</strong><br>
 Keep only text-like regions (e.g., body text, headers, list items) and drop tables, charts, and metadata.</li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">is_in_text_region</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">layout_page</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_in_text_region</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">layout_page</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">layout_page</span><span class="o">.</span><span class="n">bboxes</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Text&quot;</span><span class="p">,</span> <span class="s2">&quot;SectionHeader&quot;</span><span class="p">,</span> <span class="s2">&quot;ListItem&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">line_in_bbox</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">bbox</span><span class="p">):</span>
@@ -218,7 +218,7 @@ Keep only text-like regions (e.g., body text, headers, list items) and drop tabl
 <p>Strict cleaning: drop footnotes, contact info, disclaimers, fragments, and HTML tags.</p>
 </li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">clean_line_basic</span><span class="p">(</span><span class="n">line</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">clean_line_basic</span><span class="p">(</span><span class="n">line</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">is_page_number</span><span class="p">(</span><span class="n">line</span><span class="p">):</span> <span class="k">return</span> <span class="kc">None</span>
@@ -236,7 +236,7 @@ Instead of forcing PDFs into text extraction libraries, we reimagined the proces
 <h2>Cleaning Out Noise and Disclaimers</h2>
 <p>Even after all the OCR and layout filtering, some unwanted text inevitably slipped through — disclaimers, researcher introductions, and institutional boilerplate. After examining the structure of reports, we noticed a consistent pattern: these sections almost always appeared at the end, with no useful content following them.  </p>
 <p>That insight allowed us to apply a simple rule: stop processing once a disclaimer keyword appeared. This removed large chunks of noise efficiently.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">stop_keywords</span> <span class="o">=</span> <span class="n">disclaimer_keywords</span> <span class="o">+</span> <span class="n">rating_keywords</span>
+<div class="highlight"><pre><span></span><code><span class="n">stop_keywords</span> <span class="o">=</span> <span class="n">disclaimer_keywords</span> <span class="o">+</span> <span class="n">rating_keywords</span>
 
 <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
     <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -266,7 +266,7 @@ Instead of forcing PDFs into text extraction libraries, we reimagined the proces
 <p>Negative examples: disclaimers, metadata, table headers, and other noise.</p>
 </li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">EmbeddingClassifier</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">EmbeddingClassifier</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading BGE-m3 embedding model...&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;BAAI/bge-m3&quot;</span><span class="p">)</span>
@@ -294,7 +294,7 @@ Instead of forcing PDFs into text extraction libraries, we reimagined the proces
 
 <p><strong>Context-Aware Recheck</strong>
 One issue we encountered was that short fragments (like numbers or symbols) were often misclassified as noise, even when they were part of meaningful sentences. To reduce false positives, we added a recheck step: short lines were re-evaluated in the context of their neighboring lines. If the combined text looked like valid content, we reclassified it as “text.”</p>
-<div class="codehilite"><pre><span></span><code><span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight"><pre><span></span><code><span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">line</span><span class="p">,</span>
     <span class="n">prev1</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">line</span><span class="p">,</span>
 <span class="p">]</span>
@@ -316,7 +316,7 @@ One issue we encountered was that short fragments (like numbers or symbols) were
 <p>2.Otherwise, remove lines tagged as “noise” and keep the “text” lines, stripping away the label prefixes.</p>
 </li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">process_label</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">process_label</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
 
@@ -360,7 +360,7 @@ One issue we encountered was that short fragments (like numbers or symbols) were
 <p>2.Batch translation with error handling, ensuring residual Chinese characters were removed and fallback logic preserved outputs even if translation failed.</p>
 </li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Merge lines → paragraphs</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Merge lines → paragraphs</span>
 <span class="n">paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">buffer</span> <span class="o">=</span> <span class="p">[]</span>
 

@@ -90,7 +90,7 @@
 <p>The data collection process automatically adjusts for non-trading days such as weekends and holidays. By modifying only the stock symbol and earnings date list, the same script can gather data for any publicly traded company.</p>
 <h3>Example: General Motors Data Processing</h3>
 <p>Here is the Python code used to extract and process General Motors' stock price data:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
 <span class="c1"># Download General Motors historical data from Stooq</span>
@@ -162,7 +162,7 @@
 <p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-SemanticFragmentsSynthesizer_02_image-description1.png"></p>
 <h3>1.1 Calculating Market Reactions</h3>
 <p>After obtaining stock prices for the required dates, we proceed to calculate Cumulative Abnormal Returns (CAR) and volatility measures.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">companies_reaction</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="n">companies_reaction</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;General Motors&#39;</span><span class="p">:</span> <span class="n">gm_df</span><span class="p">,</span>
     <span class="s1">&#39;Tesla&#39;</span><span class="p">:</span> <span class="n">tsla_df</span><span class="p">,</span>
     <span class="s1">&#39;BMW&#39;</span><span class="p">:</span> <span class="n">bmw_df</span><span class="p">,</span>
@@ -194,7 +194,7 @@
 <p><img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Group-SemanticFragmentsSynthesizer_02_image-description2.png"></p>
 <h3>1.2 Volatility Analysis</h3>
 <p>To measure market uncertainty following earnings announcements, we calculated price volatility:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">companies_vol</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="n">companies_vol</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;General Motors&#39;</span><span class="p">:</span> <span class="n">gm_df</span><span class="p">,</span>
     <span class="s1">&#39;Tesla&#39;</span><span class="p">:</span> <span class="n">tsla_df</span><span class="p">,</span>
     <span class="s1">&#39;BMW&#39;</span><span class="p">:</span> <span class="n">bmw_df</span><span class="p">,</span>
@@ -235,7 +235,7 @@
 </li>
 </ul>
 <h5>Key Columns</h5>
-<div class="codehilite"><pre><span></span><code><span class="p">[</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="s1">&#39;filename&#39;</span><span class="p">,</span> 
+<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="s1">&#39;filename&#39;</span><span class="p">,</span> 
  <span class="s1">&#39;vader_pos&#39;</span><span class="p">,</span> <span class="s1">&#39;vader_neg&#39;</span><span class="p">,</span> <span class="s1">&#39;vader_neu&#39;</span><span class="p">,</span> <span class="s1">&#39;vader_compound&#39;</span><span class="p">,</span>
  <span class="s1">&#39;n_words_full&#39;</span><span class="p">]</span>  <span class="c1"># optional: word count</span>
 </code></pre></div>
@@ -245,7 +245,7 @@
 <p>Text preprocessing plays a critical role in VADER's performance. We found that over-aggressive cleaning—such as removing punctuation or splitting contractions—can distort VADER's rule-based scoring mechanism.</p>
 <p><strong>Example</strong>: Transforming "don't" into "don t" weakens negation handling and may bias sentiment scores upward.</p>
 <p>To address this issue, we adopt a dual preprocessing strategy:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Strategy 1: Light preprocessing for VADER</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Strategy 1: Light preprocessing for VADER</span>
 <span class="c1"># Preserves negations and punctuation cues essential for rule-based scoring</span>
 
 <span class="c1"># Strategy 2: Heavier preprocessing for dictionary-based methods (e.g., LM)</span>
@@ -253,7 +253,7 @@
 </code></pre></div>
 
 <p>This separation ensures that each sentiment method operates on text that is appropriate for its underlying assumptions.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
 
 <span class="c1"># Light cleaning for VADER: preserve negations and punctuation cues</span>
 <span class="k">def</span> <span class="nf">clean_for_vader</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -273,7 +273,7 @@
 <p>Using the lightly preprocessed transcripts, we compute VADER sentiment at the call level, treating each earnings call as a single observation. Sentiment scores are obtained via the <code>polarity_scores()</code> function, with the compound score serving as the primary baseline sentiment measure.</p>
 <p>The implementation iterates through company folders and transcript files, applies VADER scoring, and stores the results in a call-level dataset.</p>
 <p><em>Code: iterate through folders and compute VADER scores</em></p>
-<div class="codehilite"><pre><span></span><code><span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight"><pre><span></span><code><span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">for</span> <span class="n">company</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">FOLDER</span><span class="p">):</span>
     <span class="n">company_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FOLDER</span><span class="p">,</span> <span class="n">company</span><span class="p">)</span>
@@ -336,7 +336,7 @@
 - Additional derived measures (net tone, tone strength)</p>
 <h3>3.2 Load the Official LM Dictionary and Build Word Sets</h3>
 <p>We use the official LM Master Dictionary (1993–2024) CSV file and convert it into three word sets: Positive, Negative, and Uncertainty. This makes counting fast: for each token, we just check membership in a set.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">lm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">LM_CSV</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">lm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">LM_CSV</span><span class="p">)</span>
 <span class="n">lm</span><span class="p">[</span><span class="s2">&quot;Word&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lm</span><span class="p">[</span><span class="s2">&quot;Word&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
 <span class="n">POS_SET</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">lm</span><span class="p">[</span><span class="s2">&quot;Positive&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Word&quot;</span><span class="p">])</span>
@@ -360,7 +360,7 @@
 </li>
 </ul>
 <p>This is a trade-off: it improves robustness and speed, but it ignores context (e.g., negation) because LM is dictionary-based.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-z\s]&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -371,7 +371,7 @@
 <p>A practical problem: transcript filenames often include dates, but sometimes the dash in filenames is not the normal ASCII -.</p>
 <p>It can be an en-dash (–) or other unicode dash characters. Visually they look the same, but regex matching fails.</p>
 <p>We solved this by normalizing unicode in filenames first, converting different dash characters to -, then extracting the YYYY-MM-DD pattern.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">normalize_filename</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">normalize_filename</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFKC&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;</span><span class="se">\u2013</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\u2014</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\u2212</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\uFF0D</span><span class="s2">&quot;</span><span class="p">]:</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
@@ -408,7 +408,7 @@
 <p>lm_tone_strength = lm_pos_ratio + lm_neg_ratio</p>
 </li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="n">pos_cnt</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">POS_SET</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">pos_cnt</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">POS_SET</span><span class="p">)</span>
 <span class="n">neg_cnt</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">NEG_SET</span><span class="p">)</span>
 <span class="n">unc_cnt</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">UNC_SET</span><span class="p">)</span>
 
@@ -436,7 +436,7 @@
 All measures are normalized by transcript length to ensure comparability across calls of different sizes.</strong></p>
 <p>We then re-estimate the same regression framework used in the VADER analysis, focusing on three market outcomes: immediate returns, short-horizon cumulative returns (CAR), and post-call volatility.</p>
 <p>-OLS regression function:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">run_ols_export</span><span class="p">(</span><span class="n">y_var</span><span class="p">,</span> <span class="n">X_vars</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">run_ols_export</span><span class="p">(</span><span class="n">y_var</span><span class="p">,</span> <span class="n">X_vars</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
     <span class="n">df_reg</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="n">y_var</span><span class="p">]</span> <span class="o">+</span> <span class="n">X_vars</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Running regression for </span><span class="si">{</span><span class="n">y_var</span><span class="si">}</span><span class="s2">, N = </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_reg</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -469,7 +469,7 @@ All measures are normalized by transcript length to ensure comparability across 
 
 <p>This function runs an OLS regression with HC3 robust standard errors, prints the regression summary, and exports a compact results table including coefficients, t-statistics, p-values, confidence intervals, sample size, and R².</p>
 <p>Running regressions for three market outcomes:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">X_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;lm_net_tone&quot;</span><span class="p">,</span> <span class="s2">&quot;lm_net_tone_sq&quot;</span><span class="p">,</span> <span class="s2">&quot;lm_unc_ratio&quot;</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="n">X_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;lm_net_tone&quot;</span><span class="p">,</span> <span class="s2">&quot;lm_net_tone_sq&quot;</span><span class="p">,</span> <span class="s2">&quot;lm_unc_ratio&quot;</span><span class="p">]</span>
 
 <span class="n">y_vars</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;Volatility_T0_T5&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\18443\Desktop\Reg_Volatility.xlsx&quot;</span><span class="p">,</span>

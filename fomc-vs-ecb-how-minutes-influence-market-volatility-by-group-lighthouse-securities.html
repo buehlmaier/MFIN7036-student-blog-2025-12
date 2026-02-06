@@ -94,7 +94,7 @@ FOMC and ECB minutes differ not only in length, but also in structure, writing s
 This created a subtle form of look-ahead bias, as the market often reacts to the underlying meeting information before the official publication.</p>
 <p>Below is a simplified version of the cleaning logic we eventually settled on:
 In hindsight, this stage taught us that in text-based financial research, data cleaning is not a preprocessing step, but an economic modeling decision.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Core cleaning stages</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Core cleaning stages</span>
 <span class="n">text</span> <span class="o">=</span> <span class="n">remove_html_tags</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 <span class="n">text</span> <span class="o">=</span> <span class="n">fix_encoding</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>  <span class="c1"># NFKC normalization</span>
 <span class="n">text</span> <span class="o">=</span> <span class="n">remove_names_and_titles</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>  <span class="c1"># Powell, Lagarde, etc.</span>
@@ -108,7 +108,7 @@ In hindsight, this stage taught us that in text-based financial research, data c
 <p>The first thing we needed to do in both Approach 1 and Approach 3 was the embedding of the minutes. So we looked for models that could provide us with high-quality embeddings for our text data. </p>
 <p>And we found BERT-based models are quite popular in the academic community for various NLP tasks, including text classification and sentiment analysis. But the limits of BERT actually pushed us to explore more advanced models like <code>Qwen3-Embedding-8B</code>, which has less limitations on the input text length and can handle longer documents more effectively.</p>
 <p>But when we actually started to try to run the model on the Kaggle platform, we found that the model was quite resource-intensive and required a lot of computational power to run efficiently. So we had to turn to <strong>OpenRouter</strong>, which provided us with an API to access the Qwen3-Embedding model without needing to run it locally.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
     <span class="n">base_url</span><span class="o">=</span><span class="n">OPENROUTER_BASE_URL</span><span class="p">,</span>
@@ -143,7 +143,7 @@ In hindsight, this stage taught us that in text-based financial research, data c
 </code></pre></div>
 
 <p>Then we used the <code>Qwen3-Embedding</code> model to generate embeddings for each of the FOMC and ECB minutes. During the embedding, we found that even though the model could handle longer texts, some of the minutes were still too long to fit into a single input. So we had to truncate some of the minutes to fit within the model's input limits.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">minutes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">minutes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="o">...</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="p">[:</span><span class="mi">128000</span><span class="p">]</span>
     <span class="o">...</span>
@@ -152,7 +152,7 @@ In hindsight, this stage taught us that in text-based financial research, data c
 <h3>3.2 LLM Classification</h3>
 <p>When setting out on our analysis using Large Language Models (LLMs), we were planning to use state-of-the-art (SOTA) models for the best results. However, we quickly encountered a significant hurdle; being based in Hong Kong. Access to leading models from OpenAI, Google (<em>Gemini Flash 3.0 was our original choice</em>), and Anthropic was restricted due to regulatory constraints. This limitation forced us to pivot our approach and explore alternative models available through <strong>OpenRouter</strong>.</p>
 <p>We aimed to keep costs low while still achieving reliable performance, so we looked for the best freely accessible model on OpenRouter. After evaluating several options, we settled on <strong>Xiaomi's Mimo v2 Flash</strong> model. While not as advanced as some of the restricted models, Mimo v2 Flash provided a good balance between accessibility and performance for our sentiment analysis tasks. The models are easy to use with only a few lines of code:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
     <span class="n">base_url</span><span class="o">=</span><span class="n">OPENROUTER_BASE_URL</span><span class="p">,</span>
@@ -172,7 +172,7 @@ In hindsight, this stage taught us that in text-based financial research, data c
 <p>Creating a correct and, <em>ideally</em>, significant regression model is always challenging. We go through many iterations of finding the correct control variables, assessing multicollinearity, handling heteroscedasticity, and other statistical pitfalls. In our analysis, both GDP and CPI had to be dropped due to multicollinearity issues (both for FED and ECB). To deal with heteroscedasticity (tested through a Breusch-Pagan and White test), we used robust standard errors (HC3) throughout our regression analyses.</p>
 <h3>3.3 Neural Embeddings</h3>
 <p>In our approach 3, we have two models. The first model, which we called it the baseline model, is quite simple. We just feed the text vectors to feed forward neural network with two hidden layers. On the top of this baseline model, we would like to add some market variables as input, for example the FFR, GDP etc., since an intuitive thinking is that those market variables would also have great influence on the following stock market volitility. But here comes the question: what is a good way to combine the text vectors and market variables? A simple method is that we could concatenate the market variables after the text vecters directly, by which we create a new vector and feed to the FFN. The structure of this simple model is as follow:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="k">class</span> <span class="nc">easy_fusion_FNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text_dim</span><span class="p">,</span> <span class="n">market_dim</span><span class="p">,</span> <span class="n">fusion_text_dim</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">fusion_mkt_dim</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">combine_dims</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span><span class="mi">8</span><span class="p">],</span> <span class="n">output_num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">drop_out</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
@@ -205,7 +205,7 @@ In hindsight, this stage taught us that in text-based financial research, data c
 </code></pre></div>
 
 <p>Theoretically speaking, the disadvantage of this model is that text vectors and market data are directly mixed, and the model may struggle to distinguish between two different types of data and may not adequately learn the characteristics of both data. So, we made some adjustments to the model and created a new model, which we called fusion model. The key is that we first used two sub-neural networks to process the text vectors and market variables respectively. Then, we concatenated the outputs of the two sub-networks as the input for the next hidden layer. In this way, the two sub-networks can respectively learn the text features and market features. But the weakness is that the complexity of the model is much more higher which may makes model doen't fit well to our experiment due to the less amount of data. The structure is as follow:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">fusion_FNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">fusion_FNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text_dim</span><span class="p">,</span> <span class="n">market_dim</span><span class="p">,</span> <span class="n">fusion_text_dim</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">fusion_mkt_dim</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">combine_dims</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">output_num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">drop_out</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">            text_dim: the dimensions of text;</span>
@@ -250,7 +250,7 @@ In hindsight, this stage taught us that in text-based financial research, data c
 <p><img alt="Neural Embeddings Approach Accuracy Results" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Lighthouse-Securities_02_accuracy.png"></p>
 <h2>4. VIX Trading Strategy</h2>
 <p>Translating textual similarity into a trading signal was not an obvious next step. At first, we were skeptical whether cosine similarity—an abstract NLP metric—could carry any economically meaningful information for a volatility instrument like VIX. The initial thresholds were admittedly heuristic, chosen based on exploratory analysis rather than theory.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">similarity</span> <span class="o">&lt;</span> <span class="mf">0.83</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="n">similarity</span> <span class="o">&lt;</span> <span class="mf">0.83</span><span class="p">:</span>
     <span class="n">signal</span> <span class="o">=</span> <span class="mi">1</span>   <span class="c1"># Long VIX</span>
 <span class="k">elif</span> <span class="n">similarity</span> <span class="o">&gt;</span> <span class="mf">0.96</span><span class="p">:</span>
     <span class="n">signal</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># Short VIX</span>

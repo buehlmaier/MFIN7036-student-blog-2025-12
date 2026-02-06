@@ -97,7 +97,7 @@
 <p>Before using this API, users must first obtain access credentials: register a real-name authenticated account on the <a href="https://xinghuo.xfyun.cn/sparkapi">iFlytek Spark Large Model API platform</a>, create a dedicated application, then select the Spark Lite model, where the token margin will show "Unlimited". Afterwards, obtain your own API key, which must be predefined before running the code, as indicated in the commented code below. For specific call configurations, refer to the Spark Lite documentation available on this platform, which includes Python call configuration examples.
 <img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/TextWizards_02_sparkLite.png">
 The specific calling code is as follows:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># encoding:UTF-8</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># encoding:UTF-8</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="c1"># Replace XXXXXXXXXXXX with your API key. </span>
@@ -157,12 +157,12 @@ The specific calling code is as follows:</p>
 <h1>3. Hawkish/Dovish Sentiment Analysis</h1>
 <h2>3.1 Subject Content Extraction (Semantic Matching Optimization)</h2>
 <p>Implement semantic fuzzy matching using regular expressions to solve the problem of chapter title variations and accurately extract the content of target chapters. Here is an example:</p>
-<div class="codehilite"><pre><span></span><code><span class="s2">&quot;Developments in Financial Markets and Open Market Operations&quot;</span><span class="p">:</span> 
+<div class="highlight"><pre><span></span><code><span class="s2">&quot;Developments in Financial Markets and Open Market Operations&quot;</span><span class="p">:</span> 
 <span class="sa">r</span><span class="s2">&quot;(developments in financial markets and|financial developments and) open market operations&quot;</span>
 </code></pre></div>
 
 <p>Then, we extract subject content using the following code:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
 <span class="k">def</span> <span class="nf">extract_section_from_text</span><span class="p">(</span><span class="n">full_text</span><span class="p">,</span> <span class="n">target_sections_map</span><span class="p">):</span>
     <span class="n">section_content</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">text_lower</span> <span class="o">=</span> <span class="n">full_text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -189,7 +189,7 @@ The specific calling code is as follows:</p>
 
 <h2>3.2 Sentiment Scoring (Dovish/Hawkish)</h2>
 <p>A complete <strong>batch sentiment analysis</strong> workflow targets different sections of the FOMC meeting minutes by calling an API to score each paragraph for dovish and hawkish sentiment intensity and returns the results in a structured format. The <strong>scores range from 0 to 1</strong>, where hawkish indicates hawkish strength (0 = no hawkishness, 1 = very hawkish) and dovish indicates dovish strength (0 = no dovishness, 1 = very dovish).</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">call_spark_api</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">call_spark_api</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="c1"># Construct a constrained prompt to force JSON-only output</span>
     <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    Analyze the monetary policy stance of the following FOMC minutes paragraph.</span>
@@ -240,7 +240,7 @@ The specific calling code is as follows:</p>
 
 <h2>3.3 Visualization of stacked diagrams</h2>
 <p>We <strong>normalize hawkish and dovish scores so their sum equals 1 for each topic</strong>, ensuring comparability across topics. For each meeting, we generate horizontal stacked bar charts showing hawkish intensity in red and dovish intensity in blue for multiple predefined topics to analyze their impact on the 10-year Treasury yield.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">:</span>
     <span class="n">d_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">_dovish&quot;</span>
     <span class="n">h_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">_hawkish&quot;</span>
     <span class="k">if</span> <span class="n">d_col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="n">h_col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
@@ -259,7 +259,7 @@ Here uses 2024 as an example to visualize the impact of FOMC meeting minutes on 
 <img alt="Picture showing Powell" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/TextWizards_02_image-FOMC_2024_Yield.png"></p>
 <h2>3.4 Word Cloud Analysis (Sentiment Feature Visualization)</h2>
 <p>Word clouds display high-frequency hawkish and dovish keywords to validate sentiment scores. We use an API-based large language model with strict prompts to convert text into structured sentiment data.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">You are a financial analyst. Analyze the provided FOMC minutes text.</span>
 <span class="s2">Task: Extract exact sentences that are Hawkish or Dovish.</span>
 <span class="s2">Definitions:</span>
@@ -274,7 +274,7 @@ Here uses 2024 as an example to visualize the impact of FOMC meeting minutes on 
 -   Instead of just "Labor," the code captures <strong>"Tight Labor."</strong>
 -   Instead of just "Supply," the code captures <strong>"Supply Chains."</strong><br>
 -   Instead of just "Prices," the code captures <strong>"High Prices."</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">create_circle_mask</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_circle_mask</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ogrid</span><span class="p">[:</span><span class="n">width</span><span class="p">,</span> <span class="p">:</span><span class="n">height</span><span class="p">]</span>
     <span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span> <span class="o">=</span> <span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
     <span class="n">radius</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>

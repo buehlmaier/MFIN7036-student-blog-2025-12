@@ -87,15 +87,15 @@
 <h2>AstroNLP: Blog-Post-3</h2>
 <p>In the third blog, which is very likely to be the final one, we will introduce the details about how we derive trading signals from news headlines and then implement trading strategies according to the signals. Here in the post, we will mainly focus on the procedure, while some specific results are to be mentioned in the report, making sure that two contents do not overlap a lot. Also, this blog is aimed for better understanding our code, which will not be illustrated detailly in the report due to the space limit.</p>
 <p>Our overall idea is to construct a multi-factor gold price prediction model based on NLP. The entire process briefly follows:</p>
-<div class="codehilite"><pre><span></span><code>graph LR
+<div class="highlight"><pre><span></span><code><span class="nx">graph</span><span class="w"> </span><span class="nx">LR</span>
 
-A[LDA Classification Generation] --&gt; B[Use LDA Topics as Factors] --&gt;C[Add in Sentiment Factor] --&gt;D[Add in Event Factor] --&gt; E[Train a Multi-Factor Model] --&gt;F[Use the Model to Predict Gold Price]--&gt; G[Construct Simple Trading Strategies on the Prediction]
+<span class="nx">A</span><span class="p">[</span><span class="nx">LDA</span><span class="w"> </span><span class="nx">Classification</span><span class="w"> </span><span class="nx">Generation</span><span class="p">]</span><span class="w"> </span><span class="o">--</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">B</span><span class="p">[</span><span class="nx">Use</span><span class="w"> </span><span class="nx">LDA</span><span class="w"> </span><span class="nx">Topics</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nx">Factors</span><span class="p">]</span><span class="w"> </span><span class="o">--</span><span class="p">&gt;</span><span class="nx">C</span><span class="p">[</span><span class="nx">Add</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">Sentiment</span><span class="w"> </span><span class="nx">Factor</span><span class="p">]</span><span class="w"> </span><span class="o">--</span><span class="p">&gt;</span><span class="nx">D</span><span class="p">[</span><span class="nx">Add</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">Event</span><span class="w"> </span><span class="nx">Factor</span><span class="p">]</span><span class="w"> </span><span class="o">--</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">E</span><span class="p">[</span><span class="nx">Train</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">Multi</span><span class="o">-</span><span class="nx">Factor</span><span class="w"> </span><span class="nx">Model</span><span class="p">]</span><span class="w"> </span><span class="o">--</span><span class="p">&gt;</span><span class="nx">F</span><span class="p">[</span><span class="nx">Use</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">Model</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">Predict</span><span class="w"> </span><span class="nx">Gold</span><span class="w"> </span><span class="nx">Price</span><span class="p">]</span><span class="o">--</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">G</span><span class="p">[</span><span class="nx">Construct</span><span class="w"> </span><span class="nx">Simple</span><span class="w"> </span><span class="nx">Trading</span><span class="w"> </span><span class="nx">Strategies</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">Prediction</span><span class="p">]</span>
 </code></pre></div>
 
 <hr>
 <h3>1. LDA Topic Modeling</h3>
 <p>In this section, we are going to classify the news headlines using the LDA method. After cleaning the text data, we use CountVectorizer for text vectorization as LDA typically uses term frequency matrix:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span>
+<div class="highlight"><pre><span></span><code><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span>
     <span class="n">max_features</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>      <span class="c1"># Keep top 1000 most common words</span>
     <span class="n">min_df</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>               <span class="c1"># Appear in at least 5 documents</span>
     <span class="n">max_df</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>             <span class="c1"># Appear in at most 70% of documents (filter high-frequency words)</span>
@@ -109,7 +109,7 @@ A[LDA Classification Generation] --&gt; B[Use LDA Topics as Factors] --&gt;C[Add
 
 <p>As can be seen above, when we instantiate the <code>vectorizer</code> , we only keep the high-frequency words.</p>
 <p>Then we can set out training our LDA model:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">n_topics</span> <span class="o">=</span> <span class="mi">6</span>
+<div class="highlight"><pre><span></span><code><span class="n">n_topics</span> <span class="o">=</span> <span class="mi">6</span>
 <span class="n">topic_labels</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;LDA1&#39;</span><span class="p">,</span>      
     <span class="s1">&#39;LDA2&#39;</span><span class="p">,</span>    
@@ -134,7 +134,7 @@ A[LDA Classification Generation] --&gt; B[Use LDA Topics as Factors] --&gt;C[Add
 </code></pre></div>
 
 <p>We can try to investigate what the keywords are inside the topics:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">display_topics</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">feature_names</span><span class="p">,</span> <span class="n">n_top_words</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">display_topics</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">feature_names</span><span class="p">,</span> <span class="n">n_top_words</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Display top keywords for each topic&quot;&quot;&quot;</span>
     <span class="n">topics</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">topic_idx</span><span class="p">,</span> <span class="n">topic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="p">):</span>
@@ -148,28 +148,28 @@ A[LDA Classification Generation] --&gt; B[Use LDA Topics as Factors] --&gt;C[Add
 <span class="n">topics_keywords</span> <span class="o">=</span> <span class="n">display_topics</span><span class="p">(</span><span class="n">lda_model</span><span class="p">,</span> <span class="n">feature_names</span><span class="p">,</span> <span class="n">n_top_words</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code>Topic 0 (LDA1):
-  Keywords: at, oz, at oz, or, to, dec, dec gold, falls, up, down, gold falls, or to, settle, settle at, to settle, to oz, june, up or, gold down, down or
+<div class="highlight"><pre><span></span><code><span class="nv">Topic</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ss">(</span><span class="nv">LDA1</span><span class="ss">)</span>:
+<span class="w">  </span><span class="nv">Keywords</span>:<span class="w"> </span><span class="nv">at</span>,<span class="w"> </span><span class="nv">oz</span>,<span class="w"> </span><span class="nv">at</span><span class="w"> </span><span class="nv">oz</span>,<span class="w"> </span><span class="nv">or</span>,<span class="w"> </span><span class="nv">to</span>,<span class="w"> </span><span class="nv">dec</span>,<span class="w"> </span><span class="nv">dec</span><span class="w"> </span><span class="nv">gold</span>,<span class="w"> </span><span class="nv">falls</span>,<span class="w"> </span><span class="nv">up</span>,<span class="w"> </span><span class="nv">down</span>,<span class="w"> </span><span class="nv">gold</span><span class="w"> </span><span class="nv">falls</span>,<span class="w"> </span><span class="nv">or</span><span class="w"> </span><span class="nv">to</span>,<span class="w"> </span><span class="nv">settle</span>,<span class="w"> </span><span class="nv">settle</span><span class="w"> </span><span class="nv">at</span>,<span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">settle</span>,<span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">oz</span>,<span class="w"> </span><span class="nv">june</span>,<span class="w"> </span><span class="nv">up</span><span class="w"> </span><span class="nv">or</span>,<span class="w"> </span><span class="nv">gold</span><span class="w"> </span><span class="nv">down</span>,<span class="w"> </span><span class="nv">down</span><span class="w"> </span><span class="nv">or</span>
 
-Topic 1 (LDA2):
-  Keywords: for, the, of, futures, gold futures, week, in, for the, fed, since, session, ahead, gain, ahead of, lower, but, at, end, more, the week
+<span class="nv">Topic</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="ss">(</span><span class="nv">LDA2</span><span class="ss">)</span>:
+<span class="w">  </span><span class="nv">Keywords</span>:<span class="w"> </span><span class="k">for</span>,<span class="w"> </span><span class="nv">the</span>,<span class="w"> </span><span class="nv">of</span>,<span class="w"> </span><span class="nv">futures</span>,<span class="w"> </span><span class="nv">gold</span><span class="w"> </span><span class="nv">futures</span>,<span class="w"> </span><span class="nv">week</span>,<span class="w"> </span><span class="nv">in</span>,<span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">the</span>,<span class="w"> </span><span class="nv">fed</span>,<span class="w"> </span><span class="nv">since</span>,<span class="w"> </span><span class="nv">session</span>,<span class="w"> </span><span class="nv">ahead</span>,<span class="w"> </span><span class="nv">gain</span>,<span class="w"> </span><span class="nv">ahead</span><span class="w"> </span><span class="nv">of</span>,<span class="w"> </span><span class="nv">lower</span>,<span class="w"> </span><span class="nv">but</span>,<span class="w"> </span><span class="nv">at</span>,<span class="w"> </span><span class="k">end</span>,<span class="w"> </span><span class="nv">more</span>,<span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">week</span>
 
-Topic 2 (LDA3):
-  Keywords: futures, gold futures, after, to, rs, in, trade, on, at, to rs, global, cues, global cues, trading, rise, per, at rs, rs per, data, up
+<span class="nv">Topic</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="ss">(</span><span class="nv">LDA3</span><span class="ss">)</span>:
+<span class="w">  </span><span class="nv">Keywords</span>:<span class="w"> </span><span class="nv">futures</span>,<span class="w"> </span><span class="nv">gold</span><span class="w"> </span><span class="nv">futures</span>,<span class="w"> </span><span class="nv">after</span>,<span class="w"> </span><span class="nv">to</span>,<span class="w"> </span><span class="nv">rs</span>,<span class="w"> </span><span class="nv">in</span>,<span class="w"> </span><span class="nv">trade</span>,<span class="w"> </span><span class="nv">on</span>,<span class="w"> </span><span class="nv">at</span>,<span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">rs</span>,<span class="w"> </span><span class="nv">global</span>,<span class="w"> </span><span class="nv">cues</span>,<span class="w"> </span><span class="nv">global</span><span class="w"> </span><span class="nv">cues</span>,<span class="w"> </span><span class="nv">trading</span>,<span class="w"> </span><span class="nv">rise</span>,<span class="w"> </span><span class="nv">per</span>,<span class="w"> </span><span class="nv">at</span><span class="w"> </span><span class="nv">rs</span>,<span class="w"> </span><span class="nv">rs</span><span class="w"> </span><span class="nv">per</span>,<span class="w"> </span><span class="nv">data</span>,<span class="w"> </span><span class="nv">up</span>
 
-Topic 3 (LDA4):
-  Keywords: as, prices, gold prices, in, dollar, on, us, gains, to, as dollar, data, asia, higher, demand, in asia, stocks, india, lower, gold gains, investors
+<span class="nv">Topic</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="ss">(</span><span class="nv">LDA4</span><span class="ss">)</span>:
+<span class="w">  </span><span class="nv">Keywords</span>:<span class="w"> </span><span class="nv">as</span>,<span class="w"> </span><span class="nv">prices</span>,<span class="w"> </span><span class="nv">gold</span><span class="w"> </span><span class="nv">prices</span>,<span class="w"> </span><span class="nv">in</span>,<span class="w"> </span><span class="nv">dollar</span>,<span class="w"> </span><span class="nv">on</span>,<span class="w"> </span><span class="nv">us</span>,<span class="w"> </span><span class="nv">gains</span>,<span class="w"> </span><span class="nv">to</span>,<span class="w"> </span><span class="nv">as</span><span class="w"> </span><span class="nv">dollar</span>,<span class="w"> </span><span class="nv">data</span>,<span class="w"> </span><span class="nv">asia</span>,<span class="w"> </span><span class="nv">higher</span>,<span class="w"> </span><span class="nv">demand</span>,<span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">asia</span>,<span class="w"> </span><span class="nv">stocks</span>,<span class="w"> </span><span class="nv">india</span>,<span class="w"> </span><span class="nv">lower</span>,<span class="w"> </span><span class="nv">gold</span><span class="w"> </span><span class="nv">gains</span>,<span class="w"> </span><span class="nv">investors</span>
 
-Topic 4 (LDA5):
-  Keywords: ounce, an, an ounce, at, ends, up, gold ends, at an, down, on, futures, gold futures, in, up at, to, higher, first, gold up, lower, to an
+<span class="nv">Topic</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="ss">(</span><span class="nv">LDA5</span><span class="ss">)</span>:
+<span class="w">  </span><span class="nv">Keywords</span>:<span class="w"> </span><span class="nv">ounce</span>,<span class="w"> </span><span class="nv">an</span>,<span class="w"> </span><span class="nv">an</span><span class="w"> </span><span class="nv">ounce</span>,<span class="w"> </span><span class="nv">at</span>,<span class="w"> </span><span class="nv">ends</span>,<span class="w"> </span><span class="nv">up</span>,<span class="w"> </span><span class="nv">gold</span><span class="w"> </span><span class="nv">ends</span>,<span class="w"> </span><span class="nv">at</span><span class="w"> </span><span class="nv">an</span>,<span class="w"> </span><span class="nv">down</span>,<span class="w"> </span><span class="nv">on</span>,<span class="w"> </span><span class="nv">futures</span>,<span class="w"> </span><span class="nv">gold</span><span class="w"> </span><span class="nv">futures</span>,<span class="w"> </span><span class="nv">in</span>,<span class="w"> </span><span class="nv">up</span><span class="w"> </span><span class="nv">at</span>,<span class="w"> </span><span class="nv">to</span>,<span class="w"> </span><span class="nv">higher</span>,<span class="w"> </span><span class="nv">first</span>,<span class="w"> </span><span class="nv">gold</span><span class="w"> </span><span class="nv">up</span>,<span class="w"> </span><span class="nv">lower</span>,<span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">an</span>
 
-Topic 5 (LDA6):
-  Keywords: on, silver, to, rs, high, gold silver, global, demand, low, by, mcx, cues, up, month, global cues, weak, near, contract, of, week
+<span class="nv">Topic</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="ss">(</span><span class="nv">LDA6</span><span class="ss">)</span>:
+<span class="w">  </span><span class="nv">Keywords</span>:<span class="w"> </span><span class="nv">on</span>,<span class="w"> </span><span class="nv">silver</span>,<span class="w"> </span><span class="nv">to</span>,<span class="w"> </span><span class="nv">rs</span>,<span class="w"> </span><span class="nv">high</span>,<span class="w"> </span><span class="nv">gold</span><span class="w"> </span><span class="nv">silver</span>,<span class="w"> </span><span class="nv">global</span>,<span class="w"> </span><span class="nv">demand</span>,<span class="w"> </span><span class="nv">low</span>,<span class="w"> </span><span class="nv">by</span>,<span class="w"> </span><span class="nv">mcx</span>,<span class="w"> </span><span class="nv">cues</span>,<span class="w"> </span><span class="nv">up</span>,<span class="w"> </span><span class="nv">month</span>,<span class="w"> </span><span class="nv">global</span><span class="w"> </span><span class="nv">cues</span>,<span class="w"> </span><span class="nv">weak</span>,<span class="w"> </span><span class="nv">near</span>,<span class="w"> </span><span class="nv">contract</span>,<span class="w"> </span><span class="nv">of</span>,<span class="w"> </span><span class="nv">week</span>
 </code></pre></div>
 
 <p>It seems that the first topic LDA1 is related to the downtrend of gold price, and the second topic LDA2 is related to the future of gold price. Can we say so? Obviously no! Because LDA is a kind of unsupervised learning, we do not know what its outcomes actually stand for naturally, and that's why we need to further construct multi-factor model for prediction. </p>
 <p>Now we generate the topic distribution for each news headlines respectively to see which topic it is most likely to belong to and derive the LDA feature for the news headlines:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">topic_distributions</span> <span class="o">=</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">topic_distributions</span> <span class="o">=</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Topic distribution matrix shape: </span><span class="si">{</span><span class="n">topic_distributions</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Each row represents a news article with </span><span class="si">{</span><span class="n">n_topics</span><span class="si">}</span><span class="s2"> topic probabilities (sum to 1)&quot;</span><span class="p">)</span>
@@ -188,7 +188,7 @@ Topic 5 (LDA6):
 <p>In this section, we will add in more factors, besides our LDA feature, to construct a multi-factor model.</p>
 <h4>- Category A Factors: Media Sentiment and Attention</h4>
 <p>The sentiment score has been included in the original dataset on Hugging Face, so we can directly compute the statistics of it:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">daily_sentiment</span> <span class="o">=</span> <span class="n">df_text</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;news_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span>
+<div class="highlight"><pre><span></span><code><span class="n">daily_sentiment</span> <span class="o">=</span> <span class="n">df_text</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;news_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span>
     <span class="s1">&#39;sentiment&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">]</span>
 <span class="p">})</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
@@ -206,7 +206,7 @@ Topic 5 (LDA6):
 </code></pre></div>
 
 <p>Then is the attention factor. We define it as the daily news volume and its following statistics:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">daily_news_count</span> <span class="o">=</span> <span class="n">df_news</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;news_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;news_count&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">daily_news_count</span> <span class="o">=</span> <span class="n">df_news</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;news_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;news_count&#39;</span><span class="p">)</span>
 <span class="n">daily_news_count</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;news_count&#39;</span><span class="p">]</span>
 
 <span class="c1"># Calculate moving average of news count (smooth attention level)</span>
@@ -220,7 +220,7 @@ Topic 5 (LDA6):
 
 <h4>- Category B Factors: Event-Driven</h4>
 <p>We mainly consider 2 events for this category: the Fed and Geopolitical events. Here we use NLP again:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">fomc_keywords</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(?i)(FOMC|Fed meeting|Federal Reserve meeting|Fed minutes|FOMC statement|Fed policy)&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="n">fomc_keywords</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(?i)(FOMC|Fed meeting|Federal Reserve meeting|Fed minutes|FOMC statement|Fed policy)&#39;</span>
 
 <span class="c1"># Search keywords in news titles</span>
 <span class="n">df_news</span><span class="p">[</span><span class="s1">&#39;is_fomc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_news</span><span class="p">[</span><span class="s1">&#39;news_title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">fomc_keywords</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
@@ -243,7 +243,7 @@ Topic 5 (LDA6):
 </code></pre></div>
 
 <p>We mark the news headlines that contain specific keywords, so as for the geopolitical events:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">geopolitical_keywords</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(?i)(war|conflict|(Geopolitically sensitive place U)|(Geopolitically sensitive place R)|(Geopolitically sensitive place N)|(Geopolitically sensitive place I)|(Geopolitically sensitive place S)|(Geopolitically sensitive place Y)|tariff|trade war|sanction|Brexit|tension|crisis)&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="n">geopolitical_keywords</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(?i)(war|conflict|(Geopolitically sensitive place U)|(Geopolitically sensitive place R)|(Geopolitically sensitive place N)|(Geopolitically sensitive place I)|(Geopolitically sensitive place S)|(Geopolitically sensitive place Y)|tariff|trade war|sanction|Brexit|tension|crisis)&#39;</span>
 
 <span class="c1"># Search keywords in news titles</span>
 <span class="n">df_news</span><span class="p">[</span><span class="s1">&#39;is_geopolitical&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_news</span><span class="p">[</span><span class="s1">&#39;news_title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">geopolitical_keywords</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
@@ -262,7 +262,7 @@ Topic 5 (LDA6):
 
 <h4>- Data Merging</h4>
 <p>After creating all the features, or factors, we nearly complete our mission collecting the predictors. The final step is to merge them together:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Use gold price data as base (left join)</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Use gold price data as base (left join)</span>
 <span class="n">df_final</span> <span class="o">=</span> <span class="n">df_price</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">df_final</span> <span class="o">=</span> <span class="n">df_final</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;date&#39;</span><span class="p">})</span>
 
@@ -290,7 +290,7 @@ Topic 5 (LDA6):
 </code></pre></div>
 
 <p>However, in this project, we are not trying to predict the absolute price series or return series of gold. What we want to predict is the direction over a certain trading interval, so we need to further generate our target variables:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 1. Calculate next day return</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Calculate next day return</span>
 <span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_day_return&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># 2. Calculate next 5-day, 10-day, 20-day return</span>
@@ -326,7 +326,7 @@ Topic 5 (LDA6):
 </code></pre></div>
 
 <p>We further want to figure out whether there is severe unbalanced problem in the target distribution:</p>
-<div class="codehilite"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Label distribution:&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Label distribution:&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_day_label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_5d_label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;next_10d_label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
@@ -334,28 +334,28 @@ Topic 5 (LDA6):
 </code></pre></div>
 
 <p>Fortunately, it seems that we do not need to worry about this too much. In machine learning, it is quite annoying when facing some super unbalanced datasets, which means that we need to reconsider our modeling method and evaluation method.</p>
-<div class="codehilite"><pre><span></span><code>Label distribution:
-next_day_label
-0    2333
-1    2430
-Name: count, dtype: int64
-next_5d_label
-0    2219
-1    2544
-Name: count, dtype: int64
-next_10d_label
-0    2230
-1    2533
-Name: count, dtype: int64
-next_20d_label
-0    2215
-1    2548
-Name: count, dtype: int64
+<div class="highlight"><pre><span></span><code><span class="nx">Label</span><span class="w"> </span><span class="nx">distribution</span><span class="p">:</span>
+<span class="nx">next_day_label</span>
+<span class="mi">0</span><span class="w">    </span><span class="mi">2333</span>
+<span class="mi">1</span><span class="w">    </span><span class="mi">2430</span>
+<span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="nx">count</span><span class="p">,</span><span class="w"> </span><span class="nx">dtype</span><span class="p">:</span><span class="w"> </span><span class="nx">int64</span>
+<span class="nx">next_5d_label</span>
+<span class="mi">0</span><span class="w">    </span><span class="mi">2219</span>
+<span class="mi">1</span><span class="w">    </span><span class="mi">2544</span>
+<span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="nx">count</span><span class="p">,</span><span class="w"> </span><span class="nx">dtype</span><span class="p">:</span><span class="w"> </span><span class="nx">int64</span>
+<span class="nx">next_10d_label</span>
+<span class="mi">0</span><span class="w">    </span><span class="mi">2230</span>
+<span class="mi">1</span><span class="w">    </span><span class="mi">2533</span>
+<span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="nx">count</span><span class="p">,</span><span class="w"> </span><span class="nx">dtype</span><span class="p">:</span><span class="w"> </span><span class="nx">int64</span>
+<span class="nx">next_20d_label</span>
+<span class="mi">0</span><span class="w">    </span><span class="mi">2215</span>
+<span class="mi">1</span><span class="w">    </span><span class="mi">2548</span>
+<span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="nx">count</span><span class="p">,</span><span class="w"> </span><span class="nx">dtype</span><span class="p">:</span><span class="w"> </span><span class="nx">int64</span>
 </code></pre></div>
 
 <h4>- Factor Correlations with Return and Labels</h4>
 <p>Correlation analysis helps us better understanding the predictors and targets, although it is not difficult to employ it:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">factor_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_final</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+<div class="highlight"><pre><span></span><code><span class="n">factor_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_final</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
     <span class="n">keyword</span> <span class="ow">in</span> <span class="n">col</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> 
     <span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">,</span> <span class="s1">&#39;news&#39;</span><span class="p">,</span> <span class="s1">&#39;fomc&#39;</span><span class="p">,</span> <span class="s1">&#39;geopolitical&#39;</span><span class="p">,</span> <span class="s1">&#39;topic_&#39;</span><span class="p">]</span>
 <span class="p">)]</span>
@@ -379,60 +379,60 @@ Name: count, dtype: int64
 </code></pre></div>
 
 <p>Here we compare between the correlations for the next day return and the next day direction. The output demonstrates that the absolute correlation coefficient is higher for the direction than the return, meaning that the factors may be more powerful in predicting the direction instead of the return:</p>
-<div class="codehilite"><pre><span></span><code>Correlation coefficients between factors and next_day_return (Top 15):
-topic_LDA3_mean            0.019660
-fomc_news_count            0.013660
-has_fomc_event             0.008256
-topic_LDA1_mean            0.005725
-geopolitical_risk_count    0.005073
-topic_LDA2_mean            0.003241
-news_attention_ratio       0.002758
-sentiment_count           -0.003807
-sentiment_min             -0.004477
-news_count                -0.006096
-geopolitical_risk_ma5     -0.006558
-topic_LDA4_mean           -0.007690
-topic_LDA5_mean           -0.009298
-sentiment_trend           -0.011080
-topic_LDA6_mean           -0.012364
-Name: next_day_return, dtype: float64
+<div class="highlight"><pre><span></span><code><span class="nx">Correlation</span><span class="w"> </span><span class="nx">coefficients</span><span class="w"> </span><span class="nx">between</span><span class="w"> </span><span class="nx">factors</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">next_day_return</span><span class="w"> </span><span class="p">(</span><span class="nx">Top</span><span class="w"> </span><span class="mi">15</span><span class="p">):</span>
+<span class="nx">topic_LDA3_mean</span><span class="w">            </span><span class="m m-Double">0.019660</span>
+<span class="nx">fomc_news_count</span><span class="w">            </span><span class="m m-Double">0.013660</span>
+<span class="nx">has_fomc_event</span><span class="w">             </span><span class="m m-Double">0.008256</span>
+<span class="nx">topic_LDA1_mean</span><span class="w">            </span><span class="m m-Double">0.005725</span>
+<span class="nx">geopolitical_risk_count</span><span class="w">    </span><span class="m m-Double">0.005073</span>
+<span class="nx">topic_LDA2_mean</span><span class="w">            </span><span class="m m-Double">0.003241</span>
+<span class="nx">news_attention_ratio</span><span class="w">       </span><span class="m m-Double">0.002758</span>
+<span class="nx">sentiment_count</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.003807</span>
+<span class="nx">sentiment_min</span><span class="w">             </span><span class="o">-</span><span class="m m-Double">0.004477</span>
+<span class="nx">news_count</span><span class="w">                </span><span class="o">-</span><span class="m m-Double">0.006096</span>
+<span class="nx">geopolitical_risk_ma5</span><span class="w">     </span><span class="o">-</span><span class="m m-Double">0.006558</span>
+<span class="nx">topic_LDA4_mean</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.007690</span>
+<span class="nx">topic_LDA5_mean</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.009298</span>
+<span class="nx">sentiment_trend</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.011080</span>
+<span class="nx">topic_LDA6_mean</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.012364</span>
+<span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="nx">next_day_return</span><span class="p">,</span><span class="w"> </span><span class="nx">dtype</span><span class="p">:</span><span class="w"> </span><span class="nx">float64</span>
 
-Correlation coefficients between factors and next_day_return (Bottom 15):
-sentiment_min            -0.004477
-news_count               -0.006096
-...
-sentiment_ma5            -0.018873
-news_count_ma20          -0.022093
-sentiment_max            -0.023293
+<span class="nx">Correlation</span><span class="w"> </span><span class="nx">coefficients</span><span class="w"> </span><span class="nx">between</span><span class="w"> </span><span class="nx">factors</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">next_day_return</span><span class="w"> </span><span class="p">(</span><span class="nx">Bottom</span><span class="w"> </span><span class="mi">15</span><span class="p">):</span>
+<span class="nx">sentiment_min</span><span class="w">            </span><span class="o">-</span><span class="m m-Double">0.004477</span>
+<span class="nx">news_count</span><span class="w">               </span><span class="o">-</span><span class="m m-Double">0.006096</span>
+<span class="o">...</span>
+<span class="nx">sentiment_ma5</span><span class="w">            </span><span class="o">-</span><span class="m m-Double">0.018873</span>
+<span class="nx">news_count_ma20</span><span class="w">          </span><span class="o">-</span><span class="m m-Double">0.022093</span>
+<span class="nx">sentiment_max</span><span class="w">            </span><span class="o">-</span><span class="m m-Double">0.023293</span>
 
-Correlation coefficients between factors and next_5d_return (Top 15):
-topic_LDA3_mean            0.036147
-topic_LDA1_mean            0.025534
-topic_LDA5_mean            0.014486
-news_attention_ratio       0.006375
-sentiment_min             -0.005230
-geopolitical_risk_count   -0.006227
-fomc_news_count           -0.007213
-topic_LDA2_mean           -0.013275
-has_fomc_event            -0.016117
-sentiment_std             -0.016882
-sentiment_ma5             -0.019594
-news_count                -0.022034
-sentiment_trend           -0.024597
-topic_LDA4_mean           -0.027311
-sentiment_count           -0.028205
-Name: next_5d_return, dtype: float64
+<span class="nx">Correlation</span><span class="w"> </span><span class="nx">coefficients</span><span class="w"> </span><span class="nx">between</span><span class="w"> </span><span class="nx">factors</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">next_5d_return</span><span class="w"> </span><span class="p">(</span><span class="nx">Top</span><span class="w"> </span><span class="mi">15</span><span class="p">):</span>
+<span class="nx">topic_LDA3_mean</span><span class="w">            </span><span class="m m-Double">0.036147</span>
+<span class="nx">topic_LDA1_mean</span><span class="w">            </span><span class="m m-Double">0.025534</span>
+<span class="nx">topic_LDA5_mean</span><span class="w">            </span><span class="m m-Double">0.014486</span>
+<span class="nx">news_attention_ratio</span><span class="w">       </span><span class="m m-Double">0.006375</span>
+<span class="nx">sentiment_min</span><span class="w">             </span><span class="o">-</span><span class="m m-Double">0.005230</span>
+<span class="nx">geopolitical_risk_count</span><span class="w">   </span><span class="o">-</span><span class="m m-Double">0.006227</span>
+<span class="nx">fomc_news_count</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.007213</span>
+<span class="nx">topic_LDA2_mean</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.013275</span>
+<span class="nx">has_fomc_event</span><span class="w">            </span><span class="o">-</span><span class="m m-Double">0.016117</span>
+<span class="nx">sentiment_std</span><span class="w">             </span><span class="o">-</span><span class="m m-Double">0.016882</span>
+<span class="nx">sentiment_ma5</span><span class="w">             </span><span class="o">-</span><span class="m m-Double">0.019594</span>
+<span class="nx">news_count</span><span class="w">                </span><span class="o">-</span><span class="m m-Double">0.022034</span>
+<span class="nx">sentiment_trend</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.024597</span>
+<span class="nx">topic_LDA4_mean</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.027311</span>
+<span class="nx">sentiment_count</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.028205</span>
+<span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="nx">next_5d_return</span><span class="p">,</span><span class="w"> </span><span class="nx">dtype</span><span class="p">:</span><span class="w"> </span><span class="nx">float64</span>
 
-Correlation coefficients between factors and next_5d_return (Bottom 15):
-has_fomc_event           -0.016117
-sentiment_std            -0.016882
-sentiment_ma5            -0.019594
-news_count               -0.022034
-sentiment_trend          -0.024597
-...
-sentiment_ma20           -0.038777
-geopolitical_risk_ma20   -0.046619
-sentiment_max            -0.050572
+<span class="nx">Correlation</span><span class="w"> </span><span class="nx">coefficients</span><span class="w"> </span><span class="nx">between</span><span class="w"> </span><span class="nx">factors</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">next_5d_return</span><span class="w"> </span><span class="p">(</span><span class="nx">Bottom</span><span class="w"> </span><span class="mi">15</span><span class="p">):</span>
+<span class="nx">has_fomc_event</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.016117</span>
+<span class="nx">sentiment_std</span><span class="w">            </span><span class="o">-</span><span class="m m-Double">0.016882</span>
+<span class="nx">sentiment_ma5</span><span class="w">            </span><span class="o">-</span><span class="m m-Double">0.019594</span>
+<span class="nx">news_count</span><span class="w">               </span><span class="o">-</span><span class="m m-Double">0.022034</span>
+<span class="nx">sentiment_trend</span><span class="w">          </span><span class="o">-</span><span class="m m-Double">0.024597</span>
+<span class="o">...</span>
+<span class="nx">sentiment_ma20</span><span class="w">           </span><span class="o">-</span><span class="m m-Double">0.038777</span>
+<span class="nx">geopolitical_risk_ma20</span><span class="w">   </span><span class="o">-</span><span class="m m-Double">0.046619</span>
+<span class="nx">sentiment_max</span><span class="w">            </span><span class="o">-</span><span class="m m-Double">0.050572</span>
 </code></pre></div>
 
 <h3>3. Tree Model Training</h3>
@@ -446,7 +446,7 @@ sentiment_max            -0.050572
 <li>Bollinger Bands</li>
 <li>Price channel</li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_rsi</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">14</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_rsi</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">14</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate RSI indicator&quot;&quot;&quot;</span>
     <span class="n">delta</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
     <span class="n">gain</span> <span class="o">=</span> <span class="p">(</span><span class="n">delta</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">delta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">period</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
@@ -492,7 +492,7 @@ sentiment_max            -0.050572
 </code></pre></div>
 
 <p>Eventually, we are almost ready to train our model. Let's decide how to split the train, validate and test datasets. We select the data from 2000-02-15 to 2014-02-1as the train and validate dataset, while the data from 2014-02-1 to 2019-02-1 as the test dataset. In the train and validate dataset, 70% of the data is randomly selected as training data, the rest of it would be the validating data. We also shuffle the train and validate dataset to break the time series. Hopefully, this can mimic the <code>random_split()</code> function in PyTorch:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">data_process</span><span class="p">(</span><span class="n">trainval_start</span><span class="p">,</span> <span class="n">trainval_end</span><span class="p">,</span> <span class="n">test_end</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">train_ratio</span><span class="o">=</span><span class="mf">0.70</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">data_process</span><span class="p">(</span><span class="n">trainval_start</span><span class="p">,</span> <span class="n">trainval_end</span><span class="p">,</span> <span class="n">test_end</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">train_ratio</span><span class="o">=</span><span class="mf">0.70</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">print_flag</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data Processing with Multiple Labels&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">80</span><span class="p">)</span>

@@ -108,7 +108,7 @@
 <p>During our initial meeting, we divided responsibilities among group members. Two members focused on data collection, one on data cleaning and manipulation, and the remaining two on the machine learning and NLP components.</p>
 <p>Due to overlapping examination schedules, progress has so far been limited to data collection and cleaning. Central bank speeches were obtained from BIS, while market data for the S&amp;P 500 and VIX were sourced from publicly available financial APIs. These datasets were relatively clean and required minimal preprocessing.</p>
 <p>Below is how market data were retrieved using Python:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">yfinance</span> <span class="k">as</span> <span class="nn">yf</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">yfinance</span> <span class="k">as</span> <span class="nn">yf</span>
 
 <span class="c1"># Download S&amp;P 500 and VIX</span>
 <span class="n">sp500</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;^GSPC&quot;</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="s2">&quot;1d&quot;</span><span class="p">)</span>

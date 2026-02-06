@@ -101,7 +101,7 @@
 <p>To clean and gather the data, we imported Python libraries like <code>pandas</code> and <code>nltk</code>. Since our team is focusing on the sentiment of comments on social media (Reddit), the comments we scraped are usually quite different from financial news or reports, requiring deep cleaning.</p>
 <h3>2.1. General Cleaning (Used for FinBERT &amp; LLM)</h3>
 <p>For deep learning models like FinBERT and LLMs, we need to remove noise (like HTML tags and markdown) while preserving sentence structure and emojis, which often carry sentiment.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">html</span>
 
 <span class="k">def</span> <span class="nf">clean_reddit_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
@@ -129,7 +129,7 @@
 
 <h3>2.2. Stop Words Removal (Specific to NLTK)</h3>
 <p>For the bag-of-words approach used in NLTK (and for generating WordClouds), we perform an extra step: removing "stop words" (common words like "the", "is", "at") that do not carry sentiment value.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">nltk</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">nltk</span>
 <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
 
 <span class="c1"># Download stop words list</span>
@@ -153,7 +153,7 @@
 *   <strong>Intuitive output:</strong> Generates a compound score (-1 = extremely negative, 1 = extremely positive) plus clear positive/negative/neutral labels.</p>
 <p><strong>Implementation Snippet:</strong>
 Below is the core logic for initializing VADER and scoring a comment. It calculates a "compound" score which normalizes the sum of lexical ratings.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">nltk.sentiment.vader</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">nltk.sentiment.vader</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
 
 <span class="c1"># Initialize the VADER sentiment analyzer</span>
 <span class="n">sid</span> <span class="o">=</span> <span class="n">SentimentIntensityAnalyzer</span><span class="p">()</span>
@@ -180,7 +180,7 @@ Below is the core logic for initializing VADER and scoring a comment. It calcula
 *   <strong>Efficient batch processing:</strong> Handles hundreds of comments at once, balancing speed and precision.</p>
 <p><strong>Implementation Snippet:</strong>
 We utilize the Hugging Face <code>transformers</code> pipeline to load the <code>ProsusAI/finbert</code> model. The following code demonstrates how we initialize the model and process a batch of text to get probability distributions.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
 
 <span class="c1"># Initialize FinBERT model pipeline</span>
 <span class="n">classifier</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span>
@@ -226,7 +226,7 @@ Our prompt follows a strict "Funnel Structure":
 4.  <strong>Domain Adaptation:</strong> Explicitly maps Reddit slang (e.g., "diamond hands") to sentiment to bridge the cultural gap.
 5.  <strong>Output Constraints:</strong> Enforces a strict JSON format for programmatic parsing.</p>
 <p>Below is the actual System Prompt we designed:</p>
-<div class="codehilite"><pre><span></span><code>You are a professional financial market sentiment analyst specializing in analyzing discussions about precious metals (gold and silver) on social media platforms like Reddit.
+<div class="highlight"><pre><span></span><code>You are a professional financial market sentiment analyst specializing in analyzing discussions about precious metals (gold and silver) on social media platforms like Reddit.
 
 ## Task
 Analyze the sentiment of user comments to determine their attitude toward precious metal price trends.
@@ -270,7 +270,7 @@ Calling LLM APIs for thousands of comments is slow and expensive. To mitigate th
 <li><strong>Concurrency:</strong> We use a <code>ThreadPoolExecutor</code> to send parallel requests, maximizing throughput without hitting API rate limits.</li>
 </ol>
 <p>Below is the implementation code using the <code>dashscope</code> SDK:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">dashscope</span>
 <span class="kn">from</span> <span class="nn">http</span> <span class="kn">import</span> <span class="n">HTTPStatus</span>
 <span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span><span class="p">,</span> <span class="n">as_completed</span>

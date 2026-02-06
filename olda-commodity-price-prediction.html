@@ -89,7 +89,7 @@
 <p><strong>2.Time-consistent:</strong> Prices change daily, so we pulled 2022–2025 news to align with long-term price trends.</p>
 <p><strong>3.Enough volume:</strong> We needed ~1,100–1,200 articles/month (56,578 total) to spot shifting themes (like "supply shortages" or "rate hikes").</p>
 <p><strong>Mediastack News API</strong> was perfect here: it lets us filter by category, grab historical data, and scale up easily—so our dataset matches real market news flow.</p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1"># Sample code for fetching news metadata via Mediastack API</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1"># Sample code for fetching news metadata via Mediastack API</span>
    <span class="kn">import</span> <span class="nn">http.client</span><span class="o">,</span> <span class="nn">urllib.parse</span><span class="o">,</span> <span class="nn">json</span>
 
    <span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="s1">&#39;api.mediastack.com&#39;</span><span class="p">)</span>
@@ -112,7 +112,7 @@
 </ul>
 <h3>(b) Data Preprocess_1.0</h3>
 <p>First, we import necessary libraries, load the raw news dataset from an Excel file, and check the basic structure of our data.</p>
-<div class="codehilite"><pre><span></span><code>   <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight"><pre><span></span><code>   <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
    <span class="kn">import</span> <span class="nn">nltk</span>
    <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
    <span class="kn">import</span> <span class="nn">jieba</span>
@@ -140,7 +140,7 @@
 <p>2.<strong>Data Transformation</strong>: We convert the <code>published_date</code> column to datetime format (to handle time-based grouping later).</p>
 <p>3.<strong>Date-Based Grouping</strong>: We group news entries by their publication date, organizing them into a dictionary where each key is a date (as a string) and the value is a list of daily news details (like title, abstract, and content).</p>
 <p>Here’s the code for these steps:</p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1"># Data Cleaning</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1"># Data Cleaning</span>
    <span class="c1"># We replace the &quot;Failed to retrieve content&quot; with empty string.</span>
    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;Failed to retrieve content&#39;</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="s1">&#39;content&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
@@ -176,7 +176,7 @@
 <p>2.<strong>Save Grouped Data</strong>: We export the date-grouped news data (from the previous step) as a JSON-formatted text file (<code>2025_12.txt</code>), using UTF-8 encoding to preserve special characters.</p>
 <p>3.<strong>Verify Saving</strong>: We print the file path and size to confirm the data is saved successfully.</p>
 <p>Here’s the code for this step:</p>
-<div class="codehilite"><pre><span></span><code>   <span class="c1"># Save Processed Data</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1"># Save Processed Data</span>
    <span class="n">output_directory</span> <span class="o">=</span> <span class="s1">&#39;transformed_data&#39;</span>
    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_directory</span><span class="p">):</span>
       <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_directory</span><span class="p">)</span>
@@ -193,7 +193,7 @@
 </code></pre></div>
 
 <p>This is a example of our JSON formatted text data:</p>
-<div class="codehilite"><pre><span></span><code><span class="w">   </span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="w">   </span><span class="p">{</span>
 <span class="w">   </span><span class="nt">&quot;2025-12-01&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">      </span><span class="p">{</span>
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;News Title&quot;</span><span class="p">,</span>
@@ -237,7 +237,7 @@
 <ul>
 <li><strong>Solution:</strong> We integrated the <code>newspaper3k</code> Python package. We built a scraper pipeline that iterates through the URLs provided by the API to fetch and parse the full article text, ensuring our model learns from the complete narrative.</li>
 </ul>
-<div class="codehilite"><pre><span></span><code>   <span class="kn">from</span> <span class="nn">newspaper</span> <span class="kn">import</span> <span class="n">Article</span>
+<div class="highlight"><pre><span></span><code>   <span class="kn">from</span> <span class="nn">newspaper</span> <span class="kn">import</span> <span class="n">Article</span>
 
    <span class="k">def</span> <span class="nf">get_full_article</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
       <span class="k">try</span><span class="p">:</span>
@@ -294,7 +294,7 @@ The terms were a mix of stop words, irrelevant proper nouns (e.g., "naidu", "cho
 </ol>
 <p>This part of the code is quite extensive, the code below is a <strong>Code Skeleton</strong> of our process.For the complete and rigorous data preprocessing code, please refer to the <strong>data_preprocess_word_reconstruct.ipynb</strong> file in the GitHub repository of our Project, which includes detailed preprocessing steps with comprehensive comments:</p>
 <p><a href="https://github.com/DJQ83/data-preprocess">Rigorous Preprocessing Code</a></p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 1. Configuration &amp; Dependency Section</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Configuration &amp; Dependency Section</span>
 <span class="c1"># Define INPUT/OUTPUT directories and initialize cleaning paths.</span>
 <span class="c1"># Ensure environment readiness before processing starts.</span>
 
@@ -353,7 +353,7 @@ Let <span class="math">\(f_v\)</span> be the marginal probability of term <span 
 $$\tilde{w}_{k,v}=\frac{\phi_{k,v}}{f_v + \epsilon}$$
 </div>
 
-<div class="codehilite"><pre><span></span><code>   <span class="c1"># 1. Get Topic-Term distribution (Phi)</span>
+<div class="highlight"><pre><span></span><code>   <span class="c1"># 1. Get Topic-Term distribution (Phi)</span>
    <span class="n">topic_term_counts</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">components_</span>
    <span class="n">topic_term_distr</span> <span class="o">=</span> <span class="n">topic_term_counts</span> <span class="o">/</span> <span class="n">topic_term_counts</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="c1"># K x V</span>
 
@@ -417,7 +417,7 @@ $$\tilde{w}_{k,v}=\frac{\phi_{k,v}}{f_v + \epsilon}$$
     configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','color.js','mhchem.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +

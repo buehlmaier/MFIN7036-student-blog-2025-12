@@ -105,7 +105,7 @@ In total, the dataset includes:</p>
 <hr>
 <h2><strong>Step 1: Data Collection</strong></h2>
 <p>For the text data, firstly we import the libraries. Since the Federal Reserve’s website is static, which does not require the user interaction or JavaScript rendering, we conduct the Requests library to do the web scraping.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -114,7 +114,7 @@ In total, the dataset includes:</p>
 
 <p>We download and store the statement and minutes’ html from the current url and history url.
 Our HTTP requests are sent using the requests library with a standard browser user-agent header to avoid access restrictions. Later, the HTML content is parsed using BeautifulSoup.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0&quot;</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0&quot;</span><span class="p">}</span>
 <span class="c1"># get current html links</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">current_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
 <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
@@ -126,7 +126,7 @@ Our HTTP requests are sent using the requests library with a standard browser us
 <p>Due to inconsistencies in webpage design across different periods, the structure of FOMC pages differs between current and historical URLs. </p>
 <p><img alt="Picture showing 2025FOMCMeetings" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Deepsick_01_2025FOMCMeetings.jpeg"> <img alt="Picture showing 2005Memos" src="https://buehlmaier.github.io/MFIN7036-student-blog-2025-12/images/Deepsick_01_2005Memos.jpeg"></p>
 <p>For recent years, FOMC statements have been published as press releases with standardized HTML structures, allowing statement links to be identified directly through consistent URL patterns. In contrast, historical pages embed statements within year-specific archives alongside various related materials. Statement links are therefore identified using keyword matching (e.g., “statement”) and filtered by the presence of an eight-digit date pattern (YYYYMMDD) in the URL. PDF files and supplementary documents are excluded to avoid irrelevant or duplicate content. Accordingly, separate extraction rules are applied to current and historical pages to ensure consistent and accurate data collection over time.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 2020-2025 Statement Link</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 2020-2025 Statement Link</span>
        <span class="k">if</span> <span class="p">(</span>
            <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;HTML&quot;</span>
            <span class="ow">and</span> <span class="n">href</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/newsevents/pressreleases/monetary&quot;</span><span class="p">)</span>
@@ -142,14 +142,14 @@ Our HTTP requests are sent using the requests library with a standard browser us
 </code></pre></div>
 
 <p>Combine the html from 2000-2025 together.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 3. combine the links of statements and minutes (2000-2025)</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 3. combine the links of statements and minutes (2000-2025)</span>
    <span class="n">sta_links</span> <span class="o">=</span> <span class="n">statement_links</span> <span class="o">+</span> <span class="n">historical_statement_links</span>
    <span class="n">min_links</span> <span class="o">=</span> <span class="n">minutes_links</span> <span class="o">+</span> <span class="n">historical_minutes_links</span>
 </code></pre></div>
 
 <p>Next, we use the beautiful soup to extract the date and text from the HTML. 
 We found that each HTML link contains the meeting date, which was extracted directly from the URL. This approach is more efficient than parsing the date from the HTML content, as the webpage structure is inconsistent across years and makes the date difficult to locate programmatically. </p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 4. extract date and text from html</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 4. extract date and text from html</span>
 <span class="k">def</span> <span class="nf">extract_date_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">   </span><span class="sd">&quot;&quot;&quot;Extract YYYYMMDD from URL only; return empty string on failure.&quot;&quot;&quot;</span>
    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d</span><span class="si">{8}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
@@ -161,7 +161,7 @@ We found that each HTML link contains the meeting date, which was extracted dire
 
 <p>The text content is extracted using the function extract_text_from_soup. Specifically, the function first targets the main content area identified by the col-sm-8 "div", and falls back to "table" elements when necessary. All relevant "p" tags are collected and concatenated to form the complete document text.</p>
 <p>Besides, a text-cleaning step is then applied to normalize whitespace. Specifically, carriage returns (\r), line breaks (\n), and tab characters (\t) are replaced with spaces, and multiple consecutive spaces are collapsed into a single space. This ensures a clean and consistent text format for subsequent analysis.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 5. data cleaning</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 5. data cleaning</span>
 <span class="k">def</span> <span class="nf">data_cleaning</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">   </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">   Normalize whitespace (remove \\r, \\n, \\t) and collapse multiple spaces.</span>
@@ -187,13 +187,13 @@ We found that each HTML link contains the meeting date, which was extracted dire
 <h2><strong>Step 2: Data Preprocessing</strong></h2>
 <p>In this section, we construct a standard Natural Language Processing (NLP) preprocessing pipeline to transform raw textual data into a clean, structured format suitable for downstream analysis or modeling. The pipeline is: lowercase the text -&gt; tokenization -&gt; delete punctuations/numbers -&gt; remove stopwords -&gt; lemmatization -&gt; save to csv.
 Before the preprocessing, we import the NLTK library, which provides essential tools for tokenization, stopword removal, and lemmatization.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">nltk</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">nltk</span>
 <span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">WordNetLemmatizer</span>
 <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
 </code></pre></div>
 
 <p>We begin by converting all text to lowercase to ensure case consistency. Next, the text is tokenized into individual words using NLTK’s tokenizer. After tokenization, non-alphabetic tokens such as punctuation marks and numbers are removed to reduce noise. We then apply stopword removal to eliminate commonly used words (e.g., <em>“the”</em>, <em>“and”</em>, <em>“is”</em>) that typically carry limited semantic value. Following this, lemmatization is performed to normalize words to their base or dictionary form, which helps reduce vocabulary size while preserving meaning.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">cleaned_statement1</span> <span class="o">=</span> <span class="n">cleaned_statement</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="n">cleaned_statement1</span> <span class="o">=</span> <span class="n">cleaned_statement</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="c1"># 1. lowercase all text</span>
 <span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cleaned_statement1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 <span class="c1"># 2. tokenize text</span>
@@ -219,7 +219,7 @@ Before the preprocessing, we import the NLTK library, which provides essential t
 <li>Standard English stopwords are excluded</li>
 </ul>
 <p>This filtering strategy ensures that the resulting TF-IDF features focus on informative and policy-relevant language rather than generic or repetitive terms.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span>
+<div class="highlight"><pre><span></span><code><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span>
        <span class="n">token_pattern</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;(?u)\b\w+\b&quot;</span><span class="p">,</span>
        <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>  <span class="c1"># unigram and bigram</span>
        <span class="n">min_df</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="c1"># at least 10 times</span>

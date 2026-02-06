@@ -15,7 +15,7 @@
 &lt;p&gt;To solve the "Memorylessness" problem without flooding the context window with noise, we engineered a two-step prompting strategy. The model must first identify a key event and then explicitly pass a "Significance Filter" before the memory is stored.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;The Filter Prompt:&lt;/strong&gt;
 We force the model to predict the &lt;em&gt;durability&lt;/em&gt; of the impact, acting as a high-pass filter for news.&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# From run_backtest_memory_legacy.py&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# From run_backtest_memory_legacy.py&lt;/span&gt;
 &lt;span class="n"&gt;filter_prompt&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&amp;lt;|begin_of_text|&amp;gt;&amp;lt;|start_header_id|&amp;gt;system&amp;lt;|end_header_id|&amp;gt;&lt;/span&gt;
 &lt;span class="s2"&gt;Is there ANY event in today&amp;#39;s news that will significantly impact Gold prices for the next 2 weeks? Reply ONLY &amp;#39;YES&amp;#39; or &amp;#39;NO&amp;#39;.&amp;lt;|eot_id|&amp;gt;&amp;lt;|start_header_id|&amp;gt;user&amp;lt;|end_header_id|&amp;gt;&lt;/span&gt;
 &lt;span class="s2"&gt;News:&lt;/span&gt;
@@ -24,7 +24,7 @@ We force the model to predict the &lt;em&gt;durability&lt;/em&gt; of the impact,
 
 &lt;p&gt;&lt;strong&gt;The Update Loop:&lt;/strong&gt;
 If the Gatekeeper returns "YES", the event is stored. We enforce a &lt;strong&gt;14-day rolling window&lt;/strong&gt; (our estimated "Narrative Half-Life") to prevent stale data from polluting the decision process.&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# ... generation logic ...&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# ... generation logic ...&lt;/span&gt;
 &lt;span class="n"&gt;is_imp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;YES&amp;quot;&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;tokenizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;batch_decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f_out&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;skip_special_tokens&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 
 &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;is_imp&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
@@ -41,7 +41,7 @@ If the Gatekeeper returns "YES", the event is stored. We enforce a &lt;strong&gt
 &lt;h3&gt;2.2 The Execution (Momentum Delta)&lt;/h3&gt;
 &lt;p&gt;To solve the "Score Saturation" problem, we ignore the absolute sentiment score. Instead, we trade the &lt;strong&gt;Derivative (&lt;span class="math"&gt;\(\Delta\)&lt;/span&gt;)&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;We inject the filtered memory (&lt;code&gt;mem_strs_D&lt;/code&gt;) into the prompt to generate a "Context-Aware Score" (&lt;code&gt;score_D&lt;/code&gt;), and then calculate the delta against the previous day's state.&lt;/p&gt;
-&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# 1. Generate Context-Aware Score (Score D)&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# 1. Generate Context-Aware Score (Score D)&lt;/span&gt;
 &lt;span class="c1"&gt;# Input injects historical high-impact events into the current prompt&lt;/span&gt;
 &lt;span class="n"&gt;input_D&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Date: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;current_date&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;strftime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;%Y-%m-&lt;/span&gt;&lt;span class="si"&gt;%d&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;News:&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
     &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;- &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;h&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;current_headlines&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;mem_strs_D&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
@@ -155,7 +155,7 @@ If the Gatekeeper returns "YES", the event is stored. We enforce a &lt;strong&gt
     configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','color.js','mhchem.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +

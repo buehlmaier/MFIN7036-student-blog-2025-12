@@ -83,7 +83,7 @@
 <p>Our analysis is conducted based on a combination of sentiment data and market data covering a long time range. For sentiment, we collect Bitcoin-related news articles and online discussions from multiple sources. To be specific, our news data are obtained from Hugging Face and Google News, while our Reddit comments are sourced from Kaggle. After evaluating data coverage, consistency, and practical usability, we ultimately rely on Google News articles and Reddit comments as our primary sentiment inputs. Sentiment scores are primarily constructed using FinBERT for news articles and VADER for Reddit comments. For market data, we use daily Bitcoin price data from CryptoCompare as our main source, with Yahoo Finance as a reference. These data are used to compute realized price volatility, which turns out to be our core target variable in the modeling framework.</p>
 <h2>Sentiment Data - Google News</h2>
 <p>To collect Bitcoin news articles from Google News, we write a function <code>get_data(coin:str = 'BTC')</code> to help us achieve the goal. It fetches daily news items (from January 2011 to the present) that contain the term "BTC". As the result, the returned document is a pandas.DataFrame containing each article’s publication time, title, and original URL, which is ideal for sentiment tracking and time-series analysis.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">coin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;BTC&#39;</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">coin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;BTC&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39; Fetch full news data from Google News RSS feed for BTC or ETH. &#39;&#39;&#39;</span>
 
     <span class="n">link</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span>
@@ -143,7 +143,7 @@
 <p>Considering that the comment data on Kaggle is extremely abundant, if the web-sqraping requires a significant amount of time, We use two different time-period open-source Kaggle dataset as the basic reddit comments data. The data structures of these two datasets include timestamp(seconds), subreddit, body and sentiment score. Total length of our data is more than seven million. Considering the data's accuracy, we only re-performed the text sentiment analysis on the comments themselves.</p>
 <h2>Market Data - CryptoCompare</h2>
 <p>We collected Bitcoin price data from two sources — Yahoo Finance and CryptoCompare. After comparing the two datasets, we decided to use the data from <a href="https://www.cryptocompare.com/">CryptoCompare</a> because it covers a longer time period. Since CryptoCompare’s API has a limit of 2000 data points per request, we use a cyclic scraping approach to retrieve the full dataset. The specific process can be seen in the main function of the scraping code, and below is the scraping code we used:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Configuration</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Configuration</span>
 <span class="n">FSYM</span> <span class="o">=</span> <span class="s2">&quot;BTC&quot;</span>                 <span class="c1"># From symbol</span>
 <span class="n">TSYM</span> <span class="o">=</span> <span class="s2">&quot;USD&quot;</span>                 <span class="c1"># To symbol</span>
 <span class="n">START_DATE</span> <span class="o">=</span> <span class="s2">&quot;2011-01-01&quot;</span>    <span class="c1"># Start date (inclusive)</span>
@@ -211,7 +211,7 @@
 </code></pre></div>
 
 <p>Then we got the Bitcoin price from 2011/01/01 to 2026/01/14. To reduce the effect of extreme changes in Bitcoin price, we used the absolute value of the daily log return of Bitcoin as the daily volatility proxy. In addition, we used winsorization (1%–99%) to deal with outliers without affecting the time series of our data. The data reprocessing code is shown below:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Ensure Date is datetime and sorted</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Ensure Date is datetime and sorted</span>
 <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;Date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -250,7 +250,7 @@
 <p>Unlike Vader which works well for casual Reddit comments, FinBert's transformer architecture captures nuanced financial sentiments. This property makes it more reliably for professional news content, even though it is more computationally expensive. Therefore, considering FinBert's fine-tuned characteristics, we select to use it as the NLP sentiment assessment model for our Google News dataset. </p>
 <h3>Data Cleaning and Pre-processing</h3>
 <p>To satisfy FinBert's maximum 512-token limit while maximizing relevant financial context for accurate bullish/bearish scoring, we truncate overly long texts by combining the article title with the last 400 tokens in text bodies. This guarantees that elements with the strongest sentiment signals in the text, such as title, summary, and key findings, are included in text inputs. </p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">truncate_from_end</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">400</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">truncate_from_end</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">400</span><span class="p">):</span>
     <span class="n">tokens</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_tokens</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">text</span>
@@ -271,7 +271,7 @@
 
 <h3>Sentiment Calculation</h3>
 <p>Through calling the function <code>get_score(self, text)</code>, we can compute the final sentiment score as positive probability minus negative probability. This produces a continuous value roughly in [-1, +1] when using softmax, with positive news closer to +1 and negative news closer to -1. </p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">get_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="n">encoded_input</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">(</span><span class="n">text</span><span class="p">,</span>
                                     <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">,</span>
                                     <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -308,7 +308,7 @@
 <li>Eliminates URLs (e.g., www.example.com)  </li>
 </ul>
 <p>These steps ensure the text is clean, noise-free, and preserves social media features (emojis, emphasis, slang) that VADER handles well, while removing elements that could confuse scoring. The result is a lightweight, efficient pre-processing step optimized for large-scale Reddit comment sentiment aggregation in this volatility forecasting project.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">pre_clean_vader</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">pre_clean_vader</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span> <span class="c1">#if text is str format or only whitespace</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
     <span class="c1"># remove html tag</span>
@@ -343,7 +343,7 @@
 <p>To examine the different effects of sentiment from news and social media comments, we ran two regressions: one using comments from Reddit and the other using news from Google News. During both regressions, we used VADER to score the sentiment of the text to ensure that the scoring standard is consistent. The code and result for the regression are shown below.</p>
 <h3>Linear Regression for The Sentiment Scores From Reddit</h3>
 <p>The code is divided into three parts. The first part is data preprocessing. In this part, we merge the sentiment data with the Bitcoin data and create two new columns: log (1 + count) and next-day volatility.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Merge by date</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Merge by date</span>
 <span class="n">df_merged</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
     <span class="n">df_volatility</span><span class="p">[[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;Log_return&quot;</span><span class="p">,</span> <span class="s2">&quot;Daily_volatility_log&quot;</span><span class="p">]],</span>
     <span class="n">df_score</span><span class="p">[[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;vader_score&quot;</span><span class="p">,</span> <span class="s2">&quot;post_count&quot;</span><span class="p">]],</span>
@@ -373,7 +373,7 @@
 </code></pre></div>
 
 <p>The second part is using OLS and HAC to do regression:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Regression (OLS with HAC SE)</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Regression (OLS with HAC SE)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">df_reg</span><span class="p">[</span><span class="s2">&quot;Daily_volatility_log_t1&quot;</span><span class="p">]</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">df_reg</span><span class="p">[[</span><span class="s2">&quot;sent_pos&quot;</span><span class="p">,</span> <span class="s2">&quot;sent_neg&quot;</span><span class="p">,</span> <span class="s2">&quot;post_count_log&quot;</span><span class="p">,</span> <span class="s2">&quot;Daily_volatility_log&quot;</span><span class="p">]]</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -386,7 +386,7 @@
 </code></pre></div>
 
 <p>The third part is to calculate RMSE:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Simple RMSE evaluation</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Simple RMSE evaluation</span>
 <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">resid</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In-sample RMSE:&quot;</span><span class="p">,</span> <span class="n">rmse</span><span class="p">)</span>
 
@@ -411,21 +411,21 @@
 <p>Firstly, there is one important question to answer before we start our discussion. Why do we choose the Random Forest for forecasting? Unlike linear models, it can capture nonlinear and interaction effects between lagged sentiment signals and Bitcoin volatility, which are likely to exist in sentiment-driven markets. Meanwhile, Random Forest acts relatively robust to noise in NLP-derived sentiment scores and is relatively stable under hyperparameter tuning. Moreover, it doesn’t impose a parametric structure on the data. All these valuable properties make Random Forest a great fit to be our first and baseline machine learning model for forecasting.</p>
 <h3>Model Input</h3>
 <p>The sentiment input is a daily sentiment score derived from bitcoin-related news articles sourced from Google News processed through FinBERT as well as bitcoin-related Reddit news sourced from Kaggle processed through Vader. To capture delayed market reactions, we construct multiple lagged sentiment features as model predictors. These lagged terms are <code>sentiment_lag1</code>, <code>sentiment_lag3</code>, <code>sentiment_lag7</code>, which correspond to short-term, medium-term, and weekly sentiment effects. </p>
-<div class="codehilite"><pre><span></span><code><span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentiment_lag1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentiment_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> 
+<div class="highlight"><pre><span></span><code><span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentiment_lag1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentiment_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> 
 <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentiment_lag3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentiment_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentiment_lag7&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;sentiment_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Lagged volatility terms are greatly autocorrelated with current volatility. So in our analysis, we avoid using lagged volatility terms as predictors as including them would allow the model to achieve good predictive performance primarily through volatility clustering rather than the effects of sentiment scores. </p>
 <p>Therefore, based on the input dataset, we split our X and Y into:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">X</span> <span class="o">=</span> <span class="n">df_model</span><span class="p">[[</span><span class="s2">&quot;sentiment_lag1&quot;</span><span class="p">,</span> <span class="s2">&quot;sentiment_lag3&quot;</span><span class="p">,</span> <span class="s2">&quot;sentiment_lag7&quot;</span><span class="p">]]</span> 
+<div class="highlight"><pre><span></span><code><span class="n">X</span> <span class="o">=</span> <span class="n">df_model</span><span class="p">[[</span><span class="s2">&quot;sentiment_lag1&quot;</span><span class="p">,</span> <span class="s2">&quot;sentiment_lag3&quot;</span><span class="p">,</span> <span class="s2">&quot;sentiment_lag7&quot;</span><span class="p">]]</span> 
 <span class="n">Y</span> <span class="o">=</span> <span class="n">df_model</span><span class="p">[</span><span class="s2">&quot;volatility&quot;</span><span class="p">]</span>
 </code></pre></div>
 
 <h3>Model Training and Hyperparameter Finetuning</h3>
 <h4>Train-Test Split</h4>
 <p>Instead of random sampling, the data is split chronologically. We utilize the first 80% of our data as the training dataset and the last 20% as the testing dataset. Dividing in chronological order mirrors real-world forecasting and prevents future information leakage.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">split_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df_model</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span> 
+<div class="highlight"><pre><span></span><code><span class="n">split_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df_model</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span> 
 <span class="n">X_train</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">split_idx</span><span class="p">]</span> 
 <span class="n">Y_train</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">split_idx</span><span class="p">]</span> 
 <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">split_idx</span><span class="p">:]</span> 
@@ -435,7 +435,7 @@
 <h4>Regressor Establishment</h4>
 <h5>Initial Establishment</h5>
 <p>Initially, to achieve higher predicting efficiency, we set the values of hyperparameters relatively high. For example, in the initial implementation below, the number of trees - ‘n_estimators’ - is set to be 800 and the maximum depth of each tree - ‘max_depth’ - is set to be 3, which are proved to be too high after finetuning.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">initial_random_forest_model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span> 
+<div class="highlight"><pre><span></span><code><span class="n">initial_random_forest_model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span> 
 <span class="n">n_estimators</span> <span class="o">=</span> <span class="mi">800</span><span class="p">,</span> 
 <span class="n">max_depth</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span> 
 <span class="n">min_samples_leaf</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> 
@@ -447,7 +447,7 @@
 
 <h5>Hyperparameter Finetuning</h5>
 <p>To improve generalization, hyperparameters are optimized using randomized search with time-series cross-validation. We perform cross-validation analysis on different hyperparameter sets in order to find the optimal one. </p>
-<div class="codehilite"><pre><span></span><code><span class="n">tscv</span> <span class="o">=</span> <span class="n">TimeSeriesSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">tscv</span> <span class="o">=</span> <span class="n">TimeSeriesSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span>
     <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
@@ -477,7 +477,7 @@
 
 <h5>Optimal Random Forest Regressor</h5>
 <p>After finetuning, we've discovered the optimal hyperparameter set to construct our random forest regressor, which is:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">optimal_random_forest_model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span> 
+<div class="highlight"><pre><span></span><code><span class="n">optimal_random_forest_model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span> 
 <span class="n">n_estimators</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> 
 <span class="n">max_depth</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> 
 <span class="n">min_samples_leaf</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> 
@@ -513,7 +513,7 @@
 <li>Predict the current day's realized volatility using the day's features.</li>
 <li><strong>No future leakage</strong>: Test day data is never used in training.</li>
 </ul>
-<div class="codehilite"><pre><span></span><code>    <span class="k">def</span> <span class="nf">fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">df</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">df</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;date&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;The input DataFrame must contain a column named &#39;date&#39;. &quot;</span>

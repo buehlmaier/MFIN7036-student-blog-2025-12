@@ -93,7 +93,7 @@
 <p>To solve the "Memorylessness" problem without flooding the context window with noise, we engineered a two-step prompting strategy. The model must first identify a key event and then explicitly pass a "Significance Filter" before the memory is stored.</p>
 <p><strong>The Filter Prompt:</strong>
 We force the model to predict the <em>durability</em> of the impact, acting as a high-pass filter for news.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># From run_backtest_memory_legacy.py</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># From run_backtest_memory_legacy.py</span>
 <span class="n">filter_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;&lt;|begin_of_text|&gt;&lt;|start_header_id|&gt;system&lt;|end_header_id|&gt;</span>
 <span class="s2">Is there ANY event in today&#39;s news that will significantly impact Gold prices for the next 2 weeks? Reply ONLY &#39;YES&#39; or &#39;NO&#39;.&lt;|eot_id|&gt;&lt;|start_header_id|&gt;user&lt;|end_header_id|&gt;</span>
 <span class="s2">News:</span>
@@ -102,7 +102,7 @@ We force the model to predict the <em>durability</em> of the impact, acting as a
 
 <p><strong>The Update Loop:</strong>
 If the Gatekeeper returns "YES", the event is stored. We enforce a <strong>14-day rolling window</strong> (our estimated "Narrative Half-Life") to prevent stale data from polluting the decision process.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># ... generation logic ...</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># ... generation logic ...</span>
 <span class="n">is_imp</span> <span class="o">=</span> <span class="s2">&quot;YES&quot;</span> <span class="ow">in</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">batch_decode</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="k">if</span> <span class="n">is_imp</span><span class="p">:</span>
@@ -119,7 +119,7 @@ If the Gatekeeper returns "YES", the event is stored. We enforce a <strong>14-da
 <h3>2.2 The Execution (Momentum Delta)</h3>
 <p>To solve the "Score Saturation" problem, we ignore the absolute sentiment score. Instead, we trade the <strong>Derivative (<span class="math">\(\Delta\)</span>)</strong>.</p>
 <p>We inject the filtered memory (<code>mem_strs_D</code>) into the prompt to generate a "Context-Aware Score" (<code>score_D</code>), and then calculate the delta against the previous day's state.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 1. Generate Context-Aware Score (Score D)</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Generate Context-Aware Score (Score D)</span>
 <span class="c1"># Input injects historical high-impact events into the current prompt</span>
 <span class="n">input_D</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Date: </span><span class="si">{</span><span class="n">current_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">News:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
     <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">current_headlines</span> <span class="o">+</span> <span class="n">mem_strs_D</span><span class="p">]</span>
@@ -233,7 +233,7 @@ If the Gatekeeper returns "YES", the event is stored. We enforce a <strong>14-da
     configscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','color.js','mhchem.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +

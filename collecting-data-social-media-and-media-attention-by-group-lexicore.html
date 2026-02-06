@@ -97,7 +97,7 @@ to contact us. Thank you very much!</p>
 <h2>Data Collection Architecture</h2>
 <p>We targeted a comprehensive date range from January 1, 2020, to December 31, 2025, covering pre-pandemic, pandemic, and post-pandemic periods including the ChatGPT launch era.</p>
 <p>For <strong>The Guardian</strong>, we utilized the Open Platform API with daily iteration:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Date range generation</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Date range generation</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
 <span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -137,7 +137,7 @@ to contact us. Thank you very much!</p>
 </code></pre></div>
 
 <p>For <strong>The New York Times</strong>, we employed the Archive API with monthly batch processing:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Monthly data collection</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Monthly data collection</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 
 <span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Business Day&#39;</span><span class="p">,</span> <span class="s1">&#39;Science&#39;</span><span class="p">,</span> <span class="s1">&#39;Technology&#39;</span><span class="p">,</span> <span class="s1">&#39;U.S.&#39;</span><span class="p">,</span> <span class="s1">&#39;Your Money&#39;</span><span class="p">]</span>
@@ -176,7 +176,7 @@ to contact us. Thank you very much!</p>
 
 <h2>Technical Challenges &amp; Solutions</h2>
 <p><strong>API Rate Limiting</strong> presented significant hurdles. The Guardian's daily quota required segmenting our six-year timeline and implementing key rotation mid-process:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Example of key rotation strategy</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Example of key rotation strategy</span>
 <span class="n">api_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;key1&#39;</span><span class="p">,</span> <span class="s1">&#39;key2&#39;</span><span class="p">,</span> <span class="s1">&#39;key3&#39;</span><span class="p">]</span>
 <span class="n">current_key_index</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -188,14 +188,14 @@ to contact us. Thank you very much!</p>
 </code></pre></div>
 
 <p>NYT's per-second limits necessitated implementing strategic pauses and processing data in smaller monthly batches:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="c1"># Adding delays between requests</span>
 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Wait 1 second between requests</span>
 </code></pre></div>
 
 <p><strong>Data Storage Evolution</strong> revealed architectural insights. Our initial approach separated titles and content into distinct JSON files, which proved cumbersome for analysis. We subsequently developed a merge script:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Merging separate data files</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Merging separate data files</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;news_Guardian_title.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">titles_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
@@ -220,7 +220,7 @@ to contact us. Thank you very much!</p>
 <p><strong>Data Consistency</strong> required careful normalization. We standardized date formats across sources, handled missing fields systematically, and implemented validation checks to ensure data integrity throughout the six-year collection period.</p>
 <h2>Implementation &amp; Workflow</h2>
 <p>Our Python implementation employed <code>requests</code> for API calls, <code>datetime</code> for date sequencing, and <code>json</code> for data persistence. The workflow modularized date generation, API communication, data parsing, and file operations:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Core workflow structure</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Core workflow structure</span>
 <span class="k">def</span> <span class="nf">generate_dates</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">):</span>
     <span class="c1"># Generate list of dates</span>
     <span class="k">pass</span>
@@ -245,7 +245,7 @@ to contact us. Thank you very much!</p>
 </code></pre></div>
 
 <p>We added comprehensive logging and progress indicators to monitor collection status across extended runtimes:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">logging</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -289,7 +289,7 @@ to contact us. Thank you very much!</p>
 <p>As a result, unauthenticated requests now return access errors (e.g., “Not authenticated”), which prevents direct data collection without approved credentials.</p>
 <h2>Scraping Twitter/X: Why You Can't Fetch Old Tweets</h2>
 <p>While trying to scarpe Twitter, we encountered a frustrating limitation with Twitter's API that many developers face: the inability to fetch tweets beyond 7 days using the standard search endpoint.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">tweepy</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tweepy</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">bearer_token</span><span class="o">=</span><span class="s2">&quot;token_b&quot;</span><span class="p">)</span>
 

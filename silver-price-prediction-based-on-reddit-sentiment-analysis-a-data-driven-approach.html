@@ -113,7 +113,7 @@ To solve this problem, we developed a hybrid approach using <strong>RSS Feeds</s
 <li>
 <p><strong>RSS Feed Search</strong>:<br>
     Instead of iterating through all posts, we use Reddit's RSS search feature with a specific query structure (<code>title:silver price</code>) to target posts where the discussion is explicitly about the price.</p>
-<div class="codehilite"><pre><span></span><code># Constructing the RSS URL for specific search query
+<div class="highlight"><pre><span></span><code><span class="gh">#</span> Constructing the RSS URL for specific search query
 TARGET_SUBREDDITS = &quot;PreciousMetals+Wallstreetsilver&quot;
 SEARCH_KEYWORD = &quot;title:silver price&quot;  # Strict title search
 
@@ -127,7 +127,7 @@ rss_url = (
 <li>
 <p><strong>Relevance Filtering</strong>:<br>
     We implemented a strict filter to ensure the post title contains core keywords (e.g., "silver forecast", "ounce", "silver $"), filtering out noise at the source.</p>
-<div class="codehilite"><pre><span></span><code>def is_post_title_related(title):
+<div class="highlight"><pre><span></span><code>def is_post_title_related(title):
     # Core keywords required in the title
     core_words = [&quot;silver price&quot;, &quot;silver $&quot;, &quot;ounce&quot;, &quot;silver forecast&quot;]
     title_lower = title.lower()
@@ -138,12 +138,12 @@ rss_url = (
 <li>
 <p><strong>JSON Extraction</strong>:<br>
     For each valid post found via RSS, we access its <code>.json</code> endpoint to retrieve comments recursively. This method provides structured data without needing complex HTML parsing.</p>
-<div class="codehilite"><pre><span></span><code># Accessing the JSON endpoint of a specific post
+<div class="highlight"><pre><span></span><code><span class="gh">#</span> Accessing the JSON endpoint of a specific post
 post_api_url = post_link.rstrip(&quot;/&quot;) + &quot;.json&quot;
 resp = requests.get(post_api_url, headers=HEADERS)
 post_json = resp.json()
 
-# Extracting the comment tree
+<span class="gh">#</span> Extracting the comment tree
 comment_children = post_json[1][&quot;data&quot;][&quot;children&quot;]
 </code></pre></div>
 
@@ -151,14 +151,14 @@ comment_children = post_json[1][&quot;data&quot;][&quot;children&quot;]
 <li>
 <p><strong>Comment Filtering</strong>:<br>
     We filter comments based on <strong>Time</strong> (last 90 days), <strong>Quality</strong> (minimum upvotes), and <strong>Content</strong> (investment-related keywords).</p>
-<div class="codehilite"><pre><span></span><code># 1. Time and Quality Filter (inside the collection loop)
+<div class="highlight"><pre><span></span><code><span class="gh">#</span> 1. Time and Quality Filter (inside the collection loop)
 if comment_utc &lt; THREE_MONTHS_AGO: continue
 if comment_score &lt; MIN_UPVOTES: continue
 
-# 2. Content Relevance Filter
+<span class="gh">#</span> 2. Content Relevance Filter
 price_related_words = [&quot;price&quot;, &quot;ounce&quot;, &quot;dollar&quot;, &quot;invest&quot;, &quot;forecast&quot;, &quot;trend&quot;]
 
-# Keeping only comments containing relevant keywords
+<span class="gh">#</span> Keeping only comments containing relevant keywords
 filtered_df = comments_df[comments_df[&quot;comment_content&quot;].apply(
     lambda x: any(word in x.lower() for word in price_related_words)
 )]

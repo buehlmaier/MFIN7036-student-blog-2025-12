@@ -98,7 +98,7 @@
 <hr>
 <h2>2. Choosing K: silhouette scores are low</h2>
 <p>We evaluated K from 2 to 8 using a subsample for speed. The code snippet below is reproducible and small enough for a blog context:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">silhouette_elbow</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ks</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">silhouette_elbow</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ks</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sample_size</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">X_small</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> 
@@ -118,7 +118,7 @@
 </code></pre></div>
 
 <p>Our output (headline TF-IDF) was:</p>
-<div class="codehilite"><pre><span></span><code>[(2, np.float64(0.012574001577492958)), (3, np.float64(0.017861588261286507)), (4, np.float64(0.021068812973244085)), (5, np.float64(0.022575536810476866)), (6, np.float64(0.021716745657916026)), (7, np.float64(0.023710576644436997)), (8, np.float64(0.023979766133093612))]
+<div class="highlight"><pre><span></span><code>[(2, np.float64(0.012574001577492958)), (3, np.float64(0.017861588261286507)), (4, np.float64(0.021068812973244085)), (5, np.float64(0.022575536810476866)), (6, np.float64(0.021716745657916026)), (7, np.float64(0.023710576644436997)), (8, np.float64(0.023979766133093612))]
 </code></pre></div>
 
 <p><strong>Interpretation (what this means and why it matters):</strong></p>
@@ -131,7 +131,7 @@
 <hr>
 <h2>3. What the clusters actually represent</h2>
 <p>We used TF-IDF with unigrams and bigrams and applied K-means with K=4:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># TF-IDF vectorization</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># TF-IDF vectorization</span>
 <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span>
     <span class="n">stop_words</span><span class="o">=</span><span class="s2">&quot;english&quot;</span><span class="p">,</span>
     <span class="n">max_features</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span>
@@ -147,7 +147,7 @@
 </code></pre></div>
 
 <p>the output shows:</p>
-<div class="codehilite"><pre><span></span><code>Cluster 0 top terms:
+<div class="highlight"><pre><span></span><code>Cluster 0 top terms:
 gold ends, ends, ounce, gold ounce, gold, nymex, ounce nymex, higher, ends lower, ends higher, lower, ends ounce
 
 Cluster 1 top terms:
@@ -214,7 +214,7 @@ gold, prices, gold prices, silver, dollar, rs, gold silver, gains, demand, week,
 <hr>
 <h2>4. Market linkage: do clusters correlate with next-day returns?</h2>
 <p>We merge cluster labels with gold next-day return and build a direction label <code>up</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">chi2_contingency</span><span class="p">,</span> <span class="n">ttest_1samp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">chi2_contingency</span><span class="p">,</span> <span class="n">ttest_1samp</span>
 
 <span class="n">gold</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;gold_price_cleaned.csv&quot;</span><span class="p">)</span>
 <span class="n">gold</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">gold</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span>
@@ -235,7 +235,7 @@ gold, prices, gold prices, silver, dollar, rs, gold silver, gains, demand, week,
 
 <h3>4.1 Average next-day return by cluster</h3>
 <p>Mean next-day returns by cluster were:</p>
-<div class="codehilite"><pre><span></span><code>Cluster 0: 0.000115
+<div class="highlight"><pre><span></span><code>Cluster 0: 0.000115
 
 Cluster 1: 0.000226
 
@@ -248,7 +248,7 @@ Cluster 3: 0.000358
 <hr>
 <h3>4.2 Directional linkage: chi-square test says “weak but detectable”</h3>
 <p>We tested whether <code>cluster</code> and <code>up</code> are independent:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">contingency_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">merged</span><span class="p">[</span><span class="s1">&#39;cluster&#39;</span><span class="p">],</span> <span class="n">merged</span><span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">])</span>
+<div class="highlight"><pre><span></span><code><span class="n">contingency_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">merged</span><span class="p">[</span><span class="s1">&#39;cluster&#39;</span><span class="p">],</span> <span class="n">merged</span><span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">])</span>
 <span class="n">chi2</span><span class="p">,</span> <span class="n">p_chi2</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">chi2_contingency</span><span class="p">(</span><span class="n">contingency_table</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Chi-Square Test:&quot;</span><span class="p">)</span>
@@ -256,7 +256,7 @@ Cluster 3: 0.000358
 </code></pre></div>
 
 <p>Output：</p>
-<div class="codehilite"><pre><span></span><code>Chi-Square Test:
+<div class="highlight"><pre><span></span><code>Chi-Square Test:
 Chi-Square Statistic: 8.53737682701176, p-value: 0.03611808803010272
 </code></pre></div>
 
@@ -276,7 +276,7 @@ Chi-Square Statistic: 8.53737682701176, p-value: 0.03611808803010272
 <hr>
 <h2>5. Volatility regimes: where the signal becomes more meaningful</h2>
 <p>We introduce a volatility regime variable (high vs low) using the median of the gold volatility index:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">vol_regime_stats</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;vol_regime&#39;</span><span class="p">,</span> <span class="s1">&#39;cluster&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+<div class="highlight"><pre><span></span><code><span class="n">vol_regime_stats</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;vol_regime&#39;</span><span class="p">,</span> <span class="s1">&#39;cluster&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
     <span class="n">mean_return</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;next_day_return&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">),</span>
     <span class="n">upward_probability</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">)</span>
 <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
@@ -286,16 +286,16 @@ Chi-Square Statistic: 8.53737682701176, p-value: 0.03611808803010272
 </code></pre></div>
 
 <p>Output：</p>
-<div class="codehilite"><pre><span></span><code>Mean Next-Day Return by Volatility Regime and Cluster:
-   vol_regime  cluster  mean_return  upward_probability
-0         0.0        0    -0.000070            0.463768
-1         0.0        1    -0.000051            0.514821
-2         0.0        2    -0.000344            0.504587
-3         0.0        3     0.000090            0.506768
-4         1.0        0     0.000612            0.512097
-5         1.0        1    -0.000006            0.497537
-6         1.0        2     0.001509            0.525912
-7         1.0        3     0.000676            0.501615
+<div class="highlight"><pre><span></span><code><span class="n">Mean</span><span class="w"> </span><span class="n">Next</span><span class="o">-</span><span class="n">Day</span><span class="w"> </span><span class="n">Return</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">Volatility</span><span class="w"> </span><span class="n">Regime</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nl">Cluster:</span>
+<span class="w">   </span><span class="n">vol_regime</span><span class="w">  </span><span class="n">cluster</span><span class="w">  </span><span class="n">mean_return</span><span class="w">  </span><span class="n">upward_probability</span>
+<span class="mh">0</span><span class="w">         </span><span class="mf">0.0</span><span class="w">        </span><span class="mh">0</span><span class="w">    </span><span class="o">-</span><span class="mf">0.000070</span><span class="w">            </span><span class="mf">0.463768</span>
+<span class="mh">1</span><span class="w">         </span><span class="mf">0.0</span><span class="w">        </span><span class="mh">1</span><span class="w">    </span><span class="o">-</span><span class="mf">0.000051</span><span class="w">            </span><span class="mf">0.514821</span>
+<span class="mh">2</span><span class="w">         </span><span class="mf">0.0</span><span class="w">        </span><span class="mh">2</span><span class="w">    </span><span class="o">-</span><span class="mf">0.000344</span><span class="w">            </span><span class="mf">0.504587</span>
+<span class="mh">3</span><span class="w">         </span><span class="mf">0.0</span><span class="w">        </span><span class="mh">3</span><span class="w">     </span><span class="mf">0.000090</span><span class="w">            </span><span class="mf">0.506768</span>
+<span class="mh">4</span><span class="w">         </span><span class="mf">1.0</span><span class="w">        </span><span class="mh">0</span><span class="w">     </span><span class="mf">0.000612</span><span class="w">            </span><span class="mf">0.512097</span>
+<span class="mh">5</span><span class="w">         </span><span class="mf">1.0</span><span class="w">        </span><span class="mh">1</span><span class="w">    </span><span class="o">-</span><span class="mf">0.000006</span><span class="w">            </span><span class="mf">0.497537</span>
+<span class="mh">6</span><span class="w">         </span><span class="mf">1.0</span><span class="w">        </span><span class="mh">2</span><span class="w">     </span><span class="mf">0.001509</span><span class="w">            </span><span class="mf">0.525912</span>
+<span class="mh">7</span><span class="w">         </span><span class="mf">1.0</span><span class="w">        </span><span class="mh">3</span><span class="w">     </span><span class="mf">0.000676</span><span class="w">            </span><span class="mf">0.501615</span>
 </code></pre></div>
 
 <p><strong>Conditional mean returns (key finding)</strong></p>
@@ -337,7 +337,7 @@ Chi-Square Statistic: 8.53737682701176, p-value: 0.03611808803010272
 <hr>
 <h2>6. Digging Deeper: Relative Upward Probabilities and Returns</h2>
 <p>To better interpret the economic importance of clusters, we computed <strong>relative upward probability</strong> and <strong>relative return</strong> for each cluster. These metrics compare each cluster’s performance against the overall baseline expectations.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">cluster_stats</span><span class="p">[</span><span class="s2">&quot;relative_upward_probability&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cluster_stats</span><span class="p">[</span><span class="s2">&quot;upward_probability&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">overall_upward_probability</span>
+<div class="highlight"><pre><span></span><code><span class="n">cluster_stats</span><span class="p">[</span><span class="s2">&quot;relative_upward_probability&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cluster_stats</span><span class="p">[</span><span class="s2">&quot;upward_probability&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">overall_upward_probability</span>
 <span class="n">cluster_stats</span><span class="p">[</span><span class="s2">&quot;relative_return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cluster_stats</span><span class="p">[</span><span class="s2">&quot;avg_return&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">overall_avg_return</span>
 </code></pre></div>
 
@@ -351,7 +351,7 @@ Chi-Square Statistic: 8.53737682701176, p-value: 0.03611808803010272
   \text{Relative Return} = \text{Cluster Average Return} - \text{Overall Average Return}
   ]</li>
 </ul>
-<div class="codehilite"><pre><span></span><code>   cluster  sample_size  ...  relative_upward_probability  relative_return
+<div class="highlight"><pre><span></span><code>   cluster  sample_size  ...  relative_upward_probability  relative_return
 0        0          589  ...                     0.010496        -0.000197
 1        1         1105  ...                     0.029336        -0.000086
 2        2         1603  ...                     0.017650        -0.000059

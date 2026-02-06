@@ -136,7 +136,7 @@
 </ol>
 <p><strong>Implementation:</strong></p>
 <p>In our <code>extract_text_from_html</code> function, you will see this specific argument:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 
 <span class="k">def</span> <span class="nf">extract_text_from_html</span><span class="p">(</span><span class="n">html_content</span><span class="p">):</span>
     <span class="c1"># &#39;lxml&#39; is explicitly defined as the parser</span>
@@ -163,7 +163,7 @@
 <li><strong>Using a Set:</strong> 50,000 words × 1 check = ~50,000 operations per document.</li>
 </ol>
 <p>In our code, this looks like:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Inefficient</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Inefficient</span>
 <span class="n">stop_words_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;the&quot;</span><span class="p">,</span> <span class="s2">&quot;is&quot;</span><span class="p">,</span> <span class="s2">&quot;at&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 
 <span class="c1"># Efficient</span>

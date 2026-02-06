@@ -96,7 +96,7 @@
 <h2>First Technical Challenge: Naive Scraping and Text Noise</h2>
 <p>Our initial coding attempt focused on collecting Tesla’s 2024 Q1 earnings call transcript from <em>The Motley Fool</em>. Using Python’s <span style="color:green">requests</span> and <span style="color:green">BeautifulSoup</span>, we successfully retrieved the full HTML content of the webpage. However, during the first parsing attempt, we identified a critical issue: the extracted text was not limited to the earnings call transcript itself.</p>
 <p>The code we use is as follows:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/04/23/tesla-tsla-q1-2024-earnings-call-transcript/&#39;</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/04/23/tesla-tsla-q1-2024-earnings-call-transcript/&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -111,7 +111,7 @@
 <h2>Solving the Problem: DOM-Based Precision Extraction</h2>
 <p>To resolve this issue, we examined the page’s Document Object Model (DOM) structure in detail. We found that the earnings call transcript was consistently enclosed within a <span style="color:green">&lt;div&gt;</span> element identified by the unique ID <span style="color:green">article-body-transcript</span> .</p>
 <p>By explicitly targeting this element, we were able to isolate the core transcript content while excluding non-essential webpage components. The refined extraction logic is illustrated below:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">url2</span> <span class="o">=</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/07/24/tesla-tsla-q2-2024-earnings-call-transcript/&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="n">url2</span> <span class="o">=</span> <span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/07/24/tesla-tsla-q2-2024-earnings-call-transcript/&#39;</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://www.fool.com/earnings/call-transcripts/2024/07/24/tesla-tsla-q2-2024-earnings-call-transcript/&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">s</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
 <span class="n">transcript_div</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;article-body-transcript&#39;</span><span class="p">)</span>
@@ -128,7 +128,7 @@
 <h2>Second Technical Challenge: Scaling to a Ten-Year Dataset</h2>
 <p>While the refined extraction method worked well for individual quarters, it quickly became clear that manually processing one earnings call at a time would not scale to our intended ten-year dataset. Hard-coding URLs and variables for each new quarter made the workflow cumbersome, error-prone, and difficult to maintain.
 The underlying issue was not computational complexity, but <strong>lack of scalability and abstraction</strong> in the data collection design.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 
 <span class="c1"># Q1 2024</span>
@@ -176,7 +176,7 @@ The underlying issue was not computational complexity, but <strong>lack of scala
 <h2>Solving the Problem: Refactoring for Scalability and Reproducibility</h2>
 <p>To address this limitation, we refactored the code by storing quarterly metadata—such as year, quarter, and URL—in a structured data object and iterating over it using a loop. With this design, adding new transcripts no longer requires modifying the core extraction logic; instead, new entries are simply appended to the data structure.</p>
 <p>This refactoring improved efficiency, reduced redundancy, and enhanced reproducibility. Each transcript is automatically retrieved and saved in a standardized format, making the dataset easy to extend and audit. More importantly, this modular pipeline aligns with best practices in empirical finance and NLP research.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 
 <span class="n">url_list</span> <span class="o">=</span> <span class="p">[</span>
@@ -206,7 +206,7 @@ The underlying issue was not computational complexity, but <strong>lack of scala
 <p>Capital IQ loads content dynamically with JavaScript, so Requests wouldn't work. We used Selenium to automate a real browser. The script acts like a virtual assistant: it opens the page, clicks buttons, waits for content to load, and saves everything for us.</p>
 <p><strong>Step 1: Launch &amp; Wait for Login</strong><br>
 It navigates to the target page and then politely pauses, allowing us to log in manually because Capital is a secure, paid platform. The code will only run until we enter ‘Continue’ in Terminal. </p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># The script waits after opening the login page</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># The script waits after opening the login page</span>
 <span class="n">service</span> <span class="o">=</span> <span class="n">Service</span><span class="p">(</span><span class="n">executable_path</span><span class="o">=</span><span class="s1">&#39;/usr/local/bin/chromedriver&#39;</span><span class="p">)</span>
 <span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">service</span><span class="o">=</span><span class="n">service</span><span class="p">)</span>
 <span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://www.capitaliq.com/CIQDotNet/Transcripts/Summary.aspx?CompanyId=27444752&quot;</span><span class="p">)</span>
@@ -215,7 +215,7 @@ It navigates to the target page and then politely pauses, allowing us to log in 
 
 <p><strong>Step 2: Click ‘View All’ to load every transcript</strong><br>
 The site only shows a few transcripts by default. Our code aims to find and click the ‘View All’ button to load every transcript. We use the CSS Selector to tell a precise location for the element ‘View All’ button on the page.  </p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># This CSS Selector uniquely identifies the “View All” button on the page</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># This CSS Selector uniquely identifies the “View All” button on the page</span>
 <span class="n">view_all_button</span> <span class="o">=</span> <span class="n">WebDriverWait</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
         <span class="n">EC</span><span class="o">.</span><span class="n">element_to_be_clickable</span><span class="p">((</span><span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">,</span> <span class="s2">&quot;#_transcriptsGrid__dataGrid &gt; tbody &gt; tr:nth-child(27) &gt; td &gt; div &gt; a:nth-child(4)&quot;</span><span class="p">))</span>
     <span class="p">)</span>
@@ -225,7 +225,7 @@ The site only shows a few transcripts by default. Our code aims to find and clic
 <p><strong>Step 3: Save every transcript with one loop</strong><br>
 The following script collects all links, opens each link in a new tab, saves the HTML, and then proceeds to the next link.</p>
 <p>1.Find all transcript links</p>
-<div class="codehilite"><pre><span></span><code><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> 
+<div class="highlight"><pre><span></span><code><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> 
 <span class="n">link_elements</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">,</span> <span class="s2">&quot;#_transcriptsGrid__dataGrid &gt; tbody &gt; tr &gt; td:nth-child(3) &gt; span &gt; a&quot;</span><span class="p">)</span>
 
 <span class="n">transcript_links</span> <span class="o">=</span> <span class="p">[]</span>
@@ -239,14 +239,14 @@ The following script collects all links, opens each link in a new tab, saves the
 </code></pre></div>
 
 <p>2.Create a folder to save files</p>
-<div class="codehilite"><pre><span></span><code><span class="n">desktop_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/Desktop&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">desktop_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/Desktop&quot;</span><span class="p">)</span>
 <span class="n">folder_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Transcripts_</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">_%H%M%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="n">folder_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">desktop_path</span><span class="p">,</span> <span class="n">folder_name</span><span class="p">)</span>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 
 <p>3.Core loop: process and save each transcript in HTML version</p>
-<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">link</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">transcript_links</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">link</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">transcript_links</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Processing link </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="c1">#open in new tab    </span>
 <span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;window.open(arguments[0]);&quot;</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>

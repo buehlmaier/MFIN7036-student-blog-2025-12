@@ -89,7 +89,7 @@
 <p>In today's data-driven financial world, accessing real-time news from premium sources like Bloomberg, Reuters, and The Wall Street Journal can provide valuable insights for investors and analysts. As Python developers, we recently embarked on a project to build a news aggregator focusing on gold price movements, targeting these three major financial news platforms. What seemed straightforward initially turned into a fascinating journey through the complex landscape of modern web scraping challenges.</p>
 <h2>The Initial Approach: Naive Scraping</h2>
 <p>Our initial code structure was simple - using <code>requests</code> to fetch pages and <code>BeautifulSoup</code> to parse them. I created a <code>NewsCrawler</code> class with methods for each news source, expecting to extract article titles, dates, content, and URLs. The basic structure looked like this:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">NewsCrawler</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">NewsCrawler</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&#39;</span><span class="p">,</span>
@@ -108,7 +108,7 @@
 <p>Within minutes of running the script, the code started encountering 403 errors and CAPTCHA pages. Bloomberg and Reuters both employ sophisticated anti-scraping measures that detect non-human browsing patterns. The Wall Street Journal was even more restrictive, immediately blocking requests that didn't come from authenticated sessions.</p>
 <h3>Solution 1: Enhanced Headers and Session Management</h3>
 <p>We learned that simple User-Agent strings weren't enough. News sites check for multiple headers and session consistency. Here's our enhanced approach:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36&#39;</span><span class="p">,</span>
@@ -129,7 +129,7 @@
 
 <h3>Solution 2: Proxy Rotation</h3>
 <p>To avoid IP-based blocking, we implemented proxy rotation. While I can't share actual proxy lists, here's the structure:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">_get_request_with_proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_get_request_with_proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="n">proxies</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;http&#39;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proxy_list</span><span class="p">),</span>
         <span class="s1">&#39;https&#39;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proxy_list</span><span class="p">)</span>
@@ -147,7 +147,7 @@
 <h3>The Problem: Too Fast, Too Predictable</h3>
 <p>Even with proper headers, the requests were getting blocked because they followed predictable patterns with consistent timing between requests.</p>
 <h3>Solution: Randomized Delays and Human-Like Behavior</h3>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">_human_like_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_human_like_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Random delays between requests to mimic human reading patterns&quot;&quot;&quot;</span>
     <span class="c1"># Vary delay based on action type</span>
     <span class="n">delay_types</span> <span class="o">=</span> <span class="p">[</span>
@@ -166,7 +166,7 @@
 </code></pre></div>
 
 <p>Additionally, we simulated scrolling behavior to better mimic human interaction:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">_scrolling_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_scrolling_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Simulate scrolling behavior&quot;&quot;&quot;</span>
     <span class="n">scroll_positions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">1200</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">scroll_positions</span><span class="p">:</span>
@@ -179,7 +179,7 @@
 <p>The Wall Street Journal presented the biggest challenge - most content is behind a paywall. Even Bloomberg and Reuters limit article views for non-subscribers. Traditional scraping approaches fail when confronted with subscription requirements that hide content behind login screens or partial previews.</p>
 <h3>Solution: Multi-Source Verification and Abstract Collection</h3>
 <p>Since bypassing paywalls ethically isn't possible, we adjusted our strategy to focus on publicly accessible content:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">search_wsj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">search_wsj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle WSJ&#39;s subscription requirements&quot;&quot;&quot;</span>
     <span class="n">articles</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -188,7 +188,7 @@
 </code></pre></div>
 
 <p>The key insight was to search for articles with 'free' or 'teaser' classes, which often contain partial content accessible without subscription:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">search_url</span><span class="p">)</span>
     <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
 
@@ -221,7 +221,7 @@
 <p>Financial websites frequently update their layouts and CSS classes, breaking carefully crafted selectors. A scraper that worked perfectly one day might fail completely the next as sites deploy new designs or change their HTML structure.</p>
 <h3>Solution: Robust Selector Strategies and Monitoring</h3>
 <p>To address this, we implemented a fallback system that tries multiple selector patterns:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">_find_with_fallback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soup</span><span class="p">,</span> <span class="n">selectors</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_find_with_fallback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soup</span><span class="p">,</span> <span class="n">selectors</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Try multiple selector patterns&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">selector</span> <span class="ow">in</span> <span class="n">selectors</span><span class="p">:</span>
         <span class="n">element</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">select_one</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
@@ -238,7 +238,7 @@
 </code></pre></div>
 
 <p>For extracting publication dates, we created a flexible approach that searches through multiple potential date locations:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">_extract_date_flexible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soup</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_extract_date_flexible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soup</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiple strategies to find publication date&quot;&quot;&quot;</span>
     <span class="n">date_patterns</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;property&#39;</span><span class="p">:</span> <span class="s1">&#39;article:published_time&#39;</span><span class="p">}),</span>

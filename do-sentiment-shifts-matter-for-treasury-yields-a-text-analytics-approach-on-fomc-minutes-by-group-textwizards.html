@@ -83,7 +83,7 @@
  # Web Scraping</p>
 <h2>FOMC Meeting Minutes Collection</h2>
 <p>The process starts by scraping the FOMC calendar page at <code>https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm</code>. A custom header is defined to avoid being identified as automated traffic. The following code demonstrates this process:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">#import packages</span>
+<div class="highlight"><pre><span></span><code><span class="c1">#import packages</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -123,7 +123,7 @@
 </code></pre></div>
 
 <p>After fetching the page using the <code>requests</code> package, BeautifulSoup parses the HTML to extract meeting minutes URLs. We need to identify links starting with <code>&lt;a&gt;</code> tags and containing 'fomcminutes' in <code>.htm</code> format. The links extracted from the page (<code>href</code>) are often relative paths (e.g., <code>/monetarypolicy/fomcminutes20230104.htm</code>). The code converts them to complete, working web addresses by prepending the base domain (<code>https://www.federalreserve.gov</code>). The following code demonstrates this process:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 2. Fetch and parse the webpage</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 2. Fetch and parse the webpage</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">CALENDAR_URL</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">HEADERS</span><span class="p">)</span>
 
@@ -168,7 +168,7 @@
 
 <p>Our FOMC meeting minutes data collection covers the period from January 29, 2020 to December 10, 2025 (20200129 to 20251210), ensuring comprehensive coverage of recent monetary policy cycles. After deduplication and chronological sorting, the results are saved to <code>URL.csv</code>.</p>
 <p>The following code demonstrates this process:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 8. Process and clean the data</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 8. Process and clean the data</span>
 
 <span class="n">df_links</span> <span class="o">=</span> <span class="p">(</span>
 
@@ -185,7 +185,7 @@
 
 <h2>Financial Data from Yahoo Finance</h2>
 <p>We choose the 10-year US Treasury yield (<code>^TNX</code>) and US Dollar Index (<code>DX-Y.NYB</code>) as our financial data to capture market reactions following the release of meeting minutes. We utilize the <code>yfinance</code> library to efficiently download historical market data spanning from a specified start date (e.g., 2019-01-01) and extract the 'Close' prices for daily data of these two key tickers <code>^TNX</code> and <code>DX-Y.NYB</code>. The following code demonstrates this process:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 1. Define time range</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Define time range</span>
 
 <span class="n">start_date</span> <span class="o">=</span> <span class="s2">&quot;2019-01-01&quot;</span>
 
@@ -213,7 +213,7 @@
 </code></pre></div>
 
 <p>Then we calculate the daily change in the 10-year US Treasury yield, which quantifies market movements. The processed data is saved to <code>market_data_daily.csv</code>, ready for merging with textual analysis results. The following code demonstrates this process:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># 5. Calculate daily yield changes (key: capturing market shocks)</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 5. Calculate daily yield changes (key: capturing market shocks)</span>
 
 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;yield_change&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;yield_10y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
 
@@ -245,7 +245,7 @@
 <p>to build a clean, structured text dataframe that can later be used efficiently for <strong>NLP tasks such as sentiment analysis</strong>.</p>
 <h2>1. Data Frame Setup:</h2>
 <p>We first load the data and convert the meeting date into a proper datetime format for later time-series analysis.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">df_url</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;URL.csv&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">df_url</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;URL.csv&quot;</span><span class="p">)</span>
 
 <span class="n">df_url</span><span class="p">[</span><span class="s2">&quot;meeting_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
 
@@ -272,7 +272,7 @@
 <p>Converts the cleaned HTML into plain text</p>
 </li>
 </ol>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_minutes_text</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">fetch_minutes_text</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
 
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">HEADERS</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 
@@ -314,7 +314,7 @@
 <p>word count (as a rough length indicator)</p>
 </li>
 </ol>
-<div class="codehilite"><pre><span></span><code><span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight"><pre><span></span><code><span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">df_url</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -337,7 +337,7 @@
 </code></pre></div>
 
 <p>Also, to check the errors during the process, we use the followings to log the possible errors instead of dropping them directly.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 
 <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
 
@@ -356,7 +356,7 @@
 
 <h2>4. Final Output</h2>
 <p>All results are merged into a DataFrame and exported as a UTF-8 encoded CSV file:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">df_minutes_text</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;meeting_date&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">df_minutes_text</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;meeting_date&quot;</span><span class="p">)</span>
 
 <span class="n">df_minutes_text</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
 
@@ -383,7 +383,7 @@
 <h1>Text sentiment analysis</h1>
 <p>After extracting the text from web links via BeautifulSoup, we perform sentiment analysis on the text. Long-text processing is a key strength of large language models (LLMs). However, since each meeting minutes document contains a large volume of text—ranging from 50,000 to 80,000 characters—the free quota provided by major AI platforms' APIs is generally less than 2,000,000 characters, which can be exhausted quickly. Additionally, API calls for services like ChatGPT come with relatively high costs. Eventually, we identified the <strong>Spark Lite model API</strong> of the Spark Large Model, which offers free and unlimited access, and we adopted it for text analysis.</p>
 <p>The invocation method and text prompts for it are provided in the following code:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="kn">import</span> <span class="nn">json</span>
 

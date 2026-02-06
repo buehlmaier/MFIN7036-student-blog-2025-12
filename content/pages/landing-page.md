@@ -44,15 +44,16 @@ Names of student groups:
 The source code of this blog is available on
 [GitHub](https://github.com/buehlmaier/MFIN7036-student-blog-2025-12).
 
-Disclaimer: The views and opinions expressed in this blog are those of
-the individual student authors and do not necessarily reflect the
-official position of the University of Hong Kong, HKU Business School,
-or the course instructor. All content is produced for academic and
-educational purposes only and should not be construed as financial,
-investment, or trading advice. References to public figures,
-companies, financial instruments, or geopolitical events are made
-solely in the context of academic analysis and do not constitute
-endorsement, criticism, or recommendation. While students have made
-reasonable efforts to ensure accuracy, the analyses presented may
-contain errors or limitations inherent to coursework. Readers should
-conduct their own research before making any financial decisions.
+
+
+**Disclaimer:** The views and opinions expressed in this blog are those of the individual student authors and do not necessarily reflect the official position of the University of Hong Kong, HKU Business School, or the course instructor. All content is produced for academic and educational purposes only.
+
+This blog documents student learning experiences in text analytics and NLP applied to finance. In particular:
+
+- **Not investment advice.** References to trading strategies, portfolio performance, or backtesting results are purely illustrative academic exercises. They should not be construed as financial, investment, or trading advice. Past performance discussed in these posts is not indicative of future results. Readers should conduct their own research and consult qualified professionals before making any financial decisions.
+- **Data collection.** Students worked with publicly available data sources, official APIs, and licensed datasets. Where posts describe challenges encountered during data collection (e.g., access restrictions or rate limiting), these are documented as learning experiences, not as instructions for circumventing website protections or terms of service.
+- **Third-party tools and services.** References to specific software, APIs, platforms, or LLM providers are for documentation purposes only and do not constitute endorsement by HKU or the course instructor.
+- **Public figures, companies, and markets.** Where posts analyze public statements by political figures, company earnings calls, or financial instruments, this is done strictly from a quantitative and market-impact perspective using established academic methods. Such analysis does not constitute political commentary, advocacy, endorsement, criticism, or recommendation of any entity, position, or security.
+- **Geopolitical references.** Some projects involve detecting geopolitical events as market-moving factors. Any references to countries, conflicts, or political events are made solely in the context of financial data analysis.
+
+While reasonable efforts have been made to ensure accuracy, the analyses presented may contain errors or limitations inherent to coursework.

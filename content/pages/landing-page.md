@@ -28,3 +28,16 @@ Names of student groups:
 
 The source code of this blog is available on
 [GitHub](https://github.com/buehlmaier/MFIN7036-student-blog-2025-12).
+
+Disclaimer: The views and opinions expressed in this blog are those of
+the individual student authors and do not necessarily reflect the
+official position of the University of Hong Kong, HKU Business School,
+or the course instructor. All content is produced for academic and
+educational purposes only and should not be construed as financial,
+investment, or trading advice. References to public figures,
+companies, financial instruments, or geopolitical events are made
+solely in the context of academic analysis and do not constitute
+endorsement, criticism, or recommendation. While students have made
+reasonable efforts to ensure accuracy, the analyses presented may
+contain errors or limitations inherent to coursework. Readers should
+conduct their own research before making any financial decisions.
